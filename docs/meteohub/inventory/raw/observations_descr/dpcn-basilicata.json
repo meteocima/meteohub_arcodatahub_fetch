@@ -1,0 +1,65 @@
+{
+ "B13011": {
+  "descr": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT",
+  "unit": "KG/M**2"
+ },
+ "B12101": {
+  "descr": "TEMPERATURE/DRY-BULB TEMPERATURE",
+  "unit": "K"
+ },
+ "B13003": {
+  "descr": "RELATIVE HUMIDITY",
+  "unit": "%"
+ },
+ "B13215": {
+  "descr": "River level",
+  "unit": "M"
+ },
+ "B13013": {
+  "descr": "TOTAL SNOW DEPTH",
+  "unit": "M"
+ },
+ "B10004": {
+  "descr": "PRESSURE",
+  "unit": "PA"
+ },
+ "B11041": {
+  "descr": "MAXIMUM WIND GUST SPEED",
+  "unit": "M/S"
+ },
+ "B11001": {
+  "descr": "WIND DIRECTION",
+  "unit": "DEGREE TRUE"
+ },
+ "B11002": {
+  "descr": "WIND SPEED",
+  "unit": "M/S"
+ },
+ "B01019": {
+  "descr": "LONG STATION OR SITE NAME"
+ },
+ "1,0,0,0": {
+  "descr": "Ground or water surface"
+ },
+ "103,2000,0,0": {
+  "descr": "2.000m above ground"
+ },
+ "103,10000,0,0": {
+  "descr": "10.000m above ground"
+ },
+ "1,0,60": {
+  "descr": "Accumulation over 1m at forecast time 0"
+ },
+ "254,0,0": {
+  "descr": "Analysis or observation, istantaneous value"
+ },
+ "1,0,1800": {
+  "descr": "Accumulation over 30m at forecast time 0"
+ },
+ "1,0,900": {
+  "descr": "Accumulation over 15m at forecast time 0"
+ },
+ "2,0,3600": {
+  "descr": "Maximum over 1h at forecast time 0"
+ }
+}

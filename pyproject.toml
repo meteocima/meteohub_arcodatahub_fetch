@@ -1,0 +1,11 @@
+[project]
+name = "meteohub-download"
+version = "0.1.0"
+description = "Download MeteoHub observations in 2-day chunks."
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.0",
+]
+
+[tool.uv]
+package = false

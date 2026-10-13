@@ -1,0 +1,269 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 840499422,
+   "s": 130210220034,
+   "b": [
+    2020,
+    10,
+    12,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    13,
+    20,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "dpcn-sicilia",
+    "desc": "dpcn-sicilia",
+    "longdesc": "DPCN-SICILIA - Sensor data collected by ground stations of the meteo hydro pluviometric monitoring network - Sicilia Region - DPCN Network"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "1,0,60",
+    "desc": "Accumulation over 1m at forecast time 0"
+   },
+   {
+    "code": "1,0,120",
+    "desc": "Accumulation over 2m at forecast time 0"
+   },
+   {
+    "code": "1,0,180",
+    "desc": "Accumulation over 3m at forecast time 0"
+   },
+   {
+    "code": "1,0,240",
+    "desc": "Accumulation over 4m at forecast time 0"
+   },
+   {
+    "code": "1,0,300",
+    "desc": "Accumulation over 5m at forecast time 0"
+   },
+   {
+    "code": "1,0,360",
+    "desc": "Accumulation over 6m at forecast time 0"
+   },
+   {
+    "code": "1,0,480",
+    "desc": "Accumulation over 8m at forecast time 0"
+   },
+   {
+    "code": "1,0,540",
+    "desc": "Accumulation over 9m at forecast time 0"
+   },
+   {
+    "code": "1,0,600",
+    "desc": "Accumulation over 10m at forecast time 0"
+   },
+   {
+    "code": "1,0,720",
+    "desc": "Accumulation over 12m at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,960",
+    "desc": "Accumulation over 16m at forecast time 0"
+   },
+   {
+    "code": "1,0,1080",
+    "desc": "Accumulation over 18m at forecast time 0"
+   },
+   {
+    "code": "1,0,1140",
+    "desc": "Accumulation over 19m at forecast time 0"
+   },
+   {
+    "code": "1,0,1200",
+    "desc": "Accumulation over 20m at forecast time 0"
+   },
+   {
+    "code": "1,0,1440",
+    "desc": "Accumulation over 24m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,1920",
+    "desc": "Accumulation over 32m at forecast time 0"
+   },
+   {
+    "code": "1,0,2160",
+    "desc": "Accumulation over 36m at forecast time 0"
+   },
+   {
+    "code": "1,0,2340",
+    "desc": "Accumulation over 39m at forecast time 0"
+   },
+   {
+    "code": "1,0,2400",
+    "desc": "Accumulation over 40m at forecast time 0"
+   },
+   {
+    "code": "1,0,2700",
+    "desc": "Accumulation over 45m at forecast time 0"
+   },
+   {
+    "code": "1,0,2880",
+    "desc": "Accumulation over 48m at forecast time 0"
+   },
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,4320",
+    "desc": "Accumulation over 1h 12m at forecast time 0"
+   },
+   {
+    "code": "1,0,4800",
+    "desc": "Accumulation over 1h 20m at forecast time 0"
+   },
+   {
+    "code": "1,0,5400",
+    "desc": "Accumulation over 1h 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,5760",
+    "desc": "Accumulation over 1h 36m at forecast time 0"
+   },
+   {
+    "code": "1,0,5940",
+    "desc": "Accumulation over 1h 39m at forecast time 0"
+   },
+   {
+    "code": "1,0,7140",
+    "desc": "Accumulation over 1h 59m at forecast time 0"
+   },
+   {
+    "code": "1,0,7200",
+    "desc": "Accumulation over 2h at forecast time 0"
+   },
+   {
+    "code": "1,0,8640",
+    "desc": "Accumulation over 2h 24m at forecast time 0"
+   },
+   {
+    "code": "1,0,9600",
+    "desc": "Accumulation over 2h 40m at forecast time 0"
+   },
+   {
+    "code": "1,0,10800",
+    "desc": "Accumulation over 3h at forecast time 0"
+   },
+   {
+    "code": "1,0,14400",
+    "desc": "Accumulation over 4h at forecast time 0"
+   },
+   {
+    "code": "1,0,21600",
+    "desc": "Accumulation over 6h at forecast time 0"
+   },
+   {
+    "code": "1,0,43200",
+    "desc": "Accumulation over 12h at forecast time 0"
+   },
+   {
+    "code": "1,0,82800",
+    "desc": "Accumulation over 23h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

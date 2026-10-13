@@ -1,0 +1,225 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 77404306,
+   "s": 12769766130,
+   "b": [
+    2020,
+    10,
+    12,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    13,
+    10,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "dpcn-liguria",
+    "desc": "dpcn-liguria",
+    "longdesc": "DPCN-LIGURIA - Sensor data collected by ground stations of the meteo hydro pluviometric monitoring network - Liguria Region - DPCN Network"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "1,0,60",
+    "desc": "Accumulation over 1m at forecast time 0"
+   },
+   {
+    "code": "1,0,300",
+    "desc": "Accumulation over 5m at forecast time 0"
+   },
+   {
+    "code": "1,0,600",
+    "desc": "Accumulation over 10m at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,1200",
+    "desc": "Accumulation over 20m at forecast time 0"
+   },
+   {
+    "code": "1,0,1500",
+    "desc": "Accumulation over 25m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,2100",
+    "desc": "Accumulation over 35m at forecast time 0"
+   },
+   {
+    "code": "1,0,2400",
+    "desc": "Accumulation over 40m at forecast time 0"
+   },
+   {
+    "code": "1,0,2700",
+    "desc": "Accumulation over 45m at forecast time 0"
+   },
+   {
+    "code": "1,0,3000",
+    "desc": "Accumulation over 50m at forecast time 0"
+   },
+   {
+    "code": "1,0,3300",
+    "desc": "Accumulation over 55m at forecast time 0"
+   },
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,4500",
+    "desc": "Accumulation over 1h 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,4800",
+    "desc": "Accumulation over 1h 20m at forecast time 0"
+   },
+   {
+    "code": "1,0,5400",
+    "desc": "Accumulation over 1h 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,6000",
+    "desc": "Accumulation over 1h 40m at forecast time 0"
+   },
+   {
+    "code": "1,0,7200",
+    "desc": "Accumulation over 2h at forecast time 0"
+   },
+   {
+    "code": "1,0,8100",
+    "desc": "Accumulation over 2h 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,9000",
+    "desc": "Accumulation over 2h 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,9600",
+    "desc": "Accumulation over 2h 40m at forecast time 0"
+   },
+   {
+    "code": "1,0,10800",
+    "desc": "Accumulation over 3h at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

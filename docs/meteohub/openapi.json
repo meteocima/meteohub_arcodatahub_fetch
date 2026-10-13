@@ -1,0 +1,2468 @@
+{
+ "host": "meteohub.agenziaitaliameteo.it",
+ "schemes": [
+  "https"
+ ],
+ "tags": [
+  {
+   "name": "specifications",
+   "description": "OpenAPI 2.0 Specification in JSON format"
+  },
+  {
+   "name": "status",
+   "description": "Verify the status of the server"
+  },
+  {
+   "name": "authentication",
+   "description": "Manage authentication and active tokens"
+  },
+  {
+   "name": "profile",
+   "description": "Manage your own profile"
+  },
+  {
+   "name": "management",
+   "description": "Managent endpoints"
+  }
+ ],
+ "paths": {
+  "/auth/logout": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Token correctly removed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "description": "Invalidate current registered token",
+    "summary": "Logout and invalidate the current token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/specs": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Endpoints JSON based on OpenAPI Specifications"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "specifications"
+    ],
+    "parameters": [],
+    "summary": "Endpoints specifications based on OpenAPI 2.0 format"
+   }
+  },
+  "/auth/reset/{token}": {
+   "put": {
+    "responses": {
+     "200": {
+      "description": "Reset token is valid, password changed"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid reset token"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "new_password": {
+         "type": "string",
+         "minLength": 8
+        },
+        "password_confirm": {
+         "type": "string",
+         "minLength": 8
+        }
+       }
+      }
+     },
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Change password as conseguence of a reset request",
+    "summary": "Change password as conseguence of a reset request"
+   }
+  },
+  "/auth/reset": {
+   "post": {
+    "responses": {
+     "403": {
+      "description": "Account not found or already active"
+     },
+     "200": {
+      "description": "Reset email is valid"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid reset email"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "reset_email": {
+         "type": "string",
+         "format": "email"
+        }
+       },
+       "required": [
+        "reset_email"
+       ]
+      }
+     }
+    ],
+    "description": "Request password reset via email",
+    "summary": "Request password reset via email"
+   }
+  },
+  "/auth/login/unlock/{token}": {
+   "post": {
+    "responses": {
+     "200": {
+      "description": "Credentials are now unlocked"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid token"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "The unlock sent by email is validated here to restore credentials",
+    "summary": "Unlock credentials after a login block"
+   }
+  },
+  "/auth/profile": {
+   "post": {
+    "responses": {
+     "200": {
+      "description": "The uuid of the new user is returned"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "409": {
+      "description": "This user already exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserRegistration"
+      }
+     }
+    ],
+    "summary": "Register new user"
+   },
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Password updated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/NewPassword"
+      }
+     }
+    ],
+    "summary": "Update the user password",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "patch": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Profile updated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserProfileEdit"
+      }
+     }
+    ],
+    "summary": "Update profile attributes",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User profile is returned"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [],
+    "summary": "List profile attributes",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/login": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "Invalid access credentials"
+     },
+     "200": {
+      "description": "Credentials are valid"
+     },
+     "403": {
+      "description": "Access to this account is not allowed"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/Credentials"
+      }
+     }
+    ],
+    "description": "Login with basic credentials (username and password)",
+    "summary": "Login by proving your credentials"
+   }
+  },
+  "/auth/profile/activate/{token}": {
+   "put": {
+    "responses": {
+     "403": {
+      "description": "Account temporarily blocked due to the number of failed logins"
+     },
+     "200": {
+      "description": "Account successfully activated"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid token"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Activate your account by providing the activation token"
+   }
+  },
+  "/auth/profile/activate": {
+   "post": {
+    "responses": {
+     "403": {
+      "description": "Account temporarily blocked due to the number of failed logins"
+     },
+     "200": {
+      "description": "A new activation link has been sent"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "username": {
+         "type": "string",
+         "format": "email"
+        }
+       },
+       "required": [
+        "username"
+       ]
+      }
+     }
+    ],
+    "summary": "Ask a new activation link"
+   }
+  },
+  "/api/status": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Server is alive"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "status"
+    ],
+    "parameters": [],
+    "description": "Use this endpoint to monitor network or server problems",
+    "summary": "Check if the API server is currently reachable"
+   }
+  },
+  "/auth/status": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Auth token is valid"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "description": "Use this endpoint to verify if an auth token is valid",
+    "summary": "Verify the validity of the provided token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/group/users": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of users successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "description": "This endpoint is restricted to Group Coordinators",
+    "summary": "List of users of your group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/tokens/{token_id}": {
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Token has been invalidated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Invalidate the specified token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/tokens": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of tokens"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "summary": "Retrieve all emitted tokens",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/data/{filename}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found the file to download"
+     },
+     "404": {
+      "description": "File not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "file"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "filename",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download output file",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests/{request_id}": {
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request archived successfully."
+     },
+     "404": {
+      "description": "Request does not exist."
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Archive a request",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request deleted successfully."
+     },
+     "404": {
+      "description": "Request does not exist."
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a request",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests": {
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of requests of an user"
+     },
+     "404": {
+      "description": "User has no requests"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "archived",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get requests filtered by uuid.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests/{request_id}/clone": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "A user request query model"
+     },
+     "404": {
+      "description": "No user request found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Get a request to be cloned.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/arco/{object_path}": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Data retrieved"
+     },
+     "404": {
+      "description": "Data not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "arco"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "object_path",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Access ARCO datasets"
+   }
+  },
+  "/api/arco/datasets": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Datasets retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "arco"
+    ],
+    "parameters": [],
+    "summary": "List ARCO datasets"
+   }
+  },
+  "/api/datasets/{dataset_id}/opendata": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "Requested dataset is private"
+     },
+     "200": {
+      "description": "Filelist successfully retrieved"
+     },
+     "404": {
+      "description": "Requested dataset not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_filelist"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Get the list of opendata files for that dataset",
+    "summary": "Get opendata filename and metadata"
+   }
+  },
+  "/api/opendata/{filename}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found the file to download"
+     },
+     "404": {
+      "description": "File not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_download_file"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "filename",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download the opendata file"
+   }
+  },
+  "/api/opendata/{dataset_id}/download": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found files to download"
+     },
+     "404": {
+      "description": "No files to download for the requested dataset"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_download"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "reftime",
+      "required": false,
+      "type": "string",
+      "format": "date"
+     },
+     {
+      "in": "query",
+      "name": "run",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download opendata related to a dataset"
+   }
+  },
+  "/api/observations": {
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "File of observed data"
+     },
+     "404": {
+      "description": "The query does not give result"
+     },
+     "400": {
+      "description": "Missing params"
+     }
+    },
+    "tags": [
+     "maps-observations"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "output_format",
+      "required": true,
+      "type": "string",
+      "enum": [
+       "BUFR",
+       "JSON"
+      ]
+     },
+     {
+      "in": "query",
+      "name": "networks",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lat",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lon",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "ident",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "singleStation",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "reliabilityCheck",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Download the observed data displayed on the map"
+   },
+   "get": {
+    "responses": {
+     "409": {
+      "description": "The requested interval is greater than the requested timerange"
+     },
+     "400": {
+      "description": "Missing params"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of values successfully retrieved"
+     },
+     "404": {
+      "description": "The query does not give result"
+     }
+    },
+    "tags": [
+     "maps-observations"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "networks",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "interval",
+      "required": false,
+      "type": "integer"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lat",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lon",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "ident",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "onlyStations",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "stationDetails",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "allStationProducts",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "reliabilityCheck",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "last",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "daily",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get values of observed parameters"
+   }
+  },
+  "/api/templates": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template filepath."
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [],
+    "description": "Returns a single template by name",
+    "summary": "Get a template filepath",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "post": {
+    "responses": {
+     "202": {
+      "description": "File uploaded"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "File cannot be uploaded"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [],
+    "summary": "Upload of templates for postprocessors",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/templates/{template_name}": {
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template is succesfully deleted"
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "template_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a template",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template filepath."
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "template_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Returns a single template by name",
+    "summary": "Get a template filepath",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/datasets": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Datasets successfully retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "dataset"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "licenceSpecs",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "description": "Return all available datasets",
+    "summary": "Get datasets"
+   }
+  },
+  "/api/datasets/{dataset_name}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Dataset successfully retrieved"
+     },
+     "404": {
+      "description": "Dataset does not exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "dataset"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "licenceSpecs",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "path",
+      "name": "dataset_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Return a single dataset filtered by name",
+    "summary": "Get a dataset filtered by name"
+   }
+  },
+  "/api/fields": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of fields successfully retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "field"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "datasets",
+      "required": false,
+      "collectionFormat": "multi",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "onlySummaryStats",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "SummaryStats",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "allAvailableProducts",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get summary fields for given dataset(s)."
+   }
+  },
+  "/api/data": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "Parameters for post processing are not correct"
+     },
+     "202": {
+      "description": "Data extraction request queued"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "500": {
+      "description": "File for spare point interpolation post processor is corrupted"
+     },
+     "403": {
+      "description": "Requested data exceeds allowed size"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "data"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "push",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/DataExtraction"
+      }
+     }
+    ],
+    "summary": "Request for data extraction.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/hourly": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request hourly report information"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "request_hourly_report"
+    ],
+    "parameters": [],
+    "summary": "Get user remaining requests par hour",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules": {
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of user schedules."
+     },
+     "403": {
+      "description": "User not allowed to get the schedule"
+     },
+     "404": {
+      "description": "The schedule does not exists"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [],
+    "description": "Returns a single schedule by id",
+    "summary": "Get user schedules.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "201": {
+      "description": "Scheduled request successfully created"
+     },
+     "404": {
+      "description": "Cannot schedule the request: dataset not found"
+     },
+     "400": {
+      "description": "Invalid scheduled request"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "push",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/ScheduledDataExtraction"
+      }
+     }
+    ],
+    "summary": "Request for scheduling a data extraction.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules/{schedule_id}": {
+   "patch": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Schedule is succesfully disable/enable"
+     },
+     "404": {
+      "description": "Schedule not found"
+     },
+     "400": {
+      "description": "Schedule is already enabled/disabled"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "is_active": {
+         "type": "boolean",
+         "description": "Enable or disable the schedule"
+        }
+       },
+       "required": [
+        "is_active"
+       ]
+      }
+     },
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Enable or disable a schedule",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of user schedules."
+     },
+     "403": {
+      "description": "User not allowed to get the schedule"
+     },
+     "404": {
+      "description": "The schedule does not exists"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Returns a single schedule by id",
+    "summary": "Get user schedules.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Schedule is succesfully disable/enable"
+     },
+     "404": {
+      "description": "Schedule not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a schedule",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules/{schedule_id}/requests": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of requests for a given schedule."
+     },
+     "403": {
+      "description": "Cannot access a schedule not belonging to you"
+     },
+     "404": {
+      "description": "Schedule not found."
+     }
+    },
+    "tags": [
+     "scheduled_requests"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "get_total",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "last",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Get requests related to a given schedule.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/access-key": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User access key created"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "lifetime_seconds": {
+         "type": "integer",
+         "x-nullable": true
+        }
+       }
+      }
+     }
+    ],
+    "summary": "Create or regenerate an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User access key retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "User access key not found"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Get an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "User access key revoked"
+     },
+     "404": {
+      "description": "No access key to revoke"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Revoke an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/access-key/validate": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "Missing or invalid email/access-key"
+     },
+     "200": {
+      "description": "User access key valid"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Validates access key via HTTP BasicAuth"
+   }
+  },
+  "/api/usage": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Disk usage information"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "usage"
+    ],
+    "parameters": [],
+    "summary": "Get user disk usage.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/outbindings/{username}/{network}": {
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User allowed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "username",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "network",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Allow a user to receive a network...",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User disallowed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "username",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "network",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Disallow a user from receiving a network",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/outbindings": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of bindings is returned"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of bindings between networks and user data queues",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  }
+ },
+ "info": {
+  "title": "MeteoHub",
+  "version": "0.5.8"
+ },
+ "swagger": "2.0",
+ "securityDefinitions": {
+  "Bearer": {
+   "type": "apiKey",
+   "in": "header",
+   "name": "Authorization"
+  }
+ },
+ "definitions": {
+  "Total": {
+   "type": "object",
+   "properties": {
+    "total": {
+     "type": "integer"
+    }
+   }
+  },
+  "UserRegistration": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "email": {
+     "type": "string",
+     "format": "email",
+     "maxLength": 100
+    },
+    "password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    }
+   },
+   "required": [
+    "email",
+    "name",
+    "password",
+    "password_confirm",
+    "surname"
+   ]
+  },
+  "Credentials": {
+   "type": "object",
+   "properties": {
+    "username": {
+     "type": "string",
+     "format": "email",
+     "maxLength": 100
+    },
+    "password": {
+     "type": "string"
+    },
+    "new_password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    },
+    "totp_code": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "password",
+    "username"
+   ]
+  },
+  "NewPassword": {
+   "type": "object",
+   "properties": {
+    "password": {
+     "type": "string"
+    },
+    "new_password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    },
+    "totp_code": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "new_password",
+    "password",
+    "password_confirm"
+   ]
+  },
+  "UserProfileEdit": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "privacy_accepted": {
+     "type": "boolean"
+    },
+    "requests_expiration_days": {
+     "type": "integer",
+     "default": 180,
+     "minimum": 1,
+     "maximum": 180,
+     "description": "Number of days after which requests will be archived or deleted"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean",
+     "description": "If set false expired request will be archived instead of deleted"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean",
+     "description": "Notify the user when a request is successfully completed"
+    }
+   }
+  },
+  "Reftime": {
+   "type": "object",
+   "properties": {
+    "from": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "to": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ]
+  },
+  "Filters": {
+   "type": "object",
+   "properties": {
+    "area": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "level": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "origin": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "proddef": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "product": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "quantity": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "run": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "task": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "timerange": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "network": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  "DataExtraction": {
+   "type": "object",
+   "properties": {
+    "request_name": {
+     "type": "string"
+    },
+    "reftime": {
+     "x-nullable": true,
+     "allOf": [
+      {
+       "$ref": "#/definitions/Reftime"
+      }
+     ]
+    },
+    "dataset_names": {
+     "type": "array",
+     "description": "Data belong to the datasets of the list.",
+     "items": {
+      "type": "string",
+      "description": "Dataset name"
+     }
+    },
+    "filters": {
+     "description": "Apply different filtering criteria.",
+     "allOf": [
+      {
+       "$ref": "#/definitions/Filters"
+      }
+     ]
+    },
+    "output_format": {
+     "type": "string"
+    },
+    "only_reliable": {
+     "type": "boolean"
+    },
+    "postprocessors": {
+     "type": "array",
+     "description": "Apply one or more post-processing to the filtered data.",
+     "items": {
+      "description": "Post-processing request details"
+     }
+    },
+    "force_obs_download": {
+     "type": "boolean",
+     "description": "If set to True, download of observed data will be attempted even if the estimated data size exceeds the allowed user quota."
+    }
+   },
+   "required": [
+    "dataset_names",
+    "request_name"
+   ]
+  },
+  "Reftime1": {
+   "type": "object",
+   "properties": {
+    "from": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "to": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ]
+  },
+  "Filters1": {
+   "type": "object",
+   "properties": {
+    "area": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "level": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "origin": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "proddef": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "product": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "quantity": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "run": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "task": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "timerange": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "network": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  "PeriodSettings": {
+   "type": "object",
+   "properties": {
+    "every": {
+     "type": "integer"
+    },
+    "period": {
+     "type": "string",
+     "enum": [
+      "days",
+      "hours",
+      "minutes"
+     ]
+    }
+   },
+   "required": [
+    "every",
+    "period"
+   ]
+  },
+  "CrontabSettings": {
+   "type": "object",
+   "properties": {
+    "minute": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 59
+    },
+    "hour": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 23
+    },
+    "day_of_week": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 7
+    },
+    "day_of_month": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 31
+    },
+    "month_of_year": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 12
+    }
+   }
+  },
+  "ScheduledDataExtraction": {
+   "type": "object",
+   "properties": {
+    "request_name": {
+     "type": "string"
+    },
+    "reftime": {
+     "x-nullable": true,
+     "allOf": [
+      {
+       "$ref": "#/definitions/Reftime1"
+      }
+     ]
+    },
+    "dataset_names": {
+     "type": "array",
+     "description": "Data belong to the datasets of the list.",
+     "items": {
+      "type": "string",
+      "description": "Dataset name"
+     }
+    },
+    "filters": {
+     "description": "Apply different filtering criteria.",
+     "allOf": [
+      {
+       "$ref": "#/definitions/Filters1"
+      }
+     ]
+    },
+    "output_format": {
+     "type": "string"
+    },
+    "only_reliable": {
+     "type": "boolean"
+    },
+    "postprocessors": {
+     "type": "array",
+     "description": "Apply one or more post-processing to the filtered data.",
+     "items": {
+      "description": "Post-processing request details"
+     }
+    },
+    "period-settings": {
+     "description": "Settings for the periodic request",
+     "allOf": [
+      {
+       "$ref": "#/definitions/PeriodSettings"
+      }
+     ]
+    },
+    "crontab-settings": {
+     "description": "Settings for the crontab request",
+     "allOf": [
+      {
+       "$ref": "#/definitions/CrontabSettings"
+      }
+     ]
+    },
+    "on-data-ready": {
+     "type": "boolean",
+     "description": "Activate data extraction when requested data is ready"
+    },
+    "opendata": {
+     "type": "boolean",
+     "description": "Schedule for data available in opendata folder for all users"
+    }
+   },
+   "required": [
+    "dataset_names",
+    "request_name"
+   ]
+  }
+ }
+}

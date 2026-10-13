@@ -1,0 +1,5296 @@
+{
+ "host": "meteohub.agenziaitaliameteo.it",
+ "schemes": [
+  "https"
+ ],
+ "tags": [
+  {
+   "name": "specifications",
+   "description": "OpenAPI 2.0 Specification in JSON format"
+  },
+  {
+   "name": "status",
+   "description": "Verify the status of the server"
+  },
+  {
+   "name": "authentication",
+   "description": "Manage authentication and active tokens"
+  },
+  {
+   "name": "profile",
+   "description": "Manage your own profile"
+  },
+  {
+   "name": "management",
+   "description": "Managent endpoints"
+  }
+ ],
+ "paths": {
+  "/auth/logout": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Token correctly removed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "description": "Invalidate current registered token",
+    "summary": "Logout and invalidate the current token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/groups/{group_id}": {
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Group successfully modified"
+     },
+     "404": {
+      "description": "Group not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/GroupDefinition"
+      }
+     },
+     {
+      "in": "path",
+      "name": "group_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify a group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Group successfully deleted"
+     },
+     "404": {
+      "description": "Group not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "group_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/groups": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The uuid of the new group is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/GroupDefinition1"
+      }
+     }
+    ],
+    "summary": "Create a new group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of groups successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of groups",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/specs": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Endpoints JSON based on OpenAPI Specifications"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "specifications"
+    ],
+    "parameters": [],
+    "summary": "Endpoints specifications based on OpenAPI 2.0 format"
+   }
+  },
+  "/api/admin/mail": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "Mail successfully sent"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/MailInput"
+      }
+     }
+    ],
+    "summary": "Send mail messages",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/reset/{token}": {
+   "put": {
+    "responses": {
+     "200": {
+      "description": "Reset token is valid, password changed"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid reset token"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "new_password": {
+         "type": "string",
+         "minLength": 8
+        },
+        "password_confirm": {
+         "type": "string",
+         "minLength": 8
+        }
+       }
+      }
+     },
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Change password as conseguence of a reset request",
+    "summary": "Change password as conseguence of a reset request"
+   }
+  },
+  "/auth/reset": {
+   "post": {
+    "responses": {
+     "403": {
+      "description": "Account not found or already active"
+     },
+     "200": {
+      "description": "Reset email is valid"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid reset email"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "reset_email": {
+         "type": "string",
+         "format": "email"
+        }
+       },
+       "required": [
+        "reset_email"
+       ]
+      }
+     }
+    ],
+    "description": "Request password reset via email",
+    "summary": "Request password reset via email"
+   }
+  },
+  "/api/admin/users/{user_id}": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of users successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "user_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Return the list of all defined users",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User successfully modified"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserDefinition"
+      }
+     },
+     {
+      "in": "path",
+      "name": "user_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify a user",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User successfully deleted"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "user_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a user",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/users": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "This user already exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The uuid of the new user is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserDefinition1"
+      }
+     }
+    ],
+    "summary": "Create a new user",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of users successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "Return the list of all defined users",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/tokens/{token_id}": {
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Token has been invalidated"
+     },
+     "404": {
+      "description": "Specified token cannot be found"
+     },
+     "400": {
+      "description": "Token invalidation is failed"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Invalidate the specified token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/tokens": {
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "The list of tokens is returned"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "summary": "Retrieve all tokens emitted for logged user",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/login/unlock/{token}": {
+   "post": {
+    "responses": {
+     "200": {
+      "description": "Credentials are now unlocked"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid token"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "The unlock sent by email is validated here to restore credentials",
+    "summary": "Unlock credentials after a login block"
+   }
+  },
+  "/auth/profile": {
+   "post": {
+    "responses": {
+     "200": {
+      "description": "The uuid of the new user is returned"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "409": {
+      "description": "This user already exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserRegistration"
+      }
+     }
+    ],
+    "summary": "Register new user"
+   },
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Password updated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/NewPassword"
+      }
+     }
+    ],
+    "summary": "Update the user password",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "patch": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Profile updated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/UserProfileEdit"
+      }
+     }
+    ],
+    "summary": "Update profile attributes",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User profile is returned"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [],
+    "summary": "List profile attributes",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/logins": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "Logins data retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "Retrieve logins information",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/login": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "Invalid access credentials"
+     },
+     "200": {
+      "description": "Credentials are valid"
+     },
+     "403": {
+      "description": "Access to this account is not allowed"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/Credentials"
+      }
+     }
+    ],
+    "description": "Login with basic credentials (username and password)",
+    "summary": "Login by proving your credentials"
+   }
+  },
+  "/auth/profile/activate/{token}": {
+   "put": {
+    "responses": {
+     "403": {
+      "description": "Account temporarily blocked due to the number of failed logins"
+     },
+     "200": {
+      "description": "Account successfully activated"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "Invalid token"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Activate your account by providing the activation token"
+   }
+  },
+  "/auth/profile/activate": {
+   "post": {
+    "responses": {
+     "403": {
+      "description": "Account temporarily blocked due to the number of failed logins"
+     },
+     "200": {
+      "description": "A new activation link has been sent"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "profile"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "username": {
+         "type": "string",
+         "format": "email"
+        }
+       },
+       "required": [
+        "username"
+       ]
+      }
+     }
+    ],
+    "summary": "Ask a new activation link"
+   }
+  },
+  "/api/status": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Server is alive"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "status"
+    ],
+    "parameters": [],
+    "description": "Use this endpoint to monitor network or server problems",
+    "summary": "Check if the API server is currently reachable"
+   }
+  },
+  "/auth/status": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Auth token is valid"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "description": "Use this endpoint to verify if an auth token is valid",
+    "summary": "Verify the validity of the provided token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/group/users": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of users successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "description": "This endpoint is restricted to Group Coordinators",
+    "summary": "List of users of your group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/tokens/{token_id}": {
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Token has been invalidated"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "token_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Invalidate the specified token",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/auth/tokens": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of tokens"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "authentication"
+    ],
+    "parameters": [],
+    "summary": "Retrieve all emitted tokens",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/stats": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "Stats retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "helpers"
+    ],
+    "parameters": [],
+    "summary": "Retrieve stats from the server",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/datasets/{dataset_id}": {
+   "put": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Dataset successfully modified"
+     },
+     "404": {
+      "description": "Dataset not found"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/AttributionDefinition"
+      }
+     },
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify a dataset",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Dataset successfully deleted"
+     },
+     "404": {
+      "description": "Dataset not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a dataset",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/datasets": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "This dataset already exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The id of the new dataset is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/AttributionDefinition1"
+      }
+     }
+    ],
+    "summary": "Create a new dataset",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of datasets successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of datasets",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/data/{filename}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found the file to download"
+     },
+     "404": {
+      "description": "File not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "file"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "filename",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download output file",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests/{request_id}": {
+   "put": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request archived successfully."
+     },
+     "404": {
+      "description": "Request does not exist."
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Archive a request",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request deleted successfully."
+     },
+     "404": {
+      "description": "Request does not exist."
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a request",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests": {
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of requests of an user"
+     },
+     "404": {
+      "description": "User has no requests"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "archived",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get requests filtered by uuid.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/requests/{request_id}/clone": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "A user request query model"
+     },
+     "404": {
+      "description": "No user request found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "requests"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "request_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Get a request to be cloned.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/arco/{object_path}": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Data retrieved"
+     },
+     "404": {
+      "description": "Data not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "arco"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "object_path",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Access ARCO datasets"
+   }
+  },
+  "/api/arco/datasets": {
+   "get": {
+    "responses": {
+     "200": {
+      "description": "Datasets retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "arco"
+    ],
+    "parameters": [],
+    "summary": "List ARCO datasets"
+   }
+  },
+  "/api/datasets/{dataset_id}/opendata": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "Requested dataset is private"
+     },
+     "200": {
+      "description": "Filelist successfully retrieved"
+     },
+     "404": {
+      "description": "Requested dataset not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_filelist"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Get the list of opendata files for that dataset",
+    "summary": "Get opendata filename and metadata"
+   }
+  },
+  "/api/opendata/{filename}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found the file to download"
+     },
+     "404": {
+      "description": "File not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_download_file"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "filename",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download the opendata file"
+   }
+  },
+  "/api/opendata/{dataset_id}/download": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Found files to download"
+     },
+     "404": {
+      "description": "No files to download for the requested dataset"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "opendata_download"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "reftime",
+      "required": false,
+      "type": "string",
+      "format": "date"
+     },
+     {
+      "in": "query",
+      "name": "run",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Download opendata related to a dataset"
+   }
+  },
+  "/api/observations": {
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "File of observed data"
+     },
+     "404": {
+      "description": "The query does not give result"
+     },
+     "400": {
+      "description": "Missing params"
+     }
+    },
+    "tags": [
+     "maps-observations"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "output_format",
+      "required": true,
+      "type": "string",
+      "enum": [
+       "BUFR",
+       "JSON"
+      ]
+     },
+     {
+      "in": "query",
+      "name": "networks",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lat",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lon",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "ident",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "singleStation",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "reliabilityCheck",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Download the observed data displayed on the map"
+   },
+   "get": {
+    "responses": {
+     "409": {
+      "description": "The requested interval is greater than the requested timerange"
+     },
+     "400": {
+      "description": "Missing params"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of values successfully retrieved"
+     },
+     "404": {
+      "description": "The query does not give result"
+     }
+    },
+    "tags": [
+     "maps-observations"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "networks",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "interval",
+      "required": false,
+      "type": "integer"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lat",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lon",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "ident",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "onlyStations",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "stationDetails",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "allStationProducts",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "reliabilityCheck",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "last",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "daily",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get values of observed parameters"
+   }
+  },
+  "/api/templates": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template filepath."
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [],
+    "description": "Returns a single template by name",
+    "summary": "Get a template filepath",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "post": {
+    "responses": {
+     "202": {
+      "description": "File uploaded"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "File cannot be uploaded"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [],
+    "summary": "Upload of templates for postprocessors",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/templates/{template_name}": {
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template is succesfully deleted"
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "template_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a template",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Template filepath."
+     },
+     "404": {
+      "description": "Template not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "templates"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "template_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Returns a single template by name",
+    "summary": "Get a template filepath",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/licenses/{license_id}": {
+   "put": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "License successfully modified"
+     },
+     "404": {
+      "description": "license not found"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/LicenseDefinition"
+      }
+     },
+     {
+      "in": "path",
+      "name": "license_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify a license",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "License successfully deleted"
+     },
+     "404": {
+      "description": "License not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "license_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a license",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/licenses": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "This license already exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The id of the new license is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/LicenseDefinition1"
+      }
+     }
+    ],
+    "summary": "Create a new license",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of licenses successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of licenses",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/datasets": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Datasets successfully retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "dataset"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "licenceSpecs",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "description": "Return all available datasets",
+    "summary": "Get datasets"
+   }
+  },
+  "/api/datasets/{dataset_name}": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Dataset successfully retrieved"
+     },
+     "404": {
+      "description": "Dataset does not exists"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "dataset"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "licenceSpecs",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "path",
+      "name": "dataset_name",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Return a single dataset filtered by name",
+    "summary": "Get a dataset filtered by name"
+   }
+  },
+  "/api/fields": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of fields successfully retrieved"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "field"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "datasets",
+      "required": false,
+      "collectionFormat": "multi",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "type": "string"
+     },
+     {
+      "in": "query",
+      "name": "lonmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmin",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "lonmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "latmax",
+      "required": false,
+      "type": "number"
+     },
+     {
+      "in": "query",
+      "name": "onlySummaryStats",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "SummaryStats",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "allAvailableProducts",
+      "required": false,
+      "type": "boolean"
+     }
+    ],
+    "summary": "Get summary fields for given dataset(s)."
+   }
+  },
+  "/api/data/ready": {
+   "post": {
+    "responses": {
+     "202": {
+      "description": "Notification received"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "undefined"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "Cluster": {
+         "type": "string",
+         "enum": [
+          "g100",
+          "galileo",
+          "meucci",
+          "leonardo"
+         ]
+        },
+        "Model": {
+         "type": "string"
+        },
+        "rundate": {
+         "type": "string",
+         "format": "date-time"
+        }
+       },
+       "required": [
+        "Cluster",
+        "Model",
+        "rundate"
+       ]
+      }
+     }
+    ],
+    "summary": "Notify that a dataset is ready",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/data": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "Parameters for post processing are not correct"
+     },
+     "202": {
+      "description": "Data extraction request queued"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "500": {
+      "description": "File for spare point interpolation post processor is corrupted"
+     },
+     "403": {
+      "description": "Requested data exceeds allowed size"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "data"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "push",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/DataExtraction"
+      }
+     }
+    ],
+    "summary": "Request for data extraction.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/hourly": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Request hourly report information"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "request_hourly_report"
+    ],
+    "parameters": [],
+    "summary": "Get user remaining requests par hour",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules": {
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of user schedules."
+     },
+     "403": {
+      "description": "User not allowed to get the schedule"
+     },
+     "404": {
+      "description": "The schedule does not exists"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [],
+    "description": "Returns a single schedule by id",
+    "summary": "Get user schedules.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "201": {
+      "description": "Scheduled request successfully created"
+     },
+     "404": {
+      "description": "Cannot schedule the request: dataset not found"
+     },
+     "400": {
+      "description": "Invalid scheduled request"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "push",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/ScheduledDataExtraction"
+      }
+     }
+    ],
+    "summary": "Request for scheduling a data extraction.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules/{schedule_id}": {
+   "patch": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Schedule is succesfully disable/enable"
+     },
+     "404": {
+      "description": "Schedule not found"
+     },
+     "400": {
+      "description": "Schedule is already enabled/disabled"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "is_active": {
+         "type": "boolean",
+         "description": "Enable or disable the schedule"
+        }
+       },
+       "required": [
+        "is_active"
+       ]
+      }
+     },
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Enable or disable a schedule",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "206": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Total"
+      }
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of user schedules."
+     },
+     "403": {
+      "description": "User not allowed to get the schedule"
+     },
+     "404": {
+      "description": "The schedule does not exists"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "description": "Returns a single schedule by id",
+    "summary": "Get user schedules.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Schedule is succesfully disable/enable"
+     },
+     "404": {
+      "description": "Schedule not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "schedule"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a schedule",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/schedules/{schedule_id}/requests": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "List of requests for a given schedule."
+     },
+     "403": {
+      "description": "Cannot access a schedule not belonging to you"
+     },
+     "404": {
+      "description": "Schedule not found."
+     }
+    },
+    "tags": [
+     "scheduled_requests"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "get_total",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "query",
+      "name": "last",
+      "required": false,
+      "type": "boolean"
+     },
+     {
+      "in": "path",
+      "name": "schedule_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Get requests related to a given schedule.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/access-key": {
+   "post": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User access key created"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "required": false,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "lifetime_seconds": {
+         "type": "integer",
+         "x-nullable": true
+        }
+       }
+      }
+     }
+    ],
+    "summary": "Create or regenerate an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "User access key retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "User access key not found"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Get an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "User access key revoked"
+     },
+     "404": {
+      "description": "No access key to revoke"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Revoke an access key",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/access-key/validate": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "Missing or invalid email/access-key"
+     },
+     "200": {
+      "description": "User access key valid"
+     },
+     "404": {
+      "description": "The requested resource cannot be found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "access key"
+    ],
+    "parameters": [],
+    "summary": "Validates access key via HTTP BasicAuth"
+   }
+  },
+  "/api/admin/attributions/{attribution_id}": {
+   "put": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Attribution successfully modified"
+     },
+     "404": {
+      "description": "Attribution not found"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/AttributionInput"
+      }
+     },
+     {
+      "in": "path",
+      "name": "attribution_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify an attribution",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "Attribution successfully deleted"
+     },
+     "404": {
+      "description": "Attribution not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "attribution_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete an attribution",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/attributions": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The id of the new attribution is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/AttributionInput"
+      }
+     }
+    ],
+    "summary": "Create a new attribution",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of attributions successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of attributions",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/usage": {
+   "get": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "Disk usage information"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "usage"
+    ],
+    "parameters": [],
+    "summary": "Get user disk usage.",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/licensegroups/{lic_group_id}": {
+   "put": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "License group successfully modified"
+     },
+     "404": {
+      "description": "group not found"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/LicGroupInput"
+      }
+     },
+     {
+      "in": "path",
+      "name": "lic_group_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Modify a license group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "204": {
+      "description": "License group successfully deleted"
+     },
+     "404": {
+      "description": "License group not found"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "lic_group_id",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Delete a license group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/admin/licensegroups": {
+   "post": {
+    "responses": {
+     "409": {
+      "description": "Request is invalid due to conflicts"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "The id of the new license group is returned"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "required": false,
+      "name": "body",
+      "schema": {
+       "$ref": "#/definitions/LicGroupInput"
+      }
+     }
+    ],
+    "summary": "Create a new license group",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of license groups successfully retrieved"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of license groups",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/outbindings/{username}/{network}": {
+   "post": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User allowed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "username",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "network",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Allow a user to receive a network...",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   },
+   "delete": {
+    "responses": {
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "200": {
+      "description": "User disallowed"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     },
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [
+     {
+      "in": "path",
+      "name": "username",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "path",
+      "name": "network",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "summary": "Disallow a user from receiving a network",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  },
+  "/api/outbindings": {
+   "get": {
+    "responses": {
+     "400": {
+      "description": "The request cannot be satisfied due to malformed syntax"
+     },
+     "200": {
+      "description": "List of bindings is returned"
+     },
+     "401": {
+      "description": "This endpoint requires a valid authorization token"
+     },
+     "404": {
+      "description": "The resource cannot be found or you are not authorized"
+     }
+    },
+    "tags": [
+     "management"
+    ],
+    "parameters": [],
+    "summary": "List of bindings between networks and user data queues",
+    "security": [
+     {
+      "Bearer": []
+     }
+    ]
+   }
+  }
+ },
+ "info": {
+  "title": "MeteoHub",
+  "version": "0.5.8"
+ },
+ "swagger": "2.0",
+ "definitions": {
+  "GroupDefinition": {
+   "type": "object",
+   "properties": {
+    "shortname": {
+     "type": "string",
+     "description": "Short name"
+    },
+    "fullname": {
+     "type": "string",
+     "description": "Full name"
+    }
+   },
+   "required": [
+    "fullname",
+    "shortname"
+   ]
+  },
+  "GroupDefinition1": {
+   "type": "object",
+   "properties": {
+    "shortname": {
+     "type": "string",
+     "description": "Short name"
+    },
+    "fullname": {
+     "type": "string",
+     "description": "Full name"
+    }
+   },
+   "required": [
+    "fullname",
+    "shortname"
+   ]
+  },
+  "UserWithUUID": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    }
+   }
+  },
+  "GroupWithMembers": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "fullname": {
+     "type": "string"
+    },
+    "shortname": {
+     "type": "string"
+    },
+    "members": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/UserWithUUID"
+     }
+    },
+    "coordinators": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/UserWithUUID"
+     }
+    }
+   }
+  },
+  "MailInput": {
+   "type": "object",
+   "properties": {
+    "subject": {
+     "type": "string",
+     "description": "Subject of your email"
+    },
+    "body": {
+     "type": "string",
+     "maxLength": 9999,
+     "description": "Body of your email. You can use html code here."
+    },
+    "to": {
+     "type": "string",
+     "format": "email"
+    },
+    "cc": {
+     "type": "array",
+     "description": "CC email addresses (comma-delimited list)",
+     "items": {
+      "type": "string",
+      "format": "email"
+     }
+    },
+    "bcc": {
+     "type": "array",
+     "description": "BCC email addresses (comma-delimited list)",
+     "items": {
+      "type": "string",
+      "format": "email"
+     }
+    },
+    "dry_run": {
+     "type": "boolean",
+     "description": "Only simulate the email, do not send it"
+    }
+   },
+   "required": [
+    "body",
+    "dry_run",
+    "subject",
+    "to"
+   ]
+  },
+  "MailOutput": {
+   "type": "object",
+   "properties": {
+    "html_body": {
+     "type": "string"
+    },
+    "plain_body": {
+     "type": "string"
+    },
+    "subject": {
+     "type": "string"
+    },
+    "to": {
+     "type": "string",
+     "format": "email"
+    },
+    "cc": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "format": "email"
+     }
+    },
+    "bcc": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "format": "email"
+     }
+    }
+   }
+  },
+  "Role": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    }
+   }
+  },
+  "Group": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "fullname": {
+     "type": "string"
+    },
+    "shortname": {
+     "type": "string"
+    }
+   }
+  },
+  "Datasets": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    }
+   }
+  },
+  "AdminUserData": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "first_login": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "last_login": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "last_password_change": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "is_active": {
+     "type": "boolean"
+    },
+    "privacy_accepted": {
+     "type": "boolean"
+    },
+    "roles": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Role"
+     }
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "group": {
+     "$ref": "#/definitions/Group"
+    },
+    "disk_quota": {
+     "type": "integer"
+    },
+    "requests_expiration_days": {
+     "type": "integer"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets"
+     }
+    },
+    "max_templates": {
+     "type": "integer"
+    },
+    "max_output_size": {
+     "type": "integer"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean"
+    },
+    "allowed_schedule": {
+     "type": "boolean"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean"
+    },
+    "request_par_hour": {
+     "type": "integer"
+    },
+    "amqp_queue": {
+     "type": "string"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean"
+    }
+   }
+  },
+  "UserDefinition": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string",
+     "minLength": 1
+    },
+    "surname": {
+     "type": "string",
+     "minLength": 1
+    },
+    "password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "email_notification": {
+     "type": "boolean"
+    },
+    "is_active": {
+     "type": "boolean"
+    },
+    "roles": {
+     "type": "array",
+     "description": "",
+     "items": {
+      "type": "string",
+      "enum": [
+       "normal_user",
+       "staff_user",
+       "institutional",
+       "group_coordinator",
+       "operational"
+      ]
+     }
+    },
+    "group": {
+     "type": "string",
+     "enum": [
+      "8a9bfc22-5056-4660-8ce2-038f3dc7c755",
+      "5f48224b-b156-48c5-9cbe-1d362a69cff4",
+      "1e34fda1-0972-4c7c-869f-8d63aabecb05"
+     ],
+     "description": "The group to which the user belongs"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true,
+     "description": "This user will be blocked after this date"
+    },
+    "disk_quota": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Disk quota (GB)"
+    },
+    "requests_expiration_days": {
+     "type": "integer",
+     "default": 180,
+     "minimum": 1,
+     "maximum": 180,
+     "description": "Number of days after which requests will be archived or deleted"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "description": "",
+     "items": {
+      "type": "string",
+      "enum": []
+     }
+    },
+    "max_templates": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 999,
+     "description": "Maximum number of templates the user can upload"
+    },
+    "max_output_size": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Maximum amount of data the user can request at once (GB)"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean",
+     "description": "Allow postprocessing tools"
+    },
+    "allowed_schedule": {
+     "type": "boolean",
+     "description": "Allow schedules"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean",
+     "description": "Allow access to observed archive"
+    },
+    "request_par_hour": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 999,
+     "description": "Maximum number of allowed requests per hour"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean",
+     "description": "Notify the user when a request is successfully completed"
+    },
+    "amqp_queue": {
+     "type": "string",
+     "description": "AMQP queue used to notify the user"
+    }
+   }
+  },
+  "UserDefinition1": {
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string",
+     "format": "email",
+     "maxLength": 100
+    },
+    "name": {
+     "type": "string",
+     "minLength": 1
+    },
+    "surname": {
+     "type": "string",
+     "minLength": 1
+    },
+    "password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "email_notification": {
+     "type": "boolean"
+    },
+    "is_active": {
+     "type": "boolean"
+    },
+    "roles": {
+     "type": "array",
+     "description": "",
+     "items": {
+      "type": "string",
+      "enum": [
+       "normal_user",
+       "staff_user",
+       "institutional",
+       "group_coordinator",
+       "operational"
+      ]
+     }
+    },
+    "group": {
+     "type": "string",
+     "enum": [
+      "8a9bfc22-5056-4660-8ce2-038f3dc7c755",
+      "5f48224b-b156-48c5-9cbe-1d362a69cff4",
+      "1e34fda1-0972-4c7c-869f-8d63aabecb05"
+     ],
+     "description": "The group to which the user belongs"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true,
+     "description": "This user will be blocked after this date"
+    },
+    "disk_quota": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Disk quota (GB)"
+    },
+    "requests_expiration_days": {
+     "type": "integer",
+     "default": 180,
+     "minimum": 1,
+     "maximum": 180,
+     "description": "Number of days after which requests will be archived or deleted"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "description": "",
+     "items": {
+      "type": "string",
+      "enum": []
+     }
+    },
+    "max_templates": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 999,
+     "description": "Maximum number of templates the user can upload"
+    },
+    "max_output_size": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Maximum amount of data the user can request at once (GB)"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean",
+     "description": "Allow postprocessing tools"
+    },
+    "allowed_schedule": {
+     "type": "boolean",
+     "description": "Allow schedules"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean",
+     "description": "Allow access to observed archive"
+    },
+    "request_par_hour": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 999,
+     "description": "Maximum number of allowed requests per hour"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean",
+     "description": "Notify the user when a request is successfully completed"
+    },
+    "amqp_queue": {
+     "type": "string",
+     "description": "AMQP queue used to notify the user"
+    }
+   },
+   "required": [
+    "email",
+    "group",
+    "name",
+    "password",
+    "surname"
+   ]
+  },
+  "AdminUserData1": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "first_login": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "last_login": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "last_password_change": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "is_active": {
+     "type": "boolean"
+    },
+    "privacy_accepted": {
+     "type": "boolean"
+    },
+    "roles": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Role"
+     }
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "group": {
+     "$ref": "#/definitions/Group"
+    },
+    "disk_quota": {
+     "type": "integer"
+    },
+    "requests_expiration_days": {
+     "type": "integer"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets"
+     }
+    },
+    "max_templates": {
+     "type": "integer"
+    },
+    "max_output_size": {
+     "type": "integer"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean"
+    },
+    "allowed_schedule": {
+     "type": "boolean"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean"
+    },
+    "request_par_hour": {
+     "type": "integer"
+    },
+    "amqp_queue": {
+     "type": "string"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean"
+    }
+   }
+  },
+  "User": {
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    }
+   }
+  },
+  "TokenAdmin": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "IP": {
+     "type": "string"
+    },
+    "location": {
+     "type": "string"
+    },
+    "token": {
+     "type": "string"
+    },
+    "emitted": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "last_access": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "user": {
+     "$ref": "#/definitions/User"
+    }
+   }
+  },
+  "Total": {
+   "type": "object",
+   "properties": {
+    "total": {
+     "type": "integer"
+    }
+   }
+  },
+  "UserRegistration": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "email": {
+     "type": "string",
+     "format": "email",
+     "maxLength": 100
+    },
+    "password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    }
+   },
+   "required": [
+    "email",
+    "name",
+    "password",
+    "password_confirm",
+    "surname"
+   ]
+  },
+  "Logins": {
+   "type": "object",
+   "properties": {
+    "username": {
+     "type": "string",
+     "format": "email"
+    },
+    "date": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "IP": {
+     "type": "string"
+    },
+    "location": {
+     "type": "string"
+    },
+    "failed": {
+     "type": "boolean"
+    },
+    "flushed": {
+     "type": "boolean"
+    }
+   }
+  },
+  "Credentials": {
+   "type": "object",
+   "properties": {
+    "username": {
+     "type": "string",
+     "format": "email",
+     "maxLength": 100
+    },
+    "password": {
+     "type": "string"
+    },
+    "new_password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    },
+    "totp_code": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "password",
+    "username"
+   ]
+  },
+  "UserData": {
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "roles": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Role"
+     }
+    },
+    "disk_quota": {
+     "type": "integer"
+    },
+    "requests_expiration_days": {
+     "type": "integer"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets"
+     }
+    },
+    "max_templates": {
+     "type": "integer"
+    },
+    "max_output_size": {
+     "type": "integer"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean"
+    },
+    "allowed_schedule": {
+     "type": "boolean"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean"
+    },
+    "request_par_hour": {
+     "type": "integer"
+    },
+    "amqp_queue": {
+     "type": "string"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean"
+    }
+   }
+  },
+  "Token": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "IP": {
+     "type": "string"
+    },
+    "location": {
+     "type": "string"
+    },
+    "token": {
+     "type": "string"
+    },
+    "emitted": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "last_access": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "NewPassword": {
+   "type": "object",
+   "properties": {
+    "password": {
+     "type": "string"
+    },
+    "new_password": {
+     "type": "string",
+     "minLength": 8
+    },
+    "password_confirm": {
+     "type": "string",
+     "minLength": 8
+    },
+    "totp_code": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "new_password",
+    "password",
+    "password_confirm"
+   ]
+  },
+  "UserProfileEdit": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "privacy_accepted": {
+     "type": "boolean"
+    },
+    "requests_expiration_days": {
+     "type": "integer",
+     "default": 180,
+     "minimum": 1,
+     "maximum": 180,
+     "description": "Number of days after which requests will be archived or deleted"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean",
+     "description": "If set false expired request will be archived instead of deleted"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean",
+     "description": "Notify the user when a request is successfully completed"
+    }
+   }
+  },
+  "UserProfile": {
+   "type": "object",
+   "properties": {
+    "uuid": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "email": {
+     "type": "string",
+     "format": "email"
+    },
+    "name": {
+     "type": "string"
+    },
+    "surname": {
+     "type": "string"
+    },
+    "isAdmin": {
+     "type": "boolean"
+    },
+    "isStaff": {
+     "type": "boolean"
+    },
+    "isCoordinator": {
+     "type": "boolean"
+    },
+    "privacy_accepted": {
+     "type": "boolean"
+    },
+    "is_active": {
+     "type": "boolean"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "roles": {
+     "type": "object"
+    },
+    "last_password_change": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "first_login": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "last_login": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "group": {
+     "$ref": "#/definitions/Group"
+    },
+    "two_factor_enabled": {
+     "type": "boolean"
+    },
+    "disk_quota": {
+     "type": "integer"
+    },
+    "requests_expiration_days": {
+     "type": "integer"
+    },
+    "requests_expiration_delete": {
+     "type": "boolean"
+    },
+    "open_dataset": {
+     "type": "boolean"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets"
+     }
+    },
+    "max_templates": {
+     "type": "integer"
+    },
+    "max_output_size": {
+     "type": "integer"
+    },
+    "allowed_postprocessing": {
+     "type": "boolean"
+    },
+    "allowed_schedule": {
+     "type": "boolean"
+    },
+    "allowed_obs_archive": {
+     "type": "boolean"
+    },
+    "request_par_hour": {
+     "type": "integer"
+    },
+    "amqp_queue": {
+     "type": "string"
+    },
+    "notify_on_successful_request": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "email",
+    "first_login",
+    "isAdmin",
+    "isCoordinator",
+    "isStaff",
+    "is_active",
+    "last_login",
+    "last_password_change",
+    "name",
+    "privacy_accepted",
+    "roles",
+    "surname",
+    "two_factor_enabled",
+    "uuid"
+   ]
+  },
+  "System": {
+   "type": "object",
+   "properties": {
+    "boot_time": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "CPU": {
+   "type": "object",
+   "properties": {
+    "count": {
+     "type": "integer"
+    },
+    "load_percentage": {
+     "type": "number"
+    },
+    "user": {
+     "type": "integer"
+    },
+    "system": {
+     "type": "integer"
+    },
+    "idle": {
+     "type": "integer"
+    },
+    "wait": {
+     "type": "integer"
+    },
+    "stolen": {
+     "type": "integer"
+    }
+   }
+  },
+  "RAM": {
+   "type": "object",
+   "properties": {
+    "total": {
+     "type": "integer"
+    },
+    "used": {
+     "type": "integer"
+    },
+    "active": {
+     "type": "integer"
+    },
+    "inactive": {
+     "type": "integer"
+    },
+    "buffer": {
+     "type": "integer"
+    },
+    "free": {
+     "type": "integer"
+    },
+    "cache": {
+     "type": "integer"
+    }
+   }
+  },
+  "Swap": {
+   "type": "object",
+   "properties": {
+    "from_disk": {
+     "type": "integer"
+    },
+    "to_disk": {
+     "type": "integer"
+    },
+    "total": {
+     "type": "integer"
+    },
+    "used": {
+     "type": "integer"
+    },
+    "free": {
+     "type": "integer"
+    }
+   }
+  },
+  "Disk": {
+   "type": "object",
+   "properties": {
+    "total_disk_space": {
+     "type": "number"
+    },
+    "used_disk_space": {
+     "type": "number"
+    },
+    "free_disk_space": {
+     "type": "number"
+    },
+    "occupacy": {
+     "type": "number"
+    }
+   }
+  },
+  "Proc": {
+   "type": "object",
+   "properties": {
+    "waiting_for_run": {
+     "type": "integer"
+    },
+    "uninterruptible_sleep": {
+     "type": "integer"
+    }
+   }
+  },
+  "IO": {
+   "type": "object",
+   "properties": {
+    "blocks_received": {
+     "type": "integer"
+    },
+    "blocks_sent": {
+     "type": "integer"
+    }
+   }
+  },
+  "Network": {
+   "type": "object",
+   "properties": {
+    "min": {
+     "type": "number"
+    },
+    "max": {
+     "type": "number"
+    },
+    "avg": {
+     "type": "number"
+    }
+   }
+  },
+  "Stats": {
+   "type": "object",
+   "properties": {
+    "system": {
+     "$ref": "#/definitions/System"
+    },
+    "cpu": {
+     "$ref": "#/definitions/CPU"
+    },
+    "ram": {
+     "$ref": "#/definitions/RAM"
+    },
+    "swap": {
+     "$ref": "#/definitions/Swap"
+    },
+    "disk": {
+     "$ref": "#/definitions/Disk"
+    },
+    "procs": {
+     "$ref": "#/definitions/Proc"
+    },
+    "io": {
+     "$ref": "#/definitions/IO"
+    },
+    "network_latency": {
+     "$ref": "#/definitions/Network"
+    }
+   }
+  },
+  "AttributionDefinition": {
+   "type": "object",
+   "properties": {
+    "arkimet_id": {
+     "type": "string",
+     "description": "the name of dataset directory in Arkimet"
+    },
+    "name": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    },
+    "category": {
+     "type": "string",
+     "enum": [
+      "FOR",
+      "OBS",
+      "RAD",
+      "SEA"
+     ]
+    },
+    "source": {
+     "type": "string",
+     "default": "arkimet",
+     "enum": [
+      "arkimet",
+      "nwp",
+      "arco"
+     ]
+    },
+    "fileformat": {
+     "type": "string"
+    },
+    "bounding": {
+     "type": "string"
+    },
+    "sort_index": {
+     "type": "integer",
+     "x-nullable": true,
+     "description": "Number used to sort the datasets in dataset list. If empty the default sorting is alphabetical"
+    },
+    "supports_variable_browsing": {
+     "type": "boolean",
+     "default": false
+    },
+    "license": {
+     "type": "string",
+     "enum": [
+      "1",
+      "4",
+      "5",
+      "2",
+      "6"
+     ],
+     "description": "The dataset's license"
+    },
+    "attribution": {
+     "type": "string",
+     "enum": [
+      "1",
+      "2",
+      "4",
+      "5",
+      "8",
+      "9",
+      "10",
+      "14",
+      "15",
+      "16",
+      "3",
+      "6",
+      "7",
+      "11",
+      "13",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "12",
+      "24",
+      "25",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40"
+     ],
+     "description": "The dataset's attribution"
+    }
+   }
+  },
+  "AttributionDefinition1": {
+   "type": "object",
+   "properties": {
+    "arkimet_id": {
+     "type": "string",
+     "description": "the name of dataset directory in Arkimet"
+    },
+    "name": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    },
+    "category": {
+     "type": "string",
+     "enum": [
+      "FOR",
+      "OBS",
+      "RAD",
+      "SEA"
+     ]
+    },
+    "source": {
+     "type": "string",
+     "default": "arkimet",
+     "enum": [
+      "arkimet",
+      "nwp",
+      "arco"
+     ]
+    },
+    "fileformat": {
+     "type": "string"
+    },
+    "bounding": {
+     "type": "string"
+    },
+    "sort_index": {
+     "type": "integer",
+     "x-nullable": true,
+     "description": "Number used to sort the datasets in dataset list. If empty the default sorting is alphabetical"
+    },
+    "supports_variable_browsing": {
+     "type": "boolean",
+     "default": false
+    },
+    "license": {
+     "type": "string",
+     "enum": [
+      "1",
+      "4",
+      "5",
+      "2",
+      "6"
+     ],
+     "description": "The dataset's license"
+    },
+    "attribution": {
+     "type": "string",
+     "enum": [
+      "1",
+      "2",
+      "4",
+      "5",
+      "8",
+      "9",
+      "10",
+      "14",
+      "15",
+      "16",
+      "3",
+      "6",
+      "7",
+      "11",
+      "13",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "12",
+      "24",
+      "25",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40"
+     ],
+     "description": "The dataset's attribution"
+    }
+   },
+   "required": [
+    "arkimet_id",
+    "attribution",
+    "category",
+    "description",
+    "fileformat",
+    "license",
+    "name"
+   ]
+  },
+  "License": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    }
+   }
+  },
+  "Attribution": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    }
+   }
+  },
+  "AttributionDefinition2": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "arkimet_id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    },
+    "category": {
+     "type": "string",
+     "enum": [
+      "FOR",
+      "OBS",
+      "RAD",
+      "SEA"
+     ]
+    },
+    "source": {
+     "type": "string",
+     "enum": [
+      "arkimet",
+      "nwp",
+      "arco"
+     ]
+    },
+    "fileformat": {
+     "type": "string"
+    },
+    "bounding": {
+     "type": "string"
+    },
+    "sort_index": {
+     "type": "integer",
+     "x-nullable": true
+    },
+    "supports_variable_browsing": {
+     "type": "boolean"
+    },
+    "license": {
+     "$ref": "#/definitions/License"
+    },
+    "attribution": {
+     "$ref": "#/definitions/Attribution"
+    }
+   }
+  },
+  "Dataset": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "category": {
+     "type": "string"
+    },
+    "format": {
+     "type": "string"
+    },
+    "source": {
+     "type": "string"
+    },
+    "bounding": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "attribution": {
+     "type": "string"
+    },
+    "attribution_description": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "attribution_url": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "group_license": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "group_license_description": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "license": {
+     "type": "string"
+    },
+    "license_description": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "license_url": {
+     "type": "string",
+     "x-nullable": true
+    },
+    "is_public": {
+     "type": "boolean"
+    },
+    "authorized": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "attribution",
+    "authorized",
+    "category",
+    "format",
+    "id",
+    "is_public",
+    "license",
+    "name",
+    "source"
+   ]
+  },
+  "LicenseDefinition": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url",
+     "x-nullable": true
+    },
+    "group_license": {
+     "type": "string",
+     "enum": [
+      "2",
+      "3",
+      "1"
+     ],
+     "description": "The license group to which the license belongs"
+    }
+   }
+  },
+  "LicenseDefinition1": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url",
+     "x-nullable": true
+    },
+    "group_license": {
+     "type": "string",
+     "enum": [
+      "2",
+      "3",
+      "1"
+     ],
+     "description": "The license group to which the license belongs"
+    }
+   },
+   "required": [
+    "descr",
+    "group_license",
+    "name"
+   ]
+  },
+  "Datasets1": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string"
+    }
+   }
+  },
+  "License_Group": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    }
+   }
+  },
+  "LicenseDefinition2": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets1"
+     }
+    },
+    "group_license": {
+     "$ref": "#/definitions/License_Group"
+    }
+   }
+  },
+  "Reftime": {
+   "type": "object",
+   "properties": {
+    "from": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "to": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ]
+  },
+  "Filters": {
+   "type": "object",
+   "properties": {
+    "area": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "level": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "origin": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "proddef": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "product": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "quantity": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "run": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "task": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "timerange": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "network": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  "DataExtraction": {
+   "type": "object",
+   "properties": {
+    "request_name": {
+     "type": "string"
+    },
+    "reftime": {
+     "x-nullable": true,
+     "allOf": [
+      {
+       "$ref": "#/definitions/Reftime"
+      }
+     ]
+    },
+    "dataset_names": {
+     "type": "array",
+     "description": "Data belong to the datasets of the list.",
+     "items": {
+      "type": "string",
+      "description": "Dataset name"
+     }
+    },
+    "filters": {
+     "description": "Apply different filtering criteria.",
+     "allOf": [
+      {
+       "$ref": "#/definitions/Filters"
+      }
+     ]
+    },
+    "output_format": {
+     "type": "string"
+    },
+    "only_reliable": {
+     "type": "boolean"
+    },
+    "postprocessors": {
+     "type": "array",
+     "description": "Apply one or more post-processing to the filtered data.",
+     "items": {
+      "description": "Post-processing request details"
+     }
+    },
+    "force_obs_download": {
+     "type": "boolean",
+     "description": "If set to True, download of observed data will be attempted even if the estimated data size exceeds the allowed user quota."
+    }
+   },
+   "required": [
+    "dataset_names",
+    "request_name"
+   ]
+  },
+  "Reftime1": {
+   "type": "object",
+   "properties": {
+    "from": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "to": {
+     "type": "string",
+     "format": "date-time"
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ]
+  },
+  "Filters1": {
+   "type": "object",
+   "properties": {
+    "area": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "level": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "origin": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "proddef": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "product": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "quantity": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "run": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "task": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "timerange": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "network": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  "PeriodSettings": {
+   "type": "object",
+   "properties": {
+    "every": {
+     "type": "integer"
+    },
+    "period": {
+     "type": "string",
+     "enum": [
+      "days",
+      "hours",
+      "minutes"
+     ]
+    }
+   },
+   "required": [
+    "every",
+    "period"
+   ]
+  },
+  "CrontabSettings": {
+   "type": "object",
+   "properties": {
+    "minute": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 59
+    },
+    "hour": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 23
+    },
+    "day_of_week": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 7
+    },
+    "day_of_month": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 31
+    },
+    "month_of_year": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 12
+    }
+   }
+  },
+  "ScheduledDataExtraction": {
+   "type": "object",
+   "properties": {
+    "request_name": {
+     "type": "string"
+    },
+    "reftime": {
+     "x-nullable": true,
+     "allOf": [
+      {
+       "$ref": "#/definitions/Reftime1"
+      }
+     ]
+    },
+    "dataset_names": {
+     "type": "array",
+     "description": "Data belong to the datasets of the list.",
+     "items": {
+      "type": "string",
+      "description": "Dataset name"
+     }
+    },
+    "filters": {
+     "description": "Apply different filtering criteria.",
+     "allOf": [
+      {
+       "$ref": "#/definitions/Filters1"
+      }
+     ]
+    },
+    "output_format": {
+     "type": "string"
+    },
+    "only_reliable": {
+     "type": "boolean"
+    },
+    "postprocessors": {
+     "type": "array",
+     "description": "Apply one or more post-processing to the filtered data.",
+     "items": {
+      "description": "Post-processing request details"
+     }
+    },
+    "period-settings": {
+     "description": "Settings for the periodic request",
+     "allOf": [
+      {
+       "$ref": "#/definitions/PeriodSettings"
+      }
+     ]
+    },
+    "crontab-settings": {
+     "description": "Settings for the crontab request",
+     "allOf": [
+      {
+       "$ref": "#/definitions/CrontabSettings"
+      }
+     ]
+    },
+    "on-data-ready": {
+     "type": "boolean",
+     "description": "Activate data extraction when requested data is ready"
+    },
+    "opendata": {
+     "type": "boolean",
+     "description": "Schedule for data available in opendata folder for all users"
+    }
+   },
+   "required": [
+    "dataset_names",
+    "request_name"
+   ]
+  },
+  "AccessKey": {
+   "type": "object",
+   "properties": {
+    "key": {
+     "type": "string"
+    },
+    "emitted": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "expiration": {
+     "type": "string",
+     "format": "date-time",
+     "x-nullable": true
+    },
+    "scope": {
+     "type": "string",
+     "x-nullable": true
+    }
+   }
+  },
+  "AttributionInput": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url",
+     "x-nullable": true
+    }
+   },
+   "required": [
+    "descr",
+    "name"
+   ]
+  },
+  "Datasets2": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string"
+    }
+   }
+  },
+  "Attribution1": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url"
+    },
+    "datasets": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/Datasets2"
+     }
+    }
+   }
+  },
+  "LicGroupInput": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "is_public": {
+     "type": "boolean"
+    },
+    "dballe_dsn": {
+     "type": "string",
+     "description": " Required if the License Group includes observations datasets"
+    }
+   },
+   "required": [
+    "descr",
+    "is_public",
+    "name"
+   ]
+  },
+  "License1": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string",
+     "format": "url"
+    }
+   }
+  },
+  "LicGroup": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "descr": {
+     "type": "string"
+    },
+    "is_public": {
+     "type": "boolean"
+    },
+    "dballe_dsn": {
+     "type": "string"
+    },
+    "license": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/License1"
+     }
+    }
+   }
+  },
+  "Bindings": {
+   "type": "object",
+   "properties": {
+    "exchange": {
+     "type": "string"
+    },
+    "bindings": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  }
+ },
+ "securityDefinitions": {
+  "Bearer": {
+   "type": "apiKey",
+   "in": "header",
+   "name": "Authorization"
+  }
+ }
+}
