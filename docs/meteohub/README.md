@@ -8,7 +8,7 @@ completo, dataset per dataset, è in [`inventory/`](inventory/) ed è generato d
 Il **resoconto completo** di cosa c'è su MeteoHub e su ARCO Data Hub (reti e variabili
 di osservazione, radar, modelli con tutte le variabili, livelli ed elaborazioni) è in
 [`catalogo/RESOCONTO.md`](catalogo/RESOCONTO.md), con le tabelle CSV e le fonti grezze
-nella stessa cartella. Si rigenera con gli script in `tools/catalogo/`.
+nella stessa cartella. Si rigenera con gli script in `tools/catalogo/`. La sintesi di che cosa c'è e che cosa manca è in [`DATI_DISPONIBILI.md`](../../DATI_DISPONIBILI.md).
 
 ## Fonti
 
@@ -27,6 +27,10 @@ Documentazione ufficiale e primaria:
   non sono validate: <https://www.agenziaitaliameteo.it/?p=2878>
 - Licenze degli archivi ARCO: CC BY-SA 4.0 (<https://creativecommons.org/licenses/by-sa/4.0/>) per il radar,
   CC BY 4.0 per WW3.
+- Confini di province e regioni usati per `--area` e da `filter_provincia.py`: openpolis,
+  <https://github.com/openpolis/geojson-italy>, CC BY 4.0, dati ISTAT (l'attribuzione a ISTAT va mantenuta).
+- Archivio radar SRI in Zarr: Franch et al. (2026), "IT-DPC-SRI: A Cloud-Optimized Archive of Italian Radar
+  Precipitation (2010-2025)", <https://arxiv.org/abs/2602.15088>.
 
 Non esiste una documentazione pubblica con il significato dei parametri. Quanto scritto sotto
 viene da prove dirette sull'API e dal codice di questo repository.
