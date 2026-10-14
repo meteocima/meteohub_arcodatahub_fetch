@@ -10,13 +10,15 @@ Credentials come from METEOHUB_USERNAME / METEOHUB_PASSWORD or --username / --pa
 import argparse
 import csv
 import json
-import os
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-BASE = "https://meteohub.agenziaitaliameteo.it"
+# shared with the meteohub/ package, which owns them (issue #5); the names stay for the scripts that import them
+from meteohub.client import BASE, PASSWORD, USERNAME, auth_headers, delete_request, download_file, login  # noqa: F401
+from meteohub.stazioni import PASSI_PIOGGIA_S as PREC_STEPS_S, RETI as DATASET_NAMES  # noqa: F401
+
 
 DEFAULT_T_FROM = "2026-07-26T00:00:00.000000Z"
 DEFAULT_T_TO = "2026-08-16T23:00:00.000000Z"
@@ -24,8 +26,6 @@ DEFAULT_CHUNK_DAYS = 2
 CHUNK_STEP = timedelta(minutes=1)
 REQUEST_PREFIX = "meteohub_obs"
 
-USERNAME = os.getenv("METEOHUB_USERNAME", "")
-PASSWORD = os.getenv("METEOHUB_PASSWORD", "")
 
 OUT_ROOT = Path("output")
 OUT_RAW = OUT_ROOT / "raw_json"
@@ -34,41 +34,6 @@ OUT_COMBINED = OUT_ROOT / "meteohub_20260726_20260816.csv"
 
 POLL_DELAY_SEC = 10
 
-DATASET_NAMES = [
-    "claster",
-    "agrmet",
-    "dpcn-marche",
-    "mnw",
-    "dpcn-lazio",
-    "boa",
-    "sir-toscana",
-    "dpcn-puglia",
-    "dpcn-basilicata",
-    "open-trentino",
-    "simnbo",
-    "dpcn-calabria",
-    "dpcn-liguria",
-    "dpcn-bolzanoboze",
-    "locali",
-    "spdsra",
-    "dpcn-molise",
-    "urbane",
-    "marefe",
-    "dpcn-lombardia",
-    "dpcn-sardegna",
-    "dpcn-umbria",
-    "dpcn-veneto",
-    "dpcn-campania",
-    "dpcn-piemonte",
-    "dpcn-sicilia",
-    "arpafvg",
-    "simnpr",
-]
-
-# Precipitation (B13011) is accumulated over a different step in each network (dpcn-liguria 5 min,
-# sir-toscana 15 min, mnw 1 h...; steps seen 2021-2026 in docs/meteohub/catalogo/meteohub_osservazioni_variabili.csv).
-# Asking only 1,0,3600 drops most regional stations. Each step gets its own CSV column, prec_<step>s.
-PREC_STEPS_S = (60, 120, 180, 300, 600, 900, 1800, 3600)
 
 FILTERS = {
     "level": [
@@ -169,33 +134,6 @@ def build_time_windows(t_from: str, t_to: str, chunk_days: int) -> List[Tuple[st
     return windows
 
 
-def login(username: str, password: str) -> str:
-    requests = get_requests()
-    r = requests.post(
-        f"{BASE}/auth/login",
-        json={"username": username, "password": password},
-        timeout=30,
-    )
-    try:
-        r.raise_for_status()
-    except requests.HTTPError as exc:
-        body = exc.response.text.strip()
-        raise RuntimeError(f"Login failed ({exc.response.status_code}): {body}") from exc
-
-    data = r.json()
-    if isinstance(data, str):
-        token = data
-    else:
-        token = data.get("token") or data.get("access_token") or data.get("jwt")
-    if not token:
-        raise RuntimeError(f"Token was not found in login response: {data}")
-    return token
-
-
-def auth_headers(token: str) -> Dict[str, str]:
-    return {"Authorization": f"Bearer {token}"}
-
-
 def build_filters(products: Optional[List[str]], timeranges: Optional[List[str]]) -> Dict[str, Any]:
     filters = dict(FILTERS)
     if products:
@@ -258,25 +196,6 @@ def request_matches(item: Dict[str, Any], request_name: str, task_id: Optional[s
 def is_unauthorized_error(exc: Exception) -> bool:
     response = getattr(exc, "response", None)
     return getattr(response, "status_code", None) == 401
-
-
-def delete_request(token: str, identifier: str) -> bool:
-    requests = get_requests()
-    if not identifier.strip():
-        return False
-
-    try:
-        r = requests.delete(
-            f"{BASE}/api/requests/{identifier}",
-            headers={**auth_headers(token), "Accept": "application/json"},
-            timeout=30,
-        )
-        if r.status_code in {200, 202, 204, 404}:
-            return True
-        print(f"Delete {identifier} rejected: {r.status_code} {r.text}")
-    except requests.RequestException as exc:
-        print(f"Unable to delete request {identifier}: {exc}")
-    return False
 
 
 def delete_all_requests(token: str) -> int:
@@ -370,32 +289,6 @@ def wait_for_file(
             return token, filename
 
         time.sleep(POLL_DELAY_SEC)
-
-
-def download_file(token: str, filename: str, out_path: Path, attempts: int = 3) -> Path:
-    requests = get_requests()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    for attempt in range(1, attempts + 1):
-        try:
-            with requests.get(
-                f"{BASE}/api/data/{filename}",
-                headers=auth_headers(token),
-                stream=True,
-                timeout=(30, 600),
-            ) as r:
-                r.raise_for_status()
-                with out_path.open("wb") as f:
-                    for chunk in r.iter_content(chunk_size=1024 * 1024):
-                        if chunk:
-                            f.write(chunk)
-            return out_path
-        except requests.RequestException:
-            out_path.unlink(missing_ok=True)
-            if attempt >= attempts:
-                raise
-            print(f"Download attempt {attempt}/{attempts} failed. Retrying in 5s...")
-            time.sleep(5)
-    return out_path
 
 
 def load_json_payload(json_path: Path) -> Any:

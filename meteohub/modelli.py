@@ -9,21 +9,19 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 import xarray as xr
 
 from meteohub.area import Area
+from meteohub.client import EstrazioneRifiutata
+from meteohub.punti import Punto, scrivi_punti
 from meteohub.uscite import nome_file, scrivi_nc
 
 LIMITE_MB = 900.0  # under the 1 GB max_output_size (and disk quota) of the account
 GIORNI_DI_RICERCA = 7  # days after inizio searched for one with data, to read runs, filters and sizes
 UNITA_S = {0: 60, 1: 3600, 2: 86400, 10: 10800, 11: 21600, 12: 43200, 13: 1}  # arkimet timedef units
-
-
-class EstrazioneRifiutata(RuntimeError):
-    """MeteoHub refused to queue an extraction (e.g. hourly quota used up)."""
 
 
 def pianifica_estrazioni(corse: List[datetime], mb_per_corsa: float, limite_mb: float) -> List[List[datetime]]:
@@ -52,17 +50,49 @@ def pioggia_oraria_modello(cumulata: xr.DataArray) -> xr.DataArray:
     return prec.rename("prec_1h")
 
 
-def ritaglia_griglia(valori: xr.DataArray, area: Area) -> xr.DataArray:
-    """Field on a regular lat/lon grid (ICON-2I, WRF_OL, WRF_DA_ITA) cut to the area rectangle; outside the area -> NaN."""
-    lonmin, latmin, lonmax, latmax = area.rettangolo
-    lat, lon = valori["latitude"], valori["longitude"]
-    valori = valori.isel(latitude=((lat >= latmin) & (lat <= latmax)).values, longitude=((lon >= lonmin) & (lon <= lonmax)).values)
-    if not valori.sizes["latitude"] or not valori.sizes["longitude"]:
-        raise SystemExit(f"L'area {area.nome} non interseca la griglia del modello.")
-    if area.poligoni is None:
+def a_griglia(valori: xr.DataArray) -> xr.DataArray:
+    """A field cfgrib gives as a list of points (Mercator: dim values) back on its (y, x) grid of Nj x Ni
+    (GRIB_Nj, GRIB_Ni, which apri_grib asks cfgrib to read)."""
+    nx, ny = valori.attrs.get("GRIB_Ni"), valori.attrs.get("GRIB_Nj")
+    if "values" not in valori.dims or not nx or not ny or nx * ny != valori.sizes["values"]:
         return valori
-    lon2, lat2 = np.meshgrid(valori["longitude"].values, valori["latitude"].values)
-    return valori.where(xr.DataArray(area.maschera(lon2, lat2), dims=("latitude", "longitude")))
+    altre = [d for d in valori.dims if d != "values"]
+    dati = valori.transpose(*altre, "values").values.reshape(*[valori.sizes[d] for d in altre], ny, nx)
+    coords = {c: v for c, v in valori.coords.items() if "values" not in v.dims}
+    for c in ("latitude", "longitude"):
+        coords[c] = (("y", "x"), valori[c].values.reshape(ny, nx))
+    return xr.DataArray(dati, dims=(*altre, "y", "x"), coords=coords, name=valori.name, attrs=valori.attrs)
+
+
+def ritaglia_griglia(valori: xr.DataArray, area: Area) -> xr.DataArray:
+    """Field cut to the area; outside the area -> NaN.
+
+    Regular lat/lon grids (ICON-2I) are cut on their latitude/longitude axes. Rotated (MOLOCH, BOLAM) and
+    Lambert (WRF) grids come from cfgrib with dims (y, x) and 2-D latitude/longitude: they are cut to the
+    smallest (y, x) box holding the area, and the cells of that box outside it become NaN. Mercator grids
+    (WRF_OL, WRF_DA_ITA) come as a list of points (dim values): a_griglia puts them back on (y, x) first; a list
+    that cannot be put back keeps only the points of the area.
+    """
+    if "latitude" in valori.dims:
+        lonmin, latmin, lonmax, latmax = area.rettangolo
+        lat, lon = valori["latitude"], valori["longitude"]
+        valori = valori.isel(latitude=((lat >= latmin) & (lat <= latmax)).values, longitude=((lon >= lonmin) & (lon <= lonmax)).values)
+        if not valori.sizes["latitude"] or not valori.sizes["longitude"]:
+            raise SystemExit(f"L'area {area.nome} non interseca la griglia del modello.")
+        if area.poligoni is None:
+            return valori
+        lon2, lat2 = np.meshgrid(valori["longitude"].values, valori["latitude"].values)
+        return valori.where(xr.DataArray(area.maschera(lon2, lat2), dims=("latitude", "longitude")))
+    valori = valori.assign_coords(longitude=(valori["longitude"] + 180) % 360 - 180)
+    dims = valori["latitude"].dims
+    dentro = area.maschera(valori["longitude"].values, valori["latitude"].values)
+    indici = np.nonzero(dentro)
+    if not indici[0].size:
+        raise SystemExit(f"L'area {area.nome} non interseca la griglia del modello.")
+    if len(dims) == 1:
+        return valori.isel({dims[0]: indici[0]})
+    box = {d: slice(i.min(), i.max() + 1) for d, i in zip(dims, indici)}
+    return valori.isel(box).where(xr.DataArray(dentro, dims=dims).isel(box))
 
 
 @dataclass(frozen=True)
@@ -110,19 +140,28 @@ def _filtri(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict[str, Any
     if not filtri["product"] or mancanti:
         disponibili = "; ".join(p.get("desc", "") for p in metadati.get("product", []))
         raise SystemExit(f"{nome!r}: nessun {', '.join(mancanti) or 'product'} adatto nel dataset. Variabili disponibili: {disponibili}")
+    aree = metadati.get("area", [])
+    if any(not _ritagliabile(a) for a in aree):
+        filtri["area"] = [a for a in aree if _ritagliabile(a)]
     return {k: x for k, x in filtri.items() if x}
 
 
-def _griglia_regolare(metadati: Dict[str, Any]) -> None:
-    """Refuse, before any extraction, grids that ritaglia_griglia cannot cut (rotated, Lambert)."""
-    for a in metadati.get("area", []):
-        v = a.get("value", {})
-        if "latp" in v:
-            raise SystemExit("Griglia ruotata (MOLOCH, MOLOCH_AIM, BOLAM): per ora il ritaglio funziona solo su griglie "
-                             "regolari in lat/lon (ICON-2I, WRF_OL, WRF_DA_ITA). Nessuna estrazione inviata.")
-        if v.get("tn") not in (None, 0):
-            raise SystemExit(f"Griglia GRIB tn={v.get('tn')} (WRF è Lambert): per ora il ritaglio funziona solo su griglie "
-                             "regolari in lat/lon. Nessuna estrazione inviata.")
+GRIGLIE = {0: "lat/lon regolare", 1: "ruotata", 10: "Mercator", 30: "Lambert"}  # GRIB templates with lat/lon in cfgrib
+
+
+def _ritagliabile(area: Dict[str, Any]) -> bool:
+    tn = area.get("value", {}).get("tn")
+    return tn is None or tn in GRIGLIE  # no tn: a GRIB1 grid (swan), described differently
+
+
+def _griglia_ritagliabile(metadati: Dict[str, Any]) -> None:
+    """Refuse, before any extraction, a dataset none of whose grids has latitude/longitude in cfgrib
+    (e.g. ICON unstructured, tn=101). ICON_2I_EPS lists it beside its regular grid: _filtri asks only for the latter."""
+    aree = metadati.get("area", [])
+    if aree and not any(_ritagliabile(a) for a in aree):
+        tn = ", ".join(str(a.get("value", {}).get("tn")) for a in aree)
+        raise SystemExit(f"Griglia GRIB tn={tn}: il ritaglio funziona sulle griglie {', '.join(GRIGLIE.values())}. "
+                         "Nessuna estrazione inviata.")
 
 
 def _corse(metadati: Dict[str, Any], inizio: datetime, fine: datetime) -> List[datetime]:
@@ -134,8 +173,24 @@ def _corse(metadati: Dict[str, Any], inizio: datetime, fine: datetime) -> List[d
     return corse
 
 
+def griglia_piu_fine(datasets: List[xr.Dataset]) -> xr.Dataset:
+    """The dataset on the grid with the most cells (then the most steps): MOLOCH gives t2m hourly on 1154x1154
+    and 3-hourly on 577x577 in the same extraction."""
+    def celle(ds: xr.Dataset) -> Tuple[int, int]:
+        v = ds[next(iter(ds.data_vars))]
+        return int(np.prod([n for d, n in v.sizes.items() if d not in ("time", "step")])), v.sizes.get("step", 1)
+    return max(datasets, key=celle)
+
+
 def apri_grib(path: Path) -> xr.Dataset:
-    return xr.open_dataset(path, engine="cfgrib", backend_kwargs={"indexpath": ""})
+    """GRIB of one extraction; if it holds fields on several grids, the finest one (griglia_piu_fine)."""
+    import cfgrib  # needs eccodes; imported here so that the catalogue works without it
+
+    datasets = cfgrib.open_datasets(str(path), indexpath="", read_keys=["Ni", "Nj"])
+    scelto = griglia_piu_fine(datasets)
+    if len(datasets) > 1:
+        print(f"  {Path(path).name}: {len(datasets)} griglie nel GRIB, uso la più fine {dict(scelto.sizes)}", flush=True)
+    return scelto
 
 
 def _attendi_ora_successiva(dormi: Callable[[float], Any]) -> None:
@@ -150,19 +205,20 @@ def _ritaglia_file(path: Path, apri: Callable[[Path], xr.Dataset], area: Area) -
     with apri(path) as ds:
         valori = ds[next(iter(ds.data_vars))]
         valori = valori if "time" in valori.dims else valori.expand_dims("time")
-        return ritaglia_griglia(valori, area).load()
+        return ritaglia_griglia(a_griglia(valori), area).load()
 
 
 def scarica_modelli(fonte: Any, area: Area, inizio: datetime, fine: datetime, modello: str, variabili: List[str],
                     cartella: Path, limite_mb: float = LIMITE_MB, apri: Callable[[Path], xr.Dataset] = apri_grib,
-                    dormi: Callable[[float], Any] = time.sleep) -> Dict[str, Path]:
+                    dormi: Callable[[float], Any] = time.sleep, punti: Optional[List[Punto]] = None) -> Dict[str, Path]:
     """Model runs starting in [inizio, fine] (UTC) for each variable, cut to the area, as one NetCDF per variable.
 
     fonte (meteohub.client.MeteoHub) gives metadati(dataset, giorno) from /api/fields, stima_mb(dataset, filtri, giorno),
     quota_rimanente() and estrazione(...), which submits, waits, downloads to path and deletes the extraction,
     raising EstrazioneRifiutata if MeteoHub does not queue it. Runs are grouped into extractions under limite_mb;
     the GRIB of each one is kept in cartella/grib/, so a rerun only extracts what is missing. When the hourly quota
-    is used up it waits for the next hour. prec also gets prec_1h. Returns {variable: NetCDF path}.
+    is used up it waits for the next hour. prec also gets prec_1h. Returns {variable: NetCDF path}, plus
+    {"punti_<variable>": CSV path} with the values at the punti inside the area if they are given.
     """
     cartella = Path(cartella)
     giorno, metadati = inizio.replace(hour=0, minute=0, second=0, microsecond=0), {}
@@ -171,7 +227,7 @@ def scarica_modelli(fonte: Any, area: Area, inizio: datetime, fine: datetime, mo
         if metadati.get("run"):
             break
         giorno += timedelta(days=1)
-    _griglia_regolare(metadati)
+    _griglia_ritagliabile(metadati)
     corse = _corse(metadati, inizio, fine)
     if not corse:
         raise SystemExit(f"{modello}: nessuna corsa tra {inizio} e {fine}.")
@@ -212,4 +268,6 @@ def scarica_modelli(fonte: Any, area: Area, inizio: datetime, fine: datetime, mo
                  "comment": "time = run start; valid_time = time + step; UTC"}
         out[nome] = scrivi_nc(ds, cartella / nome_file(f"modello_{modello}_{nome}", area, inizio, fine, "nc"), attrs,
                               f"modelli --modello {modello} --vars {nome}")
+        if punti:
+            out[f"punti_{nome}"] = scrivi_punti(ds, punti, area, cartella / nome_file(f"punti_modello_{modello}_{nome}", area, inizio, fine, "csv"))
     return out

@@ -100,7 +100,7 @@ Ogni archivio di ARCO Data Hub richiede un abbonamento, che si attiva dal catalo
 
 ## Modelli
 
-MeteoHub ha 18 dataset di modelli, in GRIB. Si scaricano solo con richieste di estrazione `/api/data`, 10 all'ora per account; i volumi vanno da 0,7 a 109 TB per dataset. Il downloader li scarica e li ritaglia con `meteohub_fetch.py modelli`, per ora sulle griglie regolari in lat/lon (ICON-2I, `WRF_OL`, `WRF_DA_ITA`): vedi il [README](README.md#modelli).
+MeteoHub ha 18 dataset di modelli, in GRIB. Si scaricano solo con richieste di estrazione `/api/data`, 10 all'ora per account; i volumi vanno da 0,7 a 109 TB per dataset. Il downloader li scarica e li ritaglia con `meteohub_fetch.py modelli` su tutte le griglie (lat/lon, ruotate, Mercator e Lambert; verificato il 2026-10-14 su BOLAM, MOLOCH, MOLOCH_AIM, WRF, WRF_OL e WRF_DA_ITA), e con `--punti` dà i valori sulle stazioni: vedi il [README](README.md#modelli).
 
 | Dataset | Periodo | Corse UTC | Scadenza, passo | Griglia | Variabili | Volume TB |
 |---|---|---|---|---|---|---|
@@ -111,11 +111,11 @@ MeteoHub ha 18 dataset di modelli, in GRIB. Si scaricano solo con richieste di e
 | `ICON_2I_ASSIM_SURFACE_PRESSURE_LEVELS` | dal 2025-05-25 | ogni ora (analisi) | 1 h | 761×761, ~2,2 km | 48 | 1,4 |
 | `ICON_2I_ASSIM_MODEL_LEVELS` | dal 2025-05-25 | ogni ora (analisi) | 1 h | 761×761, ~2,2 km | 12 | 10,0 |
 | `MOLOCH_AIM` | dal 2026-03-24 | 00, 12 | 72 h, 1 h | 1802×1666 ruotata, ~1,0 km | 29 | 9,3 |
-| `MOLOCH` | dal 2024-09-30 | 03 | 45 h, 1 h | 577×577 ruotata, ~2,5 km | 40 | 2,8 |
+| `MOLOCH` | dal 2024-09-30 | 03 | 45 h, 1 h | 577×577 ruotata, ~2,5 km (e 1154×1154, ~1,25 km) | 40 | 2,8 |
 | `BOLAM` | dal 2024-09-30, tranne 2025-11-26 – 2026-01-12 | 00 | 72 h, 1 h | 578×418 ruotata, ~8,3 km | 31 | 1,1 |
-| `WRF` | dal 2026-02-27 | 00, 12 | 72 h, 1 h | 1399×1399 Lambert, passo di griglia n.a. | 31 | 5,6 |
-| `WRF_DA_ITA` | dal 2024-09-29 | 00, 12 | 48 h, 1 h | 429×468, ~2,7 km | 20 | 1,1 |
-| `WRF_OL` | dal 2024-09-30 | 00 | 48 h, 1 h | 942×882, ~1,6 km | 20 | 2,1 |
+| `WRF` | dal 2026-02-27 | 00, 12 | 72 h, 1 h | 1399×1399 Lambert, 1,5 km | 31 | 5,6 |
+| `WRF_DA_ITA` | dal 2024-09-29 | 00, 12 | 48 h, 1 h | 429×468 Mercator, ~2,7 km | 20 | 1,1 |
+| `WRF_OL` | dal 2024-09-30 | 00 | 48 h, 1 h | 942×882 Mercator, ~1,6 km | 20 | 2,1 |
 | `ICON_2I_all2km` | 2024-09-29 – 2025-05-26 | 00, 12 | 72 h, 1 h | 761×761, ~2,2 km | 47 | 3,7 |
 | `ICON_2I_ita2km` | 2024-09-29 – 2025-05-26 | 00, 12 | 72 h, 1 h | 485×596, ~2,2 km | 19 | 12,0 |
 | `ICON_2I_ASSIM_all2km` | 2025-02-04 – 2025-05-26 | ogni ora (analisi) | 1 h | 761×761, ~2,2 km | 53 | 0,7 |

@@ -5,6 +5,8 @@
   uv run python meteohub_fetch.py stazioni --from 2026-10-10T06:00 --to 2026-10-10T18:00 --area bbox:8.8,44.3,9.0,44.5 --vars prec,B13215
   uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVELS --vars prec --from 2026-10-12 --to 2026-10-12 --area provincia:GE
   uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-10 --to 2026-10-11 --area regione:Liguria
+  uv run python meteohub_fetch.py catalogo --from 2026-10-10 --to 2026-10-11 --area provincia:GE
+  uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-10 --to 2026-10-11 --area provincia:GE --punti stazioni_provincia_GE_2026101000_2026101200.csv
 
 Credenziali: METEOHUB_USERNAME / METEOHUB_PASSWORD e, per il radar, ARCODATAHUB_USERNAME / ARCODATAHUB_API_KEY
 (per esempio in ~/.config/meteohub.env, da caricare con `source`).
@@ -17,8 +19,11 @@ from pathlib import Path
 from typing import Tuple
 
 from meteohub.area import Area
+from meteohub.uscite import nome_file
 
 VARIABILI_PREDEFINITE = "prec,temp,rh,wsp,wdir"
+PUNTI = ("CSV di punti (colonne lat, lon e un nome: va bene il file stazioni_ di `stazioni`): scrive anche "
+         "punti_...csv con il valore della cella più vicina a ogni punto dell'area")
 
 
 def _tempo(testo: str, fine: bool = False) -> datetime:
@@ -41,6 +46,17 @@ def _comuni(args: argparse.Namespace, comando: str) -> Tuple[Area, datetime, dat
     return area, inizio, fine, cartella
 
 
+def _punti(args: argparse.Namespace):
+    from meteohub.punti import leggi_punti
+
+    if not args.punti:
+        return None
+    punti = leggi_punti(args.punti)
+    if not punti:
+        sys.exit(f"{args.punti}: nessun punto nel file")
+    return punti
+
+
 def stazioni(args: argparse.Namespace) -> None:
     from meteohub.client import MeteoHub
     from meteohub.stazioni import scarica_stazioni
@@ -57,7 +73,7 @@ def radar(args: argparse.Namespace) -> None:
     from meteohub.radar import scarica_radar
 
     area, inizio, fine, cartella = _comuni(args, f"radar_{args.tipo}")
-    for tipo, path in scarica_radar(ArcoDataHub(), area, inizio, fine, args.tipo, cartella).items():
+    for tipo, path in scarica_radar(ArcoDataHub(), area, inizio, fine, args.tipo, cartella, punti=_punti(args)).items():
         print(f"{tipo:12s} {path}")
 
 
@@ -68,9 +84,38 @@ def modelli(args: argparse.Namespace) -> None:
     area, inizio, fine, cartella = _comuni(args, f"modelli_{args.modello}")
     if "T" not in args.t_to:  # for models the period is the run start: a whole day ends with its last run, not at 24:00
         fine -= timedelta(minutes=1)
-    file = scarica_modelli(MeteoHub(), area, inizio, fine, args.modello, args.vars.split(","), cartella, limite_mb=args.limite_mb)
+    file = scarica_modelli(MeteoHub(), area, inizio, fine, args.modello, args.vars.split(","), cartella, limite_mb=args.limite_mb,
+                           punti=_punti(args))
     for var, path in file.items():
         print(f"{var:12s} {path}")
+
+
+def catalogo(args: argparse.Namespace) -> None:
+    import csv
+    from datetime import date
+
+    from meteohub import catalogo as cat
+
+    if args.aggiorna:
+        cat.aggiorna(date.fromisoformat(args.giorno_campione) if args.giorno_campione else cat.giorno_campione_predefinito())
+        if not args.area:
+            return
+    if not (args.area and args.t_from and args.t_to):
+        sys.exit("catalogo: servono --area, --from e --to (oppure solo --aggiorna)")
+    area, inizio, fine, cartella = _comuni(args, "catalogo")
+    righe = cat.catalogo(area, inizio, fine, periodo=(args.t_from, args.t_to))
+    for r in righe:
+        print(f"{r['tipo']:9s} {r['sorgente']:38s} {r['periodo']:24s} {r['copertura']:34s} {r['risoluzione']:9s} {r['passo']}")
+    print("\nComandi:")
+    for r in righe:
+        print(f"  {r['comando']}")
+    cartella.mkdir(parents=True, exist_ok=True)
+    path = cartella / nome_file("catalogo", area, inizio, fine, "csv")
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=cat.COLONNE)
+        w.writeheader()
+        w.writerows(righe)
+    print(f"\n{len(righe)} sorgenti; comandi per scaricarle in {path}")
 
 
 def main() -> None:
@@ -91,16 +136,24 @@ def main() -> None:
     p = sub.add_parser("radar", parents=[comuni], help="radar DPC da ARCO Data Hub (Zarr, senza quota)")
     p.add_argument("--tipo", choices=["srt1", "sri"], default="srt1",
                    help="srt1: pioggia oraria corretta con i pluviometri, dal 2018-07 (predefinito); sri: intensità istantanea, dal 2010")
+    p.add_argument("--punti", type=Path, help=PUNTI)
     p.set_defaults(func=radar)
 
     p = sub.add_parser("modelli", parents=[comuni], help="modelli da MeteoHub /api/data (usa la quota: 10 estrazioni all'ora)")
     p.add_argument("--modello", default="ICON_2I_SURFACE_PRESSURE_LEVELS", help="dataset MeteoHub (vedi docs/meteohub/catalogo/RESOCONTO.md)")
     p.add_argument("--vars", default="prec", help="variabili: prec, t2m, u10, v10, mslp (predefinita prec)")
     p.add_argument("--limite-mb", type=float, default=900, help="dimensione massima di un'estrazione in MB (limite dell'account: 1 GB)")
+    p.add_argument("--punti", type=Path, help=PUNTI)
     p.set_defaults(func=modelli)
 
-    sub.add_parser("catalogo", help="inventario di MeteoHub e ARCO Data Hub").set_defaults(
-        func=lambda a: sys.exit("Usa per ora: meteohub_inventory.py, tools/catalogo/ e tools/catalogo/resoconto.py (vedi CLAUDE.md)"))
+    p = sub.add_parser("catalogo", help="che cosa c'è per un'area e un periodo (dall'inventario, senza chiamate); --aggiorna rifà l'inventario")
+    p.add_argument("--from", dest="t_from", help="inizio UTC: 2026-10-10 o 2026-10-10T06:00")
+    p.add_argument("--to", dest="t_to", help="fine UTC: 2026-10-11 (giorno intero) o 2026-10-11T18:00")
+    p.add_argument("--area", help="provincia:GE | regione:Liguria | bbox:lonmin,latmin,lonmax,latmax | italia | file:bacino.geojson")
+    p.add_argument("--out-dir", type=Path, help="cartella del CSV (predefinita output/catalogo_<area>_<date>/)")
+    p.add_argument("--aggiorna", action="store_true", help="rilancia inventario, variabili dei modelli e resoconto (senza quota, 1-2 ore)")
+    p.add_argument("--giorno-campione", help="giorno campione delle reti per --aggiorna (predefinito: due giorni fa)")
+    p.set_defaults(func=catalogo)
 
     args = parser.parse_args()
     args.func(args)

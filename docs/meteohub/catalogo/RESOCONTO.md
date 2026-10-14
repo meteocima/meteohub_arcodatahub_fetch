@@ -778,7 +778,7 @@ Variabili degli archivi radar (dai metadati Zarr autenticati dove abbonati, altr
 | `ICON_2I_RUC` | ICON-2I-RUC (Rapid Update Cycle) | 2024-06-03 → 2026-10-13 | 00:00 03:00 06:00 09:00 12:00 15:00 18:00 21:00 | 24h | 10min | 485x596 ~2.2 km | 105 327 009 | 108 563 | 54 |
 | `ICON_2I_ASSIM_SURFACE_PRESSURE_LEVELS` | ICON-2I-ASSIM (analysis) \| surface and pressure levels | 2025-05-25 → 2026-10-13 | 24 runs/day (00:00..23:00) | 1h | 1h | 761x761 ~2.2 km | 1 223 214 | 1 394 | 48 |
 | `ICON_2I_ASSIM_MODEL_LEVELS` | ICON-2I-ASSIM (analysis) \| model levels | 2025-05-25 → 2026-10-13 | 24 runs/day (00:00..23:00) | 1h | 1h | 761x761 ~2.2 km | 8 835 569 | 9 951 | 12 |
-| `WRF` | WRF | 2026-02-27 → 2026-10-13 | 00:00 12:00 | 72h | 1h | GRIB(Ni=1399, Nj=1399, latfirst=31012714, lonfirst=92041, tn | 3 738 266 | 5 628 | 31 |
+| `WRF` | WRF | 2026-02-27 → 2026-10-13 | 00:00 12:00 | 72h | 1h | 1399x1399 Lambert ~1.5 km | 3 738 266 | 5 628 | 31 |
 | `MOLOCH_AIM` | MOLOCH-AIM | 2026-03-24 → 2026-10-13 | 00:00 12:00 | 72h | 1h | 1802x1666 ruotata ~1.0 km | 1 554 784 | 9 303 | 29 |
 | `SEASONAL` | Seasonal Forecast \| 0.1° downscaling | – | – | – | – | – | – | – | – |
 | `BOLAM` | BOLAM-ISAC | 2024-09-30 → 2026-10-14 | 00:00 | 72h | 1h | 578x418 ruotata ~8.3 km | 2 358 321 | 1 138 | 31 |
@@ -797,7 +797,9 @@ Note:
 - `ICON_2I_all2km`/`ita2km` e `ICON_2I_ASSIM_all2km`/`ita2km` sono le serie fino al 2025-05-26; dopo continuano in `ICON_2I_SURFACE_PRESSURE_LEVELS`/`MODEL_LEVELS` e `ICON_2I_ASSIM_*`.
 - `SEASONAL` (SEAS5 ECMWF ridotto di scala a 0,1°, Tmax, Tmin e precipitazione giornaliere): `source=nwp`, `/api/fields` non lo supporta; periodo e variabili non leggibili senza una richiesta `/api/data`.
 - Le variabili di precipitazione e neve chiamate *rate* (kg m⁻² s⁻¹) nei GRIB di ICON sono in realtà **cumulate dall'inizio della corsa** (kg m⁻² = mm): la pioggia oraria è la differenza tra due scadenze consecutive.
-- WRF: griglia Lambert (GRIB `tn=30`) non ancora decodificata dall'inventario.
+- `WRF`: griglia Lambert conforme (GRIB `tn=30`) 1399×1399 con passo di 1,5 km, paralleli standard 43,42° e 37,21°, meridiano centrale 11° (letti dal GRIB di un'estrazione `t2m` della corsa 2026-10-12 00: `/api/fields` non dà questi parametri).
+- `MOLOCH`: oltre alla griglia 577×577 (~2,5 km) ha una griglia 1154×1154 (~1,25 km); in un'estrazione `t2m` (corsa 2026-10-12 03) la 1154×1154 ha tutte le 45 scadenze orarie e la 577×577 solo 16. `meteohub_fetch.py modelli` tiene la griglia più fine.
+- `WRF_OL` e `WRF_DA_ITA` sono su griglia Mercator (GRIB `tn=10`), con passo costante in longitudine.
 
 ### 3.2 Variabili per modello (MeteoHub)
 

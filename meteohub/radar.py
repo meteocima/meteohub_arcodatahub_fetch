@@ -1,15 +1,16 @@
 """Radar from ARCO Data Hub (docs/adr/0001): SRT1 hourly rain adjusted with gauges, SRI instantaneous rain rate."""
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
 import xarray as xr
 
 from meteohub.area import Area
+from meteohub.punti import Punto, scrivi_punti
 from meteohub.uscite import campioni_attesi, coperta, nome_file, scrivi_nc
 
 
@@ -70,26 +71,32 @@ class Tipo:
     variabile: str
     anticipo: timedelta  # data needed before --from to build the first hour
     descrizione: str
+    dal: date  # first day of the archive
+    passo: str  # native step, for the catalogue
 
 
 # radar type on the command line (CONTEXT.md: SRT1, SRI)
 TIPI = {
     "srt1": Tipo("italian-radar-dpc-srt1-adj.zarr", "srt1_adj", timedelta(0),
-                 "Precipitation of the hour ending at the time stamp (SRT1, gauge-adjusted)"),
+                 "Precipitation of the hour ending at the time stamp (SRT1, gauge-adjusted)", date(2018, 7, 1),
+                 "pioggia oraria corretta con i pluviometri, ogni 5 min"),
     "sri": Tipo("italian-radar-dpc-sri.zarr", "RR", timedelta(hours=1),
-                "Precipitation of the hour ending at the time stamp, from SRI rates"),
+                "Precipitation of the hour ending at the time stamp, from SRI rates", date(2010, 1, 1),
+                "intensità ogni 5-15 min, pioggia oraria dalla media"),
 }
 LIMITE_BYTE = 4e9  # largest crop read at once; larger requests are refused with a hint
 
 
-def scarica_radar(fonte: Any, area: Area, inizio: datetime, fine: datetime, tipo: str, cartella: Path) -> Dict[str, Path]:
+def scarica_radar(fonte: Any, area: Area, inizio: datetime, fine: datetime, tipo: str, cartella: Path,
+                 punti: Optional[List[Punto]] = None) -> Dict[str, Path]:
     """Radar of the area between inizio and fine (UTC) as two NetCDF files: native scans and hourly rain.
 
     fonte.apri(archivio) returns the lazily opened ARCO archive (meteohub.arco.ArcoDataHub).
     srt1: hourly rain is the SRT1 value at HH:00 (rain of the previous hour, gauge-adjusted, from 2018-07).
     sri: hourly rain from pioggia_oraria_sri (from 2010); the native file starts one hour before inizio.
     The period stops at the archive's last_valid; every hour of the period is in the hourly file, NaN if no data.
-    Returns {"nativo": path, "orario": path}.
+    Returns {"nativo": path, "orario": path}, plus "punti_nativo" and "punti" (hourly): CSV of the values at the
+    punti inside the area, if they are given.
     """
     spec = TIPI[tipo]
     ds = fonte.apri(spec.archivio)
@@ -123,5 +130,9 @@ def scarica_radar(fonte: Any, area: Area, inizio: datetime, fine: datetime, tipo
         sub, orario = sub.assign(crs=crs), orario.assign(crs=crs)
         sub[spec.variabile].attrs["grid_mapping"] = orario["prec_1h"].attrs["grid_mapping"] = "crs"
     comando = f"radar --tipo {tipo}"
-    return {"nativo": scrivi_nc(sub, Path(cartella) / nome_file(f"radar_{tipo}_nativo", area, inizio, fine, "nc"), attrs, comando),
-            "orario": scrivi_nc(orario, Path(cartella) / nome_file(f"radar_{tipo}_orario", area, inizio, fine, "nc"), attrs, comando)}
+    out = {"nativo": scrivi_nc(sub, Path(cartella) / nome_file(f"radar_{tipo}_nativo", area, inizio, fine, "nc"), attrs, comando),
+           "orario": scrivi_nc(orario, Path(cartella) / nome_file(f"radar_{tipo}_orario", area, inizio, fine, "nc"), attrs, comando)}
+    if punti:
+        out["punti_nativo"] = scrivi_punti(sub, punti, area, Path(cartella) / nome_file(f"punti_radar_{tipo}_nativo", area, inizio, fine, "csv"))
+        out["punti"] = scrivi_punti(orario, punti, area, Path(cartella) / nome_file(f"punti_radar_{tipo}_orario", area, inizio, fine, "csv"))
+    return out

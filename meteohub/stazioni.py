@@ -8,9 +8,44 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import meteohub_download as mh
 from meteohub.area import Area
 from meteohub.uscite import campioni_attesi, coperta, nome_file
+
+RETI = [  # the 28 observation networks of MeteoHub (docs/meteohub/datasets.json)
+    "claster",
+    "agrmet",
+    "dpcn-marche",
+    "mnw",
+    "dpcn-lazio",
+    "boa",
+    "sir-toscana",
+    "dpcn-puglia",
+    "dpcn-basilicata",
+    "open-trentino",
+    "simnbo",
+    "dpcn-calabria",
+    "dpcn-liguria",
+    "dpcn-bolzanoboze",
+    "locali",
+    "spdsra",
+    "dpcn-molise",
+    "urbane",
+    "marefe",
+    "dpcn-lombardia",
+    "dpcn-sardegna",
+    "dpcn-umbria",
+    "dpcn-veneto",
+    "dpcn-campania",
+    "dpcn-piemonte",
+    "dpcn-sicilia",
+    "arpafvg",
+    "simnpr",
+]
+
+# Precipitation (B13011) is accumulated over a different step in each network (dpcn-liguria 5 min,
+# sir-toscana 15 min, mnw 1 h...; steps seen 2021-2026 in docs/meteohub/catalogo/meteohub_osservazioni_variabili.csv).
+# Asking only 1,0,3600 drops most regional stations. Each step is kept apart (one column per step in meteohub_download.py).
+PASSI_PIOGGIA_S = (60, 120, 180, 300, 600, 900, 1800, 3600)
 
 # short names accepted on the command line -> BUFR code; any BUFR code (e.g. B13215) is accepted as is
 VARIABILI = {"prec": "B13011", "temp": "B12101", "rh": "B13003", "wsp": "B11002", "wdir": "B11001"}
@@ -68,9 +103,9 @@ COLONNE_ORARIE = ["rete", "stazione", "lat", "lon", "tempo", "prec_1h", "passo_p
 
 
 def passo_cumulata(elaborazione: Optional[str]) -> Optional[int]:
-    """Accumulation step in seconds of a precipitation timerange ("1,0,300" -> 300), None if it is not one of PREC_STEPS_S."""
+    """Accumulation step in seconds of a precipitation timerange ("1,0,300" -> 300), None if it is not one of PASSI_PIOGGIA_S."""
     parti = (elaborazione or "").split(",")
-    if len(parti) == 3 and parti[0] == "1" and parti[2].isdigit() and int(parti[2]) in mh.PREC_STEPS_S:
+    if len(parti) == 3 and parti[0] == "1" and parti[2].isdigit() and int(parti[2]) in PASSI_PIOGGIA_S:
         return int(parti[2])
     return None
 
@@ -193,7 +228,7 @@ def scarica_stazioni(fonte: Any, area: Area, inizio: datetime, fine: datetime, v
     righe: List[Dict[str, Any]] = []
     errori: List[Dict[str, str]] = []
     zona = "_".join(f"{x:.3f}" for x in area.rettangolo)  # cache per rectangle: another area never reuses these answers
-    for rete in reti or mh.DATASET_NAMES:
+    for rete in reti or RETI:
         for a, b in _finestre(inizio - ANTICIPO, fine):
             cache = cartella / "raw" / zona / rete / f"{a:%Y%m%d%H%M}_{b:%Y%m%d%H%M}.json"
             if cache.exists():

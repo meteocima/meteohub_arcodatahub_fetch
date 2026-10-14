@@ -109,11 +109,16 @@ def main() -> None:
         for c in ("temp_c", "rh", "wsp", "wdir", "prec_1h"):
             st[f"n_{c}"] += r[c] != ""
 
+    for s in leggi(file["stazioni"]):  # stations with values but none usable (e.g. all unreliable): listed with zero counts
+        stations.setdefault((s["rete"], s["lat"], s["lon"]), {
+            "dataset": s["rete"], "station_name": s["stazione"], "lat": s["lat"], "lon": s["lon"], "alt": "",
+            "n_rows": 0, "first": "", "last": "", **{f"n_{c}": 0 for c in ("temp_c", "rh", "wsp", "wdir", "prec_1h")}})
+
     stations_path = out_dir / f"stazioni_{prov}.csv"
     with stations_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(next(iter(stations.values()), {"dataset": ""})))
         writer.writeheader()
-        writer.writerows(stations.values())
+        writer.writerows(sorted(stations.values(), key=lambda s: (s["dataset"], float(s["lat"]), float(s["lon"]))))
 
     errori = leggi(file["errori"])
     if errori:

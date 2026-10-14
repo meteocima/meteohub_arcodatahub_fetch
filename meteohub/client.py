@@ -1,18 +1,93 @@
 """MeteoHub client: bearer login, token renewal, retries, gateway-timeout splitting (CONTEXT.md, "MeteoHub")."""
 
+import os
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 
-import meteohub_download as mh
-from meteohub.modelli import EstrazioneRifiutata
-
+BASE = "https://meteohub.agenziaitaliameteo.it"
+USERNAME = os.getenv("METEOHUB_USERNAME", "")
+PASSWORD = os.getenv("METEOHUB_PASSWORD", "")
 LICENZA = "CCBY_COMPLIANT"
 ATTESE = [5, 15, 30, 60, 120, 300]  # seconds between retries of a failed call
+LETTURA_S = 300  # read timeout of a call
 FINESTRA_MINIMA = timedelta(hours=1)  # windows that still fail with 5xx are not split further
+
+
+class EstrazioneRifiutata(RuntimeError):
+    """MeteoHub refused to queue an extraction (e.g. hourly quota used up)."""
+
+
+def login(username: str, password: str) -> str:
+    r = requests.post(
+        f"{BASE}/auth/login",
+        json={"username": username, "password": password},
+        timeout=30,
+    )
+    try:
+        r.raise_for_status()
+    except requests.HTTPError as exc:
+        body = exc.response.text.strip()
+        raise RuntimeError(f"Login failed ({exc.response.status_code}): {body}") from exc
+
+    data = r.json()
+    if isinstance(data, str):
+        token = data
+    else:
+        token = data.get("token") or data.get("access_token") or data.get("jwt")
+    if not token:
+        raise RuntimeError(f"Token was not found in login response: {data}")
+    return token
+
+
+def auth_headers(token: str) -> Dict[str, str]:
+    return {"Authorization": f"Bearer {token}"}
+
+
+def delete_request(token: str, identifier: str) -> bool:
+    if not identifier.strip():
+        return False
+
+    try:
+        r = requests.delete(
+            f"{BASE}/api/requests/{identifier}",
+            headers={**auth_headers(token), "Accept": "application/json"},
+            timeout=30,
+        )
+        if r.status_code in {200, 202, 204, 404}:
+            return True
+        print(f"Delete {identifier} rejected: {r.status_code} {r.text}")
+    except requests.RequestException as exc:
+        print(f"Unable to delete request {identifier}: {exc}")
+    return False
+
+
+def download_file(token: str, filename: str, out_path: Path, attempts: int = 3) -> Path:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    for attempt in range(1, attempts + 1):
+        try:
+            with requests.get(
+                f"{BASE}/api/data/{filename}",
+                headers=auth_headers(token),
+                stream=True,
+                timeout=(30, 600),
+            ) as r:
+                r.raise_for_status()
+                with out_path.open("wb") as f:
+                    for chunk in r.iter_content(chunk_size=1024 * 1024):
+                        if chunk:
+                            f.write(chunk)
+            return out_path
+        except requests.RequestException:
+            out_path.unlink(missing_ok=True)
+            if attempt >= attempts:
+                raise
+            print(f"Download attempt {attempt}/{attempts} failed. Retrying in 5s...")
+            time.sleep(5)
+    return out_path
 
 
 class MeteoHub:
@@ -21,37 +96,49 @@ class MeteoHub:
         """registro, if given, gets one row per HTTP attempt (meteohub_inventory.py writes it to api_calls.csv)."""
         self.http = requests
         self.registro = registro
-        self.username = username or mh.USERNAME
-        self.password = password or mh.PASSWORD
+        self.username = username or USERNAME
+        self.password = password or PASSWORD
         if not self.username or not self.password:
             raise SystemExit("Imposta METEOHUB_USERNAME/METEOHUB_PASSWORD (per esempio in ~/.config/meteohub.env).")
-        self.token = mh.login(self.username, self.password)
+        self.token = login(self.username, self.password)
+
+    def _chiama(self, path: str, params: Dict[str, Any], tentativo: int) -> requests.Response:
+        """One GET, logged in registro if there is one."""
+        riga = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "path": path,
+                "dataset": params.get("networks") or params.get("datasets") or "", "q": params.get("q", ""),
+                "attempt": tentativo, "read_timeout_s": LETTURA_S}
+        if self.registro is not None:
+            self.registro.append(riga)
+        t0 = time.time()
+        try:
+            r = self.http.get(f"{BASE}{path}", params=params, headers=auth_headers(self.token), timeout=(30, LETTURA_S))
+        except requests.RequestException as exc:
+            riga.update(status=0, seconds=round(time.time() - t0, 1), error=type(exc).__name__)
+            raise
+        riga.update(status=r.status_code, seconds=round(time.time() - t0, 1), bytes=len(r.content))
+        return r
 
     def _get(self, path: str, params: Dict[str, Any], tentativi: int = len(ATTESE) + 1) -> requests.Response:
-        """GET with token renewal on 401; 5xx answers and network errors are retried up to tentativi times in all."""
+        """GET with token renewal on 401 (not counted as an attempt); 5xx answers and network errors are tried
+        up to tentativi times in all, waiting ATTESE between them."""
         attese = ATTESE[:tentativi - 1] + [None]
         for tentativo, attesa in enumerate(attese, 1):
-            riga = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "path": path,
-                    "dataset": params.get("networks") or params.get("datasets") or "", "q": params.get("q", ""),
-                    "attempt": tentativo, "read_timeout_s": 300}
-            if self.registro is not None:
-                self.registro.append(riga)
-            t0 = time.time()
             try:
-                r = self.http.get(f"{mh.BASE}{path}", params=params, headers=mh.auth_headers(self.token), timeout=(30, 300))
-                riga.update(status=r.status_code, seconds=round(time.time() - t0, 1), bytes=len(r.content))
+                r = self._chiama(path, params, tentativo)
                 if r.status_code == 401:
-                    self.token = mh.login(self.username, self.password)
-                    continue
+                    self.token = login(self.username, self.password)
+                    r = self._chiama(path, params, tentativo)
+                    if r.status_code == 401:
+                        raise SystemExit("MeteoHub rifiuta il login (401 anche dopo un nuovo accesso): "
+                                         "controlla METEOHUB_USERNAME/METEOHUB_PASSWORD.")
                 if r.status_code < 500 or attesa is None:
                     return r
-            except requests.RequestException as exc:
-                riga.update(status=0, seconds=round(time.time() - t0, 1), error=type(exc).__name__)
+            except requests.RequestException:
                 if attesa is None:
                     raise
             print(f"  {path}: tentativo {tentativo} fallito, riprovo tra {attesa} s", flush=True)
             time.sleep(attesa)
-        raise SystemExit("MeteoHub rifiuta il login (401 anche dopo un nuovo accesso): controlla METEOHUB_USERNAME/METEOHUB_PASSWORD.")
+        raise RuntimeError("unreachable")
 
     def chiave_accesso(self) -> str:
         """Account access key (/api/access-key), used with the username as HTTP Basic auth on /api/arco."""
@@ -73,17 +160,17 @@ class MeteoHub:
             params.update(zip(("lonmin", "latmin", "lonmax", "latmax"), rettangolo))
         divisibile = fine - inizio >= 2 * FINESTRA_MINIMA
         try:
-            r = self._get("/api/observations", params, tentativi=1 if divisibile else len(ATTESE) + 1)
+            r = self._get("/api/observations", params, tentativi=2 if divisibile else len(ATTESE) + 1)  # a window that can be split is retried once, then split
             stato = r.status_code
         except requests.RequestException:
             if not divisibile and errori is None:
                 raise
             r, stato = None, 0
-        if self.registro:
+        if self.registro is not None:
             self.registro[-1]["window_h"] = round((fine - inizio).total_seconds() / 3600, 2)
-        if stato == 200:
+        if stato in (200, 204):
             risposta = r.json() if r.content else {"data": []}
-            if self.registro:
+            if self.registro is not None:
                 self.registro[-1]["n_stations"] = len(risposta.get("data", []))
             return risposta
         if (stato >= 500 or stato == 0) and divisibile:
@@ -145,16 +232,19 @@ class MeteoHub:
         q = r.json()
         return int(q["remaining"]) if "remaining" in q else int(q.get("total", 10)) - int(q.get("submitted", 0))
 
-    def estrazione(self, nome: str, dataset: str, da: datetime, a: datetime, filtri: Dict[str, Any], path: Path) -> Path:
+    def estrazione(self, nome: str, dataset: Union[str, List[str]], da: datetime, a: datetime, filtri: Dict[str, Any],
+                   path: Path, opzioni: Optional[Dict[str, Any]] = None) -> Path:
         """Submit an /api/data extraction, wait for its file, download it to path; the extraction is always deleted
-        on the server afterwards, also when it fails (the account disk quota is 1 GB)."""
-        corpo = {"request_name": nome, "dataset_names": [dataset], "filters": filtri,
-                 "reftime": {"from": f"{da:%Y-%m-%dT%H:%M:%S}.000Z", "to": f"{a:%Y-%m-%dT%H:%M:%S}.000Z"}}
+        on the server afterwards, also when it fails (the account disk quota is 1 GB). dataset may be a list
+        (several networks); opzioni go into the request as they are (output_format, force_obs_download...)."""
+        corpo = {"request_name": nome, "dataset_names": [dataset] if isinstance(dataset, str) else list(dataset),
+                 "filters": filtri, "reftime": {"from": f"{da:%Y-%m-%dT%H:%M:%S}.000Z", "to": f"{a:%Y-%m-%dT%H:%M:%S}.000Z"},
+                 **(opzioni or {})}
         for _ in range(2):
-            r = requests.post(f"{mh.BASE}/api/data", json=corpo, headers=mh.auth_headers(self.token), timeout=120)
+            r = requests.post(f"{BASE}/api/data", json=corpo, headers=auth_headers(self.token), timeout=120)
             if r.status_code != 401:
                 break
-            self.token = mh.login(self.username, self.password)
+            self.token = login(self.username, self.password)
         if r.status_code >= 300:
             raise EstrazioneRifiutata(f"{r.status_code} {r.text[:300]}")
         id_estrazione = str(r.json().get("request_id"))
@@ -172,7 +262,7 @@ class MeteoHub:
                 if time.time() - inizio > 6 * 3600:
                     raise RuntimeError(f"Estrazione {nome} non pronta dopo 6 ore")
                 time.sleep(15)
-            mh.download_file(self.token, mia["fileoutput"], Path(path))
+            download_file(self.token, mia["fileoutput"], Path(path))
         finally:
-            mh.delete_request(self.token, id_estrazione)
+            delete_request(self.token, id_estrazione)
         return Path(path)

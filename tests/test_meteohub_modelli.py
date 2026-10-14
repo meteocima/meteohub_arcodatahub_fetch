@@ -104,19 +104,17 @@ def test_runs_are_extracted_in_planned_requests_waiting_for_quota_and_resumed(tm
     assert fonte.estrazioni == []
 
 
-class MolochFinto(MeteoHubFinto):
-    def metadati(self, dataset, giorno):
-        return {**super().metadati(dataset, giorno), "area": [{"type": "area", "style": "GRIB", "value": {
-            "Ni": 577, "Nj": 577, "latfirst": -8094300, "latlast": 5038500, "latp": -46499996,
-            "lonfirst": 354900000, "lonlast": 7917600, "lonp": 10500000, "rot": 0, "tn": 1}}]}
+class NonStrutturatoFinto(MeteoHubFinto):
+    def metadati(self, dataset, giorno):  # ICON_2I_EPS also lists its native unstructured grid
+        return {**super().metadati(dataset, giorno), "area": [{"type": "area", "style": "GRIB", "value": {"tn": 101}}]}
 
 
 def test_a_grid_that_cannot_be_cut_is_refused_before_spending_quota(tmp_path):
-    fonte = MolochFinto(quote=[])
+    fonte = NonStrutturatoFinto(quote=[])
 
-    with pytest.raises(SystemExit, match="ruotat"):
+    with pytest.raises(SystemExit, match="tn=101"):
         scarica_modelli(fonte, Area.da_testo("bbox:8.7,44.3,9.1,44.7"), datetime(2026, 10, 11), datetime(2026, 10, 11, 12),
-                        "MOLOCH", ["prec"], tmp_path, apri=xr.open_dataset)
+                        "ICON_2I_EPS", ["prec"], tmp_path, apri=xr.open_dataset)
     assert fonte.estrazioni == []
 
 
@@ -154,3 +152,118 @@ def test_a_refused_extraction_waits_for_the_next_hour_and_is_retried(tmp_path):
                     "ICON_2I_SURFACE_PRESSURE_LEVELS", ["prec"], tmp_path, apri=xr.open_dataset, dormi=fonte.dormite.append)
 
     assert len(fonte.dormite) == 1 and len(fonte.estrazioni) == 1
+
+
+def campo_curvilineo():
+    """t2m as cfgrib decodes a rotated or Lambert grid: dims (y, x), 2-D latitude/longitude, longitudes in 0..360."""
+    lat = np.array([[44.0, 44.0, 44.0, 44.0], [44.3, 44.3, 44.3, 44.3], [44.6, 44.6, 44.6, 44.6], [44.9, 44.9, 44.9, 44.9]])
+    lon = np.array([[8.2, 8.6, 9.0, 9.4], [8.3, 8.7, 9.1, 9.5], [8.4, 8.8, 9.2, 9.6], [8.5, 8.9, 9.3, 9.7]]) % 360
+    return xr.DataArray(np.arange(16.0).reshape(1, 4, 4), dims=("time", "y", "x"),
+                        coords={"latitude": (("y", "x"), lat), "longitude": (("y", "x"), lon + 360 * (lon < 9))}, name="t2m")
+
+
+def test_rotated_or_lambert_grid_is_cut_to_the_smallest_box_around_the_area_and_masked_outside():
+    ritagliato = ritaglia_griglia(campo_curvilineo(), Area.da_testo("bbox:8.65,44.2,9.15,44.7"))
+
+    # inside: (44.3, 8.7), (44.3, 9.1), (44.6, 8.8); the box of their indices is rows 1-2, columns 1-2
+    assert ritagliato.sizes == {"time": 1, "y": 2, "x": 2}
+    assert np.isnan(ritagliato.values[0]).tolist() == [[False, False], [False, True]]  # (44.6, 9.2) is outside
+    assert ritagliato.longitude.values.max() < 180
+
+
+def test_a_curvilinear_grid_that_misses_the_area_is_refused():
+    with pytest.raises(SystemExit):
+        ritaglia_griglia(campo_curvilineo(), Area.da_testo("bbox:12,41,13,42"))
+
+
+def test_mercator_grid_decoded_as_a_list_of_points_keeps_the_points_of_the_area():
+    # cfgrib has no 2-D coordinates for Mercator (WRF_OL, WRF_DA_ITA): dims (time, values), 1-D latitude/longitude on values
+    campo = xr.DataArray(np.array([[1.0, 2.0, 3.0, 4.0]]), dims=("time", "values"),
+                         coords={"latitude": ("values", [44.4, 44.5, 44.6, 45.5]), "longitude": ("values", [8.8, 8.9, 9.3, 8.8])})
+
+    ritagliato = ritaglia_griglia(campo, Area.da_testo("bbox:8.7,44.3,9.1,44.7"))
+
+    assert ritagliato.values.tolist() == [[1.0, 2.0]]
+
+
+class SwanFinto(MeteoHubFinto):
+    def metadati(self, dataset, giorno):  # GRIB1 grids are described without tn
+        return {**super().metadati(dataset, giorno), "area": [{"type": "area", "style": "GRIB", "value": {"Ni": 169, "Nj": 145, "type": 0}}]}
+
+
+def test_a_grid_described_without_template_number_is_not_refused(tmp_path):
+    fonte = SwanFinto(quote=[])
+
+    scarica_modelli(fonte, Area.da_testo("bbox:8.7,44.3,9.1,44.7"), datetime(2026, 10, 11), datetime(2026, 10, 11, 12),
+                    "swan-ita", ["prec"], tmp_path, apri=xr.open_dataset)
+
+    assert len(fonte.estrazioni) == 1
+
+
+REGOLARE = {"type": "area", "style": "GRIB", "value": {"Ni": 761, "Nj": 761, "tn": 0}}
+NON_STRUTTURATA = {"type": "area", "style": "GRIB", "value": {"tn": 101}}
+
+
+class EpsFinto(MeteoHubFinto):
+    def metadati(self, dataset, giorno):
+        return {**super().metadati(dataset, giorno), "area": [REGOLARE, NON_STRUTTURATA]}
+
+    def estrazione(self, nome, dataset, da, a, filtri, path):
+        self.filtri = filtri
+        return super().estrazione(nome, dataset, da, a, filtri, path)
+
+
+def test_a_dataset_with_a_grid_that_cannot_be_cut_asks_only_for_the_grids_that_can(tmp_path):
+    fonte = EpsFinto(quote=[])
+
+    scarica_modelli(fonte, Area.da_testo("bbox:8.7,44.3,9.1,44.7"), datetime(2026, 10, 11), datetime(2026, 10, 11, 12),
+                    "ICON_2I_EPS", ["prec"], tmp_path, apri=xr.open_dataset)
+
+    assert fonte.filtri["area"] == [REGOLARE]
+
+
+import csv
+
+from meteohub.punti import Punto
+
+
+def test_with_points_the_values_of_the_nearest_cell_go_to_a_csv(tmp_path):
+    fonte = MeteoHubFinto(quote=[])
+
+    file = scarica_modelli(fonte, Area.da_testo("bbox:8.7,44.3,9.1,44.7"), datetime(2026, 10, 11), datetime(2026, 10, 11),
+                           "ICON_2I_SURFACE_PRESSURE_LEVELS", ["prec"], tmp_path, apri=xr.open_dataset,
+                           punti=[Punto("Genova", 44.41, 8.81), Punto("Milano", 45.46, 9.19)])
+
+    righe = list(csv.DictReader(open(file["punti_prec"], encoding="utf-8")))
+    orarie = [r for r in righe if r["variabile"] == "prec_1h"]
+    assert {r["punto"] for r in righe} == {"Genova"}  # Milan is outside the area
+    assert [(r["step_h"], r["valore"]) for r in orarie] == [("0.0", ""), ("1.0", "1.0"), ("2.0", "2.0")]  # no hour before +0 h
+    assert orarie[1]["time"] == "2026-10-11T00:00:00Z" and orarie[1]["valid_time"] == "2026-10-11T01:00:00Z"
+
+
+from meteohub.modelli import griglia_piu_fine
+
+
+def test_of_several_grids_in_one_grib_the_finest_is_kept():
+    # MOLOCH t2m: 45 hourly steps on 1154x1154 and 16 on 577x577 in the same GRIB
+    def campo(n, passi):
+        return xr.Dataset({"t2m": (("step", "y", "x"), np.zeros((passi, n, n)))})
+
+    assert griglia_piu_fine([campo(2, 16), campo(4, 45)]).sizes["y"] == 4
+    assert griglia_piu_fine([campo(4, 16), campo(4, 45)]).sizes["step"] == 45
+
+
+from meteohub.modelli import a_griglia
+
+
+def test_a_mercator_field_given_as_points_is_put_back_on_its_grid():
+    # Ni, Nj of the Mercator grid, read by apri_grib with read_keys; values run along x first
+    campo = xr.DataArray(np.arange(6.0)[None, :], dims=("time", "values"), attrs={"GRIB_Ni": 3, "GRIB_Nj": 2},
+                         coords={"latitude": ("values", [44.0, 44.0, 44.0, 44.1, 44.1, 44.1]),
+                                 "longitude": ("values", [8.8, 8.9, 9.0, 8.8, 8.9, 9.0])})
+
+    griglia = a_griglia(campo)
+
+    assert dict(griglia.sizes) == {"time": 1, "y": 2, "x": 3}
+    assert griglia.values[0].tolist() == [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]]
+    assert griglia.latitude.values[:, 0].tolist() == [44.0, 44.1]

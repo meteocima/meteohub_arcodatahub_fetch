@@ -6,7 +6,7 @@ from typing import Optional
 import aiohttp
 import xarray as xr
 
-import meteohub_download as mh
+from meteohub import client
 from meteohub.client import MeteoHub
 
 ARCO_DATA_HUB = "https://api.arcodatahub.com/S3"
@@ -39,9 +39,9 @@ class ArcoDataHub:
                 if archivio not in SU_METEOHUB:
                     raise SystemExit(f"ARCO Data Hub non apre {archivio}: {exc} (abbonamento all'archivio?)")
                 print(f"ARCO Data Hub non apre {archivio} ({exc}): provo MeteoHub /api/arco", flush=True)
-        if archivio in SU_METEOHUB and mh.USERNAME and mh.PASSWORD:
+        if archivio in SU_METEOHUB and client.USERNAME and client.PASSWORD:
             if errore is None:
                 print(f"Credenziali ARCO Data Hub assenti: leggo {SU_METEOHUB[archivio]} da MeteoHub /api/arco", flush=True)
             meteohub = MeteoHub()
-            return self._apri(f"{mh.BASE}/api/arco/{SU_METEOHUB[archivio]}", meteohub.username, meteohub.chiave_accesso())
+            return self._apri(f"{client.BASE}/api/arco/{SU_METEOHUB[archivio]}", meteohub.username, meteohub.chiave_accesso())
         raise SystemExit(f"Per {archivio} servono ARCODATAHUB_USERNAME/ARCODATAHUB_API_KEY (e l'abbonamento all'archivio).")

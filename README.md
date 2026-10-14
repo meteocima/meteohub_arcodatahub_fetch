@@ -48,6 +48,8 @@ I file finiscono in `output/<comando>_<area>_<inizio>_<fine>/`.
 - [Radar](#radar)
 - [Aree](#aree)
 - [Modelli](#modelli)
+- [Valori sui punti](#valori-sui-punti)
+- [Catalogo](#catalogo)
 - [Script precedenti](#script-precedenti)
 - [Licenze dei dati](#licenze-dei-dati)
 - [Inventario e catalogo dei dati](#inventario-e-catalogo-dei-dati)
@@ -64,10 +66,10 @@ Il punto d'ingresso è `meteohub_fetch.py`, con un sottocomando per tipo di dato
 |---|---|---|---|---|
 | **`stazioni`** | osservazioni delle 28 reti di stazioni | MeteoHub `/api/observations` | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
 | **`radar`** | pioggia dal mosaico radar del Dipartimento della Protezione Civile (DPC): SRT1, cumulata oraria corretta con i pluviometri (dal 2018-07), e SRI, intensità istantanea (dal 2010) | ARCO Data Hub, Zarr | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
-| **`modelli`** | ICON-2I, WRF_OL, WRF_DA_ITA (griglie regolari in lat/lon) | MeteoHub `/api/data` | sì, 10 estrazioni all'ora | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
-| **`catalogo`** | inventario di MeteoHub e ARCO Data Hub | API delle due piattaforme | no | ![in arrivo](https://img.shields.io/badge/-in%20arrivo-lightgrey) per ora [con gli script](#inventario-e-catalogo-dei-dati) |
+| **`modelli`** | ICON-2I, MOLOCH, BOLAM, WRF (tutte le griglie) | MeteoHub `/api/data` | sì, 10 estrazioni all'ora | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
+| **`catalogo`** | che cosa c'è per un'area e un periodo, con il comando per scaricarlo | inventario nel repository | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
 
-Ogni lancio scrive il dato nativo e quello orario, con l'ora che termina alle HH:00 e i tempi in UTC. Le scelte di progetto sono nelle [decisioni (ADR)](docs/adr/) e i termini usati sono definiti nel [glossario](CONTEXT.md).
+Con `--punti`, `radar` e `modelli` scrivono anche i valori sulle coordinate delle stazioni (vedi [Valori sui punti](#valori-sui-punti)). Ogni lancio scrive il dato nativo e quello orario, con l'ora che termina alle HH:00 e i tempi in UTC. Le scelte di progetto sono nelle [decisioni (ADR)](docs/adr/) e i termini usati sono definiti nel [glossario](CONTEXT.md).
 
 ## Installazione
 
@@ -215,8 +217,7 @@ uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVEL
 
 L'account non ha elaborazioni lato server: ogni estrazione scarica il campo intero, che viene ritagliato sull'area in locale. Lo script stima la dimensione di una corsa, raggruppa le corse in estrazioni sotto `--limite-mb` e cancella ogni estrazione dal server appena scaricata, perché anche lo spazio sul server è di 1 GB. Se la quota è esaurita, aspetta l'ora successiva e riprende da solo.
 
-> [!IMPORTANT]
-> Per ora il ritaglio funziona solo sulle griglie regolari in lat/lon: ICON-2I (tutte le serie), `WRF_OL` e `WRF_DA_ITA`. MOLOCH, MOLOCH_AIM e BOLAM (griglie ruotate) e `WRF` (griglia Lambert) vengono rifiutati prima di inviare qualsiasi estrazione.
+Il ritaglio funziona su tutte le griglie dei modelli: lat/lon regolare (ICON-2I), ruotata (MOLOCH, MOLOCH_AIM, BOLAM), Mercator (`WRF_OL`, `WRF_DA_ITA`) e Lambert (`WRF`). Sulle griglie non regolari il file ha le dimensioni `y`, `x` e latitudine e longitudine di ogni cella; si tiene il rettangolo più piccolo di celle che contiene l'area e le celle fuori dall'area valgono NaN. Se un'estrazione contiene la stessa variabile su più griglie (MOLOCH dà `t2m` su 1154×1154 e su 577×577), si tiene la più fine. Le griglie che non si possono georeferenziare (la non strutturata di ICON-2I-EPS) non vengono chieste.
 
 **File prodotti:**
 
@@ -227,7 +228,24 @@ L'account non ha elaborazioni lato server: ogni estrazione scarica il campo inte
 
 Per `prec` il file contiene anche `prec_1h`, la pioggia dell'ora che termina a ogni scadenza intera. Si calcola come differenza fra due scadenze consecutive della cumulata dall'inizio della corsa, e le differenze negative dovute alla compressione GRIB diventano 0. Per ICON-2I-RUC, che ha scadenze ogni 10 minuti, si usano solo quelle a ora intera.
 
-Il sottocomando `catalogo` non è ancora disponibile e per ora rimanda agli script descritti in [Inventario e catalogo dei dati](#inventario-e-catalogo-dei-dati).
+## Valori sui punti
+
+```bash
+uv run python meteohub_fetch.py stazioni --from 2026-10-11 --to 2026-10-11 --area provincia:GE --vars prec --out-dir output/ge
+uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-11 --to 2026-10-11 --area provincia:GE \
+    --punti output/ge/stazioni_provincia_GE_2026101100_2026101200.csv --out-dir output/ge
+```
+
+`--punti` accetta un CSV con le colonne `lat` e `lon` e, se c'è, un nome (`nome`, `stazione`, `station_name` o `name`); va bene il file `stazioni_` del sottocomando `stazioni`. Oltre ai NetCDF, `radar` scrive `punti_radar_<tipo>_nativo_...csv` (ogni scansione) e `punti_radar_<tipo>_orario_...csv`, e `modelli` scrive `punti_modello_<modello>_<var>_...csv`: una riga per punto, istante (e scadenza) e variabile, con il valore della **cella più vicina che ha dati**, le coordinate del suo centro e la distanza in km. I punti fuori dall'area vengono esclusi, e così quelli senza nessun dato intorno in tutto il periodo. Non è un'interpolazione: su una griglia di 1 km il punto è a meno di 0,7 km dal centro della cella, su una di 8 km fino a circa 6 km.
+
+## Catalogo
+
+```bash
+uv run python meteohub_fetch.py catalogo --from 2026-10-10 --to 2026-10-11 --area provincia:GE
+uv run python meteohub_fetch.py catalogo --aggiorna      # rifà l'inventario: senza quota, 1-2 ore
+```
+
+Elenca, per l'area e il periodo, le reti con stazioni nell'area (con i passi di cumulata della pioggia), gli archivi radar e i modelli che li coprono, con periodo, griglia, risoluzione e passo. Lo legge dall'inventario nel repository, quindi non fa chiamate e non serve nessuna credenziale; stampa e scrive in `catalogo_<area>_...csv` il comando per scaricare ogni sorgente, con `--from` e `--to` come li hai scritti. Per i radar la fine dell'archivio si controlla solo allo scaricamento. Il numero di stazioni è quello dei giorni campione dell'inventario (l'ultimo è il 2026-10-12), non del periodo chiesto. `--aggiorna` rilancia i tre script descritti in [Inventario e catalogo dei dati](#inventario-e-catalogo-dei-dati), con un giorno campione di due giorni prima (o `--giorno-campione`).
 
 ## Script precedenti
 
@@ -317,14 +335,16 @@ I test sono in `tests/` e non usano la rete: le sorgenti sono sostituite da fint
 <summary>Mostra i file del repository</summary>
 
 ```
-meteohub_fetch.py          downloader: sottocomandi stazioni, radar e modelli (catalogo non ancora disponibile)
+meteohub_fetch.py          downloader: sottocomandi stazioni, radar, modelli e catalogo
 meteohub/                  moduli del downloader
   area.py                  aree (provincia, regione, bbox, italia, GeoJSON)
   client.py                client MeteoHub: login, rinnovo del token, ripetizioni
   stazioni.py              osservazioni da stazione e passo orario
   arco.py                  apertura degli archivi Zarr di ARCO Data Hub e MeteoHub
   radar.py                 ritaglio radar e pioggia oraria
-  modelli.py               estrazioni dei modelli, ritaglio e pioggia oraria
+  modelli.py               estrazioni dei modelli, ritaglio (tutte le griglie) e pioggia oraria
+  punti.py                 valori della cella più vicina sui punti (--punti)
+  catalogo.py              che cosa c'è per un'area e un periodo, dall'inventario
   uscite.py                nomi dei file, scrittura NetCDF e regole comuni sui campioni attesi
 meteohub_download.py       percorso A: estrazioni /api/data per tutta Italia
 filter_provincia.py        percorso A: filtro per provincia

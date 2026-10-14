@@ -99,3 +99,23 @@ _Avoid_: buco (che è assenza di dati), giorni mancanti
 **Area**:
 La zona da scaricare: provincia, regione, rettangolo, tutta Italia o un poligono dato dall'utente (per esempio un bacino).
 _Avoid_: dominio (che è quello di un modello), bbox (quando si intende l'area in generale)
+
+## Punti
+
+**Punto**:
+Una coordinata in cui si vuole il valore di un campo su griglia (radar o modello), spesso quella di una stazione per confrontare le fonti.
+_Avoid_: stazione (quando non è una stazione), sito, location
+
+**Cella più vicina**:
+La cella con dati della griglia il cui centro è più vicino al punto; il suo valore è il valore del campo nel punto, insieme alla distanza fra punto e centro. Le celle sempre vuote, fuori dall'area, non contano.
+_Avoid_: interpolazione (che fa pensare a una media pesata), nearest neighbour
+
+## Descrizione delle sorgenti
+
+**Inventario**:
+La descrizione completa di tutti i dataset di MeteoHub e degli archivi di ARCO Data Hub (periodo, passo, griglia, stazioni, variabili), raccolta senza estrazioni e conservata nel repository.
+_Avoid_: censimento, catalogo (che è la risposta per un'area)
+
+**Catalogo**:
+L'elenco, ricavato dall'inventario, di quali reti, archivi radar e modelli coprono un'area in un periodo, con passo, risoluzione e il comando per scaricarli.
+_Avoid_: inventario (che è la descrizione completa), elenco dei dataset

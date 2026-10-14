@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import meteohub_download as mh
+import meteohub.client as client_mod
 from meteohub.client import MeteoHub
 
 
@@ -31,7 +31,8 @@ class HttpFinto:
 
 
 def meteohub(monkeypatch, http):
-    monkeypatch.setattr(mh, "login", lambda u, p: "token")
+    monkeypatch.setattr(client_mod, "login", lambda u, p: "token")
+    monkeypatch.setattr(client_mod.time, "sleep", lambda s: None)
     client = MeteoHub("utente", "segreto")
     client.http = http
     return client
@@ -64,3 +65,39 @@ def test_asks_meteohub_to_check_reliability_so_suspect_values_come_with_rel_0(mo
 
     assert http.richieste[0]["reliabilityCheck"] == "true"
     assert http.richieste[0]["lonmin"] == 8.8
+
+
+class HttpConTokenScaduto(HttpFinto):
+    """The first call answers 401 (expired token), then everything works."""
+
+    def get(self, url, params=None, headers=None, timeout=None):
+        if not self.richieste:
+            self.richieste.append(params)
+            return Risposta(401)
+        return super().get(url, params, headers, timeout)
+
+
+def test_an_expired_token_on_a_long_window_is_renewed_and_the_call_repeated(monkeypatch):
+    accessi = []
+    monkeypatch.setattr(client_mod, "login", lambda u, p: accessi.append(u) or "token")
+    monkeypatch.setattr(client_mod.time, "sleep", lambda s: None)
+    client = MeteoHub("utente", "segreto")
+    client.http = HttpConTokenScaduto()
+
+    risposta = client.osservazioni("mnw", datetime(2026, 10, 11, 10), datetime(2026, 10, 11, 12, 59))
+
+    assert len(accessi) == 2 and [x["da"] for x in risposta["data"]] == ["10:00", "11:00"]
+
+
+class HttpVuoto(HttpFinto):
+    def get(self, url, params=None, headers=None, timeout=None):
+        self.richieste.append(params)
+        return Risposta(204)
+
+
+def test_an_empty_answer_is_no_data_not_an_error(monkeypatch):
+    errori = []
+
+    risposta = meteohub(monkeypatch, HttpVuoto()).osservazioni("mnw", datetime(2026, 10, 11, 10), datetime(2026, 10, 11, 10, 59), errori=errori)
+
+    assert risposta == {"data": []} and errori == []

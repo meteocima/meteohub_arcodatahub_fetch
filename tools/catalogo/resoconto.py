@@ -130,6 +130,9 @@ def grid_short(g):
     g = (g or "").split(" | ")[0]
     if not g:
         return "–"
+    if g.startswith("GRIB(") and "tn=30" in g:  # WRF: /api/fields gives no Lambert parameters; DxInMetres=1500 in its GRIB
+        ni = g.split("Ni=")[1].split(",")[0]
+        return f"{ni}x{g.split('Nj=')[1].split(',')[0]} Lambert ~1.5 km"
     if g.startswith("GRIB("):
         return g[:60]
     km = g[g.find("(~") + 1:g.find(")", g.find("(~"))] if "(~" in g else ""
@@ -261,7 +264,13 @@ def section_models(ds_rows, mvars, arco_vars, coll):
                "`/api/fields` non lo supporta; periodo e variabili non leggibili senza una richiesta `/api/data`.\n"
                "- Le variabili di precipitazione e neve chiamate *rate* (kg m⁻² s⁻¹) nei GRIB di ICON sono in realtà **cumulate "
                "dall'inizio della corsa** (kg m⁻² = mm): la pioggia oraria è la differenza tra due scadenze consecutive.\n"
-               "- WRF: griglia Lambert (GRIB `tn=30`) non ancora decodificata dall'inventario.\n")
+               "- `WRF`: griglia Lambert conforme (GRIB `tn=30`) 1399×1399 con passo di 1,5 km, paralleli standard 43,42° e "
+               "37,21°, meridiano centrale 11° (letti dal GRIB di un'estrazione `t2m` della corsa 2026-10-12 00: `/api/fields` "
+               "non dà questi parametri).\n"
+               "- `MOLOCH`: oltre alla griglia 577×577 (~2,5 km) ha una griglia 1154×1154 (~1,25 km); in un'estrazione `t2m` "
+               "(corsa 2026-10-12 03) la 1154×1154 ha tutte le 45 scadenze orarie e la 577×577 solo 16. `meteohub_fetch.py "
+               "modelli` tiene la griglia più fine.\n"
+               "- `WRF_OL` e `WRF_DA_ITA` sono su griglia Mercator (GRIB `tn=10`), con passo costante in longitudine.\n")
     out.append("### 3.2 Variabili per modello (MeteoHub)\n")
     out.append("Una riga per variabile: codice GRIB, livelli, elaborazione statistica e scadenze, letti con "
                "`/api/fields` filtrato sul singolo prodotto in un giorno recente (indicato). I parametri locali del centro 80 "

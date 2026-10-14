@@ -137,3 +137,22 @@ def test_every_hour_of_the_period_is_written_and_the_period_stops_at_last_valid(
     assert [str(t)[11:16] for t in orario.time.values] == ["11:00", "12:00", "13:00"]
     assert orario["n_misure"].values[:, 0, 0].tolist() == [12, 0, 12]
     assert "last_valid" in capsys.readouterr().out
+
+
+import csv
+
+from meteohub.punti import Punto
+
+
+def test_with_points_the_hourly_rain_of_the_nearest_cell_goes_to_a_csv(tmp_path):
+    tempi = pd.date_range("2026-10-11T10:00", "2026-10-11T13:00", freq="5min")
+    valori = np.arange(len(tempi), dtype=float).reshape(-1, 1, 1) * np.ones((1, 4, 5))
+    fonte = ArcoFinto({"italian-radar-dpc-srt1-adj.zarr": griglia(valori, tempi, "srt1_adj")})
+
+    file = scarica_radar(fonte, GE, datetime(2026, 10, 11, 11), datetime(2026, 10, 11, 12), "srt1", tmp_path,
+                         punti=[Punto("Ovada", 44.98, 8.12)])
+
+    righe = list(csv.DictReader(open(file["punti"], encoding="utf-8")))
+    assert [(r["time"], r["variabile"], r["valore"]) for r in righe] == [
+        ("2026-10-11T11:00:00Z", "prec_1h", "12.0"), ("2026-10-11T12:00:00Z", "prec_1h", "24.0")]
+    assert (righe[0]["lat_cella"], righe[0]["lon_cella"]) == ("45.0", "8.1")
