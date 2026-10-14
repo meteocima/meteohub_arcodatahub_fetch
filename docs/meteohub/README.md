@@ -75,6 +75,6 @@ viene da prove dirette sull'API e dal codice di questo repository.
 - **Radar.** `radar_sri_dpc` (GRIB, arkimet) va solo dal 2026-01-28. L'archivio ARCO `radar.zarr`
   (FBK con DPC, CC BY-SA 4.0) contiene invece la variabile `RR` (mm/h) su una griglia 1400×1200 dal 2010 a oggi.
 - **Quota di estrazione: 10 richieste all'ora.** Con blocchi da 2 giorni, un anno di `meteohub_download.py` richiede
+  almeno 18 ore.
 - **Un'estrazione non terminata non si cancella per 2 giorni.** `DELETE /api/requests/<id>` su una richiesta `PENDING` risponde 403 "You cannot delete an unterminated request unless grace period (of 2 days) has expired" (2026-10-14). Un'estrazione interrotta resta in coda, finisce e occupa spazio sul disco del server finché non la si cancella: `meteohub.client.MeteoHub.segui` lo segnala, e `tools/prove_estrazioni.py` riprende una richiesta già in coda con lo stesso nome invece di inviarne un'altra.
 - **Le estrazioni di osservazioni contano sulla quota e sono lente.** Dopo l'invio di una richiesta su `dpcn-lombardia`, `/api/hourly` dava `submitted: 1, remaining: 9` (2026-10-14), mentre 5 estrazioni GRIB di modelli non l'avevano mosso. Un'estrazione di 24 ore di tutte le reti (2026-09-27, 84 MB in JSON) è stata pronta 2 ore dopo l'invio. Misure sui limiti di dimensione: `tools/prove_estrazioni.py` → `docs/meteohub/limiti_estrazioni.csv` (issue #3).
-  almeno 18 ore.
