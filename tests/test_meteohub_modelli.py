@@ -141,7 +141,7 @@ class MeteoHubCheRifiuta(MeteoHubFinto):
     def estrazione(self, *args):
         if not self.rifiutate:
             self.rifiutate += 1
-            raise EstrazioneRifiutata("429 too many requests")
+            raise EstrazioneRifiutata(429, "too many requests")
         return super().estrazione(*args)
 
 

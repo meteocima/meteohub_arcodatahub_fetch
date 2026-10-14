@@ -128,7 +128,7 @@ VARIABILI = {
 }
 
 
-def _filtri(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict[str, Any]]]:
+def filtri_variabile(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict[str, Any]]]:
     """/api/data filters (the very objects /api/fields returns) for one variable of the dataset."""
     if nome not in VARIABILI:
         raise SystemExit(f"Variabile {nome!r} non prevista: usa {', '.join(VARIABILI)}.")
@@ -156,7 +156,7 @@ def _ritagliabile(area: Dict[str, Any]) -> bool:
 
 def _griglia_ritagliabile(metadati: Dict[str, Any]) -> None:
     """Refuse, before any extraction, a dataset none of whose grids has latitude/longitude in cfgrib
-    (e.g. ICON unstructured, tn=101). ICON_2I_EPS lists it beside its regular grid: _filtri asks only for the latter."""
+    (e.g. ICON unstructured, tn=101). ICON_2I_EPS lists it beside its regular grid: filtri_variabile asks only for the latter."""
     aree = metadati.get("area", [])
     if aree and not any(_ritagliabile(a) for a in aree):
         tn = ", ".join(str(a.get("value", {}).get("tn")) for a in aree)
@@ -233,7 +233,7 @@ def scarica_modelli(fonte: Any, area: Area, inizio: datetime, fine: datetime, mo
         raise SystemExit(f"{modello}: nessuna corsa tra {inizio} e {fine}.")
     out = {}
     for nome in variabili:
-        filtri = _filtri(metadati, nome)
+        filtri = filtri_variabile(metadati, nome)
         mb = fonte.stima_mb(modello, filtri, giorno)
         gribs = []
         for gruppo in pianifica_estrazioni(corse, mb, limite_mb):

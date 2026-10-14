@@ -101,3 +101,25 @@ def test_an_empty_answer_is_no_data_not_an_error(monkeypatch):
     risposta = meteohub(monkeypatch, HttpVuoto()).osservazioni("mnw", datetime(2026, 10, 11, 10), datetime(2026, 10, 11, 10, 59), errori=errori)
 
     assert risposta == {"data": []} and errori == []
+
+
+from meteohub.client import EstrazioneRifiutata
+
+
+class HttpRifiuta(HttpFinto):
+    def post(self, url, json=None, headers=None, timeout=None):
+        self.richieste.append(json)
+        return Risposta(403, {"Response": {"errors": ["Requested data exceeds allowed size"]}})
+
+
+def test_a_refused_extraction_says_its_http_status():
+    # 403 = too big; the hourly quota answers otherwise: the probes of #3 must tell them apart
+    try:
+        client = MeteoHub.__new__(MeteoHub)
+        client.http, client.token, client.username, client.password = HttpRifiuta(), "t", "u", "p"
+        client.invia("prova", "dpcn-lombardia", datetime(2026, 10, 1), datetime(2026, 10, 2), {}, {"force_obs_download": True})
+    except EstrazioneRifiutata as exc:
+        assert exc.stato == 403 and "exceeds allowed size" in str(exc)
+        assert client.http.richieste[0]["force_obs_download"] is True
+    else:
+        raise AssertionError("no refusal")

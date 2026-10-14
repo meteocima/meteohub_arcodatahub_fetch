@@ -18,7 +18,11 @@ FINESTRA_MINIMA = timedelta(hours=1)  # windows that still fail with 5xx are not
 
 
 class EstrazioneRifiutata(RuntimeError):
-    """MeteoHub refused to queue an extraction (e.g. hourly quota used up)."""
+    """MeteoHub refused to queue an extraction; stato is the HTTP status (403: larger than the account allows)."""
+
+    def __init__(self, stato: int, testo: str) -> None:
+        super().__init__(f"{stato} {testo}")
+        self.stato = stato
 
 
 def login(username: str, password: str) -> str:
@@ -232,37 +236,59 @@ class MeteoHub:
         q = r.json()
         return int(q["remaining"]) if "remaining" in q else int(q.get("total", 10)) - int(q.get("submitted", 0))
 
-    def estrazione(self, nome: str, dataset: Union[str, List[str]], da: datetime, a: datetime, filtri: Dict[str, Any],
-                   path: Path, opzioni: Optional[Dict[str, Any]] = None) -> Path:
-        """Submit an /api/data extraction, wait for its file, download it to path; the extraction is always deleted
-        on the server afterwards, also when it fails (the account disk quota is 1 GB). dataset may be a list
-        (several networks); opzioni go into the request as they are (output_format, force_obs_download...)."""
-        corpo = {"request_name": nome, "dataset_names": [dataset] if isinstance(dataset, str) else list(dataset),
-                 "filters": filtri, "reftime": {"from": f"{da:%Y-%m-%dT%H:%M:%S}.000Z", "to": f"{a:%Y-%m-%dT%H:%M:%S}.000Z"},
-                 **(opzioni or {})}
+    def invia(self, nome: str, dataset: Union[str, List[str]], da: datetime, a: datetime, filtri: Dict[str, Any],
+              opzioni: Optional[Dict[str, Any]] = None) -> str:
+        """Submit an /api/data extraction and return its id; EstrazioneRifiutata if MeteoHub does not queue it.
+        dataset may be a list (several networks); opzioni go into the request (output_format, force_obs_download...)."""
+        corpo = {**(opzioni or {}), "request_name": nome,
+                 "dataset_names": [dataset] if isinstance(dataset, str) else list(dataset), "filters": filtri,
+                 "reftime": {"from": f"{da:%Y-%m-%dT%H:%M:%S}.000Z", "to": f"{a:%Y-%m-%dT%H:%M:%S}.000Z"}}
         for _ in range(2):
-            r = requests.post(f"{BASE}/api/data", json=corpo, headers=auth_headers(self.token), timeout=120)
+            r = self.http.post(f"{BASE}/api/data", json=corpo, headers=auth_headers(self.token), timeout=120)
             if r.status_code != 401:
                 break
             self.token = login(self.username, self.password)
         if r.status_code >= 300:
-            raise EstrazioneRifiutata(f"{r.status_code} {r.text[:300]}")
-        id_estrazione = str(r.json().get("request_id"))
+            raise EstrazioneRifiutata(r.status_code, r.text[:300])
+        return str(r.json().get("request_id"))
+
+    def estrazioni(self) -> List[Dict[str, Any]]:
+        """The account's extractions on the server (/api/requests)."""
+        elenco = self._get("/api/requests", {}).json()
+        return elenco if isinstance(elenco, list) else elenco.get("data", elenco.get("requests", []))
+
+    def segui(self, id_estrazione: str, path: Path, misure: Optional[Dict[str, Any]] = None,
+              attesa_max_s: float = 6 * 3600) -> Path:
+        """Wait for an extraction, download its file to path and delete it on the server, also when it fails (the
+        account disk quota is 1 GB). MeteoHub refuses to delete an extraction that has not ended for 2 days, so one
+        given up here stays queued. misure, if given, gets the server's status, dates and file size."""
         try:
             inizio = time.time()
             while True:
-                elenco = self._get("/api/requests", {}).json()
-                elenco = elenco if isinstance(elenco, list) else elenco.get("data", elenco.get("requests", []))
-                mia = next((x for x in elenco if str(x.get("id")) == id_estrazione), None)
+                mia = next((x for x in self.estrazioni() if str(x.get("id")) == id_estrazione), None)
                 stato = str((mia or {}).get("status", "")).upper()
+                if misure is not None and mia:
+                    misure.update({k: mia.get(k) for k in ("status", "submission_date", "end_date", "filesize", "error_message")})
                 if mia and mia.get("fileoutput"):
                     break
                 if stato in ("FAILURE", "FAILED", "ERROR"):
-                    raise RuntimeError(f"Estrazione {nome} fallita: {mia.get('error_message') or stato}")
-                if time.time() - inizio > 6 * 3600:
-                    raise RuntimeError(f"Estrazione {nome} non pronta dopo 6 ore")
+                    raise RuntimeError(f"Estrazione {id_estrazione} fallita: {mia.get('error_message') or stato}")
+                if time.time() - inizio > attesa_max_s:
+                    raise RuntimeError(f"Estrazione {id_estrazione} non pronta dopo {attesa_max_s / 3600:g} ore")
                 time.sleep(15)
             download_file(self.token, mia["fileoutput"], Path(path))
         finally:
-            delete_request(self.token, id_estrazione)
+            if not delete_request(self.token, id_estrazione):
+                print(f"  estrazione {id_estrazione} non cancellata: resta sul server (non terminata: cancellabile dopo 2 giorni)", flush=True)
         return Path(path)
+
+    def estrazione(self, nome: str, dataset: Union[str, List[str]], da: datetime, a: datetime, filtri: Dict[str, Any],
+                   path: Path, opzioni: Optional[Dict[str, Any]] = None) -> Path:
+        """invia + segui: submit an extraction, wait, download it to path, delete it on the server."""
+        return self.segui(self.invia(nome, dataset, da, a, filtri, opzioni), path)
+
+    def uso_disco_mb(self) -> float:
+        """Space the account's extractions take on the server (/api/usage), MB; the quota is 1 GB."""
+        r = self._get("/api/usage", {})
+        r.raise_for_status()
+        return round(r.json().get("used", 0) / 1e6, 1)
