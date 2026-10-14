@@ -2,11 +2,13 @@
 
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
 import meteohub_download as mh
+from meteohub.modelli import EstrazioneRifiutata
 
 LICENZA = "CCBY_COMPLIANT"
 ATTESE = [5, 15, 30, 60, 120, 300]  # seconds between retries of a failed call
@@ -61,3 +63,82 @@ class MeteoHub:
             return {"data": a.get("data", []) + b.get("data", [])}
         r.raise_for_status()
         return {"data": []}
+
+    # --- extractions (/api/data), used by meteohub.modelli ---
+
+    @staticmethod
+    def _giorno(giorno: datetime) -> str:
+        return f"reftime: >={giorno:%Y-%m-%d} 00:00,<={giorno:%Y-%m-%d} 23:59"
+
+    @staticmethod
+    def _codice(prodotto: Dict[str, Any]) -> str:
+        """arkimet query code of a GRIB product as /api/fields describes it."""
+        if prodotto.get("style") == "GRIB2":
+            return f"GRIB2,{prodotto['centre']},{prodotto['discipline']},{prodotto['category']},{prodotto['number']}"
+        return f"GRIB1,{prodotto['origin']},{prodotto['table']},{prodotto['product']}"
+
+    def metadati(self, dataset: str, giorno: datetime) -> Dict[str, Any]:
+        """/api/fields items of one day of the dataset (products, levels, timeranges, runs, grid) plus "licenza"."""
+        r = self._get("/api/fields", {"datasets": dataset, "q": self._giorno(giorno), "allAvailableProducts": "true"})
+        r.raise_for_status()
+        items = r.json().get("items", {})
+        items["licenza"] = " ".join(x.get("code", "") for x in items.get("all_licenses", []))
+        return items
+
+    def stima_mb(self, dataset: str, filtri: Dict[str, List[Dict[str, Any]]], giorno: datetime) -> float:
+        """Size in MB of one run of the filtered products, from /api/fields SummaryStats of one day.
+
+        SummaryStats covers all levels and timeranges of a product: it is scaled by the share of them the
+        filters keep (an estimate, since fields of different levels can differ in size)."""
+        totale = 0.0
+        for p in filtri["product"]:
+            q = f"{self._giorno(giorno)};product:{self._codice(p)}"
+            r = self._get("/api/fields", {"datasets": dataset, "q": q, "SummaryStats": "true"})
+            r.raise_for_status()
+            items = r.json().get("items", {})
+            stats = items.get("summarystats") or {}
+            quota = 1.0
+            for chiave in ("level", "timerange"):
+                tutti = items.get(chiave, [])
+                if chiave in filtri and tutti:
+                    quota *= min(1.0, sum(1 for x in tutti if x in filtri[chiave]) / len(tutti))
+            totale += stats.get("s", 0) * quota / max(1, len(items.get("run", [])))
+        return totale / 1e6
+
+    def quota_rimanente(self) -> int:
+        r = self._get("/api/hourly", {})
+        r.raise_for_status()
+        q = r.json()
+        return int(q["remaining"]) if "remaining" in q else int(q.get("total", 10)) - int(q.get("submitted", 0))
+
+    def estrazione(self, nome: str, dataset: str, da: datetime, a: datetime, filtri: Dict[str, Any], path: Path) -> Path:
+        """Submit an /api/data extraction, wait for its file, download it to path; the extraction is always deleted
+        on the server afterwards, also when it fails (the account disk quota is 1 GB)."""
+        corpo = {"request_name": nome, "dataset_names": [dataset], "filters": filtri,
+                 "reftime": {"from": f"{da:%Y-%m-%dT%H:%M:%S}.000Z", "to": f"{a:%Y-%m-%dT%H:%M:%S}.000Z"}}
+        for _ in range(2):
+            r = requests.post(f"{mh.BASE}/api/data", json=corpo, headers=mh.auth_headers(self.token), timeout=120)
+            if r.status_code != 401:
+                break
+            self.token = mh.login(self.username, self.password)
+        if r.status_code >= 300:
+            raise EstrazioneRifiutata(f"{r.status_code} {r.text[:300]}")
+        id_estrazione = str(r.json().get("request_id"))
+        try:
+            inizio = time.time()
+            while True:
+                elenco = self._get("/api/requests", {}).json()
+                elenco = elenco if isinstance(elenco, list) else elenco.get("data", elenco.get("requests", []))
+                mia = next((x for x in elenco if str(x.get("id")) == id_estrazione), None)
+                stato = str((mia or {}).get("status", "")).upper()
+                if mia and mia.get("fileoutput"):
+                    break
+                if stato in ("FAILURE", "FAILED", "ERROR"):
+                    raise RuntimeError(f"Estrazione {nome} fallita: {mia.get('error_message') or stato}")
+                if time.time() - inizio > 6 * 3600:
+                    raise RuntimeError(f"Estrazione {nome} non pronta dopo 6 ore")
+                time.sleep(15)
+            mh.download_file(self.token, mia["fileoutput"], Path(path))
+        finally:
+            mh.delete_request(self.token, id_estrazione)
+        return Path(path)

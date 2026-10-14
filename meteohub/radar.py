@@ -1,7 +1,7 @@
 """Radar from ARCO Data Hub (docs/adr/0001): SRT1 hourly rain adjusted with gauges, SRI instantaneous rain rate."""
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict
 
@@ -10,19 +10,7 @@ import pandas as pd
 import xarray as xr
 
 from meteohub.area import Area
-from meteohub.uscite import campioni_attesi, coperta, nome_file
-
-
-def _dentro_anello(lon: np.ndarray, lat: np.ndarray, anello) -> np.ndarray:
-    """Ray casting on arrays of points (lon, lat) for one ring of (lon, lat) vertices."""
-    dentro = np.zeros(lon.shape, dtype=bool)
-    xs, ys = np.array([p[0] for p in anello]), np.array([p[1] for p in anello])
-    for xi, yi, xj, yj in zip(xs, ys, np.roll(xs, 1), np.roll(ys, 1)):
-        if yi == yj:
-            continue
-        attraversa = (yi > lat) != (yj > lat)
-        dentro ^= attraversa & (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)
-    return dentro
+from meteohub.uscite import campioni_attesi, coperta, nome_file, scrivi_nc
 
 
 def ritaglia(ds: xr.Dataset, area: Area) -> xr.Dataset:
@@ -31,23 +19,15 @@ def ritaglia(ds: xr.Dataset, area: Area) -> xr.Dataset:
     The DPC grid is transverse Mercator, so the index box also holds cells outside the lat/lon rectangle:
     they are masked like the cells outside the area polygon.
     """
+    lon, lat = ds["lon"].values, ds["lat"].values
     lonmin, latmin, lonmax, latmax = area.rettangolo
-    lat, lon = ds["lat"].values, ds["lon"].values
-    dentro = (lat >= latmin) & (lat <= latmax) & (lon >= lonmin) & (lon <= lonmax)
-    righe, colonne = np.where(dentro.any(axis=1))[0], np.where(dentro.any(axis=0))[0]
+    nel_rettangolo = (lat >= latmin) & (lat <= latmax) & (lon >= lonmin) & (lon <= lonmax)
+    righe, colonne = np.where(nel_rettangolo.any(axis=1))[0], np.where(nel_rettangolo.any(axis=0))[0]
     if not len(righe):
         raise SystemExit(f"L'area {area.nome} non interseca la griglia radar.")
     r, c = slice(righe[0], righe[-1] + 1), slice(colonne[0], colonne[-1] + 1)
-    ds, maschera = ds.isel(y=r, x=c), dentro[r, c]
-    if area.poligoni is not None:
-        lat, lon = lat[r, c], lon[r, c]
-        nel_poligono = np.zeros(lat.shape, dtype=bool)
-        for esterno, buchi in area.poligoni:
-            dentro_poly = _dentro_anello(lon, lat, esterno)
-            for buco in buchi:
-                dentro_poly &= ~_dentro_anello(lon, lat, buco)
-            nel_poligono |= dentro_poly
-        maschera &= nel_poligono
+    ds = ds.isel(y=r, x=c)
+    maschera = area.maschera(lon[r, c], lat[r, c])
     if maschera.all():
         return ds
     variabili = [v for v in ds.data_vars if {"y", "x"} <= set(ds[v].dims)]
@@ -102,18 +82,6 @@ TIPI = {
 LIMITE_BYTE = 4e9  # largest crop read at once; larger requests are refused with a hint
 
 
-def _scrivi_nc(ds: xr.Dataset, path: Path) -> Path:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    ds = ds.copy()
-    for v in ds.variables:  # drop the Zarr encodings (e.g. a NaT _FillValue on time) that NetCDF cannot store
-        ds[v].encoding = {}
-        ds[v].attrs.pop("_FillValue", None)
-    ds["time"].attrs["comment"] = "UTC"
-    enc = {v: {"zlib": True, "complevel": 4} for v in ds.data_vars if ds[v].ndim >= 2}
-    ds.to_netcdf(path, encoding=enc)
-    return path
-
-
 def scarica_radar(fonte: Any, area: Area, inizio: datetime, fine: datetime, tipo: str, cartella: Path) -> Dict[str, Path]:
     """Radar of the area between inizio and fine (UTC) as two NetCDF files: native scans and hourly rain.
 
@@ -149,12 +117,11 @@ def scarica_radar(fonte: Any, area: Area, inizio: datetime, fine: datetime, tipo
     orario["prec_1h"].attrs = {"units": "mm", "long_name": spec.descrizione}
 
     attrs = {"license": ds.attrs.get("license", ""), "attribution": ds.attrs.get("attribution", ""),
-             "source": f"ARCO Data Hub, {spec.archivio}", "area": area.nome,
-             "history": f"{datetime.now(timezone.utc):%Y-%m-%dT%H:%M}Z meteohub_fetch.py radar --tipo {tipo}"}
+             "source": f"ARCO Data Hub, {spec.archivio}", "area": area.nome}
     if "crs" in ds:  # grid projection (transverse Mercator), referenced by grid_mapping
         crs = ds["crs"].load()
         sub, orario = sub.assign(crs=crs), orario.assign(crs=crs)
         sub[spec.variabile].attrs["grid_mapping"] = orario["prec_1h"].attrs["grid_mapping"] = "crs"
-    sub.attrs, orario.attrs = attrs, attrs
-    return {"nativo": _scrivi_nc(sub, Path(cartella) / nome_file(f"radar_{tipo}_nativo", area, inizio, fine, "nc")),
-            "orario": _scrivi_nc(orario, Path(cartella) / nome_file(f"radar_{tipo}_orario", area, inizio, fine, "nc"))}
+    comando = f"radar --tipo {tipo}"
+    return {"nativo": scrivi_nc(sub, Path(cartella) / nome_file(f"radar_{tipo}_nativo", area, inizio, fine, "nc"), attrs, comando),
+            "orario": scrivi_nc(orario, Path(cartella) / nome_file(f"radar_{tipo}_orario", area, inizio, fine, "nc"), attrs, comando)}

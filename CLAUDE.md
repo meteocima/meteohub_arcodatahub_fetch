@@ -8,11 +8,12 @@ Python scripts plus a small local package `meteohub/` (not installed; `pyproject
 
 ## Commands
 
-Managed with `uv` (Python >= 3.12; dependencies `requests`, plus `xarray`, `zarr>=3`, `fsspec`, `aiohttp`, `netcdf4`, `numpy` for radar; `pyproject.toml` has `package = false`).
+Managed with `uv` (Python >= 3.12; dependencies `requests`, plus `xarray`, `zarr>=3`, `fsspec`, `aiohttp`, `netcdf4`, `numpy`, `pandas` for radar and `cfgrib`, `eccodes`, `eccodeslib` for models; `pyproject.toml` has `package = false`).
 
 ```bash
 uv sync
-uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE   # new downloader (modelli not yet built)
+uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE   # new downloader
+uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVELS --vars prec --from 2026-10-12 --to 2026-10-12 --area provincia:GE   # uses /api/data quota
 uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-10 --to 2026-10-11 --area regione:Liguria   # ARCO Data Hub, no quota
 uv run python meteohub_download.py --dry-run          # print the chunk windows only, no network
 uv run python meteohub_download.py                    # full download with defaults
@@ -26,16 +27,17 @@ python3 tools/catalogo/resoconto.py                                       # docs
 uv run --with pytest pytest                                               # tests (tests/)
 ```
 
-`run_meteohub_download_background.sh` and the `cd` path in README are hard-coded to another user's macOS machine (`/Users/andrea/...`, zsh, Homebrew uv); they need adapting before use here.
+`run_meteohub_download_background.sh` is hard-coded to another user's macOS machine (`/Users/andrea/...`, zsh, Homebrew uv); it needs adapting before use here.
 
 ## Pipeline and architecture
 
-**New downloader** (`meteohub_fetch.py`, see `CONTEXT.md` for terms and `docs/adr/` for decisions): subcommands `stazioni` and `radar` (built), `modelli`, `catalogo` (not yet). Modules in `meteohub/`:
+**New downloader** (`meteohub_fetch.py`, see `CONTEXT.md` for terms and `docs/adr/` for decisions): subcommands `stazioni`, `radar`, `modelli` (built), `catalogo` (not yet). Modules in `meteohub/`:
 - `area.py`: `Area.da_testo("provincia:GE" | "regione:Liguria" | "bbox:..." | "italia" | "file:x.geojson")` → `.rettangolo`, `.contiene(lat, lon)`; openpolis boundaries cached in `output/`.
 - `client.py`: `MeteoHub().osservazioni(rete, inizio, fine, rettangolo)` → `/api/observations` JSON; login, 401 renewal, retries, 5xx windows split down to 1 h.
 - `stazioni.py`: `scarica_stazioni(fonte, area, inizio, fine, variabili, cartella, reti=None)` → CSV paths `osservazioni` (long, native, with `qc` flags), `orario` (hour ending HH:00: `prec_1h` + `passo_prec_s`, means only with ≥ 2/3 of the samples expected from that hour's step, vector-mean `wdir`, `n_*` counts), `stazioni`, `errori`. One call per network (all 28 by default) and 10-day window on the area rectangle, polygon as mask; raw answers cached in `<cartella>/raw/<rectangle>/<rete>/`; a failing network is listed in `errori` and retried on rerun. Test seams: `osservazioni_in_righe`, `righe_orarie`, `scarica_stazioni` with a fake `fonte`.
 - `arco.py`: `ArcoDataHub().apri(archivio)` → lazily opened xarray Dataset from `https://api.arcodatahub.com/S3/<archivio>` (HTTP Basic, `ARCODATAHUB_USERNAME`/`ARCODATAHUB_API_KEY`); without them, SRI falls back to MeteoHub `/api/arco/radar.zarr` with the account access key.
 - `radar.py`: `scarica_radar(fonte, area, inizio, fine, tipo, cartella)` (`TIPI`: `srt1`, `sri`) → NetCDF `nativo` (scans cropped on the area; cells outside the lat/lon rectangle or the polygon → NaN, since the grid is transverse Mercator) and `orario` (every hour of the period; `srt1` = value at HH:00, `sri` = `pioggia_oraria_sri`: per-cell mean of valid scans × 1 h, valid with ≥ 2/3 of the scans expected from the date cadence `passo_sri` (15/10/5 min, changes 2014-07 and 2020-07), `n_misure` per cell), with `license`/`attribution`/`crs`, times UTC. The period stops at the archive `last_valid`; crops over `LIMITE_BYTE` (4 GB) are refused. Time axes are preallocated (to 2049) and regular since late 2024 (missing scans = NaN fields): select times by position (`np.searchsorted`), not with `.sel` on strings. Test seams: `ritaglia`, `pioggia_oraria_sri`, `scarica_radar` with a fake `fonte`. `arco.py` falls back to MeteoHub `/api/arco/radar.zarr` for SRI also when ARCO Data Hub refuses (no subscription, outage).
+- `modelli.py`: `scarica_modelli(fonte, area, inizio, fine, modello, variabili, cartella, limite_mb=900)` → one NetCDF per variable (`time` = run start, `step` = scadenza, cut to the area; `prec` also `prec_1h` = difference of the run accumulation at whole-hour steps, never negative). The account has `allowed_postprocessing: false`, 1 GB per extraction and 1 GB server disk (issue #3). Grids that can't be cut (rotated MOLOCH/BOLAM, Lambert WRF) are refused before any extraction. Runs are grouped by `pianifica_estrazioni` from `MeteoHub.stima_mb` (`/api/fields` SummaryStats of one day, scaled by the share of levels/timeranges kept); `MeteoHub.estrazione` submits, follows the `request_id`, downloads and always deletes it (`finally`); a refusal (`EstrazioneRifiutata`) or `quota_rimanente() == 0` waits for the next hour. GRIBs are cached in `<cartella>/grib/<var>/` for resume and cut one by one. Filters are the very objects `/api/fields` returns (`_filtri` on product, level and timerange: `prec` = accumulation since run start; `t2m`, `u10`, `v10`, `mslp` instantaneous). `reftime.to` of /api/data is inclusive. Observed 2026-10-14: `/api/hourly` stayed at 10 remaining after 5 GRIB extractions. GRIB decoding: `cfgrib` + `eccodes` + `eccodeslib` (the eccodes wheel alone has no library). With a date-only `--to`, the CLI stops at that day's last run. Test seams: `pianifica_estrazioni`, `pioggia_oraria_modello`, `ritaglia_griglia`, `scarica_modelli` with a fake `fonte`.
 - Old scripts (below) still work; their windowing, retry and polygon code is duplicated in `meteohub/` and should be rebuilt on it.
 
 
@@ -71,7 +73,7 @@ There are two independent download routes. Both end in a per-province CSV, but w
 
 ## MeteoHub API reference
 
-`docs/meteohub/README.md` has the endpoint notes, BUFR/level/timerange codes, findings and **sources**; `docs/meteohub/openapi.json` is the official spec (`/api/specs`, no parameter descriptions) and `docs/meteohub/datasets.json` the dataset list. Key facts:
+`DATI_DISPONIBILI.md` (repo root, linked from README) is the readable summary of what MeteoHub and ARCO Data Hub have and lack; keep its numbers in step with `docs/meteohub/catalogo/RESOCONTO.md` when the catalogue is regenerated. `docs/meteohub/README.md` has the endpoint notes, BUFR/level/timerange codes, findings and **sources**; `docs/meteohub/openapi.json` is the official spec (`/api/specs`, no parameter descriptions) and `docs/meteohub/datasets.json` the dataset list. Key facts:
 - Extraction quota (`/api/hourly`): 10 `/api/data` requests per hour.
 - Precipitation timeranges differ per network (e.g. `dpcn-liguria` is mostly `1,0,300` = 5 min); requesting only `1,0,3600` drops most stations, so `FILTERS` in `meteohub_download.py` asks for all of them (`PREC_STEPS_S`), one CSV column per step.
 - `/api/observations` with `networks=` must not get `stationDetails=true` (400). `/api/fields` fails (400) on `source=nwp` datasets.

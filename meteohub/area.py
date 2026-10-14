@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, List, Optional, Tuple
 
+import numpy as np
 import requests
 
 from filter_provincia import point_in_ring
@@ -83,3 +84,28 @@ class Area:
             return True
         return any(point_in_ring(lon, lat, outer) and not any(point_in_ring(lon, lat, h) for h in holes)
                    for outer, holes in self.poligoni)
+
+    def maschera(self, lon: np.ndarray, lat: np.ndarray) -> np.ndarray:
+        """Boolean array, True where the points (arrays of lon, lat) fall in the area: rectangle and, if any, polygon."""
+        lonmin, latmin, lonmax, latmax = self.rettangolo
+        dentro = (lat >= latmin) & (lat <= latmax) & (lon >= lonmin) & (lon <= lonmax)
+        if self.poligoni is None:
+            return dentro
+        nel_poligono = np.zeros(np.shape(lat), dtype=bool)
+        for esterno, buchi in self.poligoni:
+            d = _dentro_anello(lon, lat, esterno)
+            for buco in buchi:
+                d &= ~_dentro_anello(lon, lat, buco)
+            nel_poligono |= d
+        return dentro & nel_poligono
+
+
+def _dentro_anello(lon: np.ndarray, lat: np.ndarray, anello: Anello) -> np.ndarray:
+    """Ray casting on arrays of points for one ring of (lon, lat) vertices."""
+    dentro = np.zeros(np.shape(lon), dtype=bool)
+    xs, ys = np.array([p[0] for p in anello]), np.array([p[1] for p in anello])
+    for xi, yi, xj, yj in zip(xs, ys, np.roll(xs, 1), np.roll(ys, 1)):
+        if yi == yj:
+            continue
+        dentro ^= ((yi > lat) != (yj > lat)) & (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)
+    return dentro

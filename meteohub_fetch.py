@@ -3,6 +3,7 @@
 
   uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE
   uv run python meteohub_fetch.py stazioni --from 2026-10-10T06:00 --to 2026-10-10T18:00 --area bbox:8.8,44.3,9.0,44.5 --vars prec,B13215
+  uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVELS --vars prec --from 2026-10-12 --to 2026-10-12 --area provincia:GE
   uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-10 --to 2026-10-11 --area regione:Liguria
 
 Credenziali: METEOHUB_USERNAME / METEOHUB_PASSWORD e, per il radar, ARCODATAHUB_USERNAME / ARCODATAHUB_API_KEY
@@ -60,6 +61,18 @@ def radar(args: argparse.Namespace) -> None:
         print(f"{tipo:12s} {path}")
 
 
+def modelli(args: argparse.Namespace) -> None:
+    from meteohub.client import MeteoHub
+    from meteohub.modelli import scarica_modelli
+
+    area, inizio, fine, cartella = _comuni(args, f"modelli_{args.modello}")
+    if "T" not in args.t_to:  # for models the period is the run start: a whole day ends with its last run, not at 24:00
+        fine -= timedelta(minutes=1)
+    file = scarica_modelli(MeteoHub(), area, inizio, fine, args.modello, args.vars.split(","), cartella, limite_mb=args.limite_mb)
+    for var, path in file.items():
+        print(f"{var:12s} {path}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="comando", required=True)
@@ -80,8 +93,12 @@ def main() -> None:
                    help="srt1: pioggia oraria corretta con i pluviometri, dal 2018-07 (predefinito); sri: intensità istantanea, dal 2010")
     p.set_defaults(func=radar)
 
-    sub.add_parser("modelli", help="modelli da MeteoHub /api/data (non ancora disponibile)").set_defaults(
-        func=lambda a: sys.exit("modelli: non ancora disponibile (issue #1, serve prima il test della #3)"))
+    p = sub.add_parser("modelli", parents=[comuni], help="modelli da MeteoHub /api/data (usa la quota: 10 estrazioni all'ora)")
+    p.add_argument("--modello", default="ICON_2I_SURFACE_PRESSURE_LEVELS", help="dataset MeteoHub (vedi docs/meteohub/catalogo/RESOCONTO.md)")
+    p.add_argument("--vars", default="prec", help="variabili: prec, t2m, u10, v10, mslp (predefinita prec)")
+    p.add_argument("--limite-mb", type=float, default=900, help="dimensione massima di un'estrazione in MB (limite dell'account: 1 GB)")
+    p.set_defaults(func=modelli)
+
     sub.add_parser("catalogo", help="inventario di MeteoHub e ARCO Data Hub").set_defaults(
         func=lambda a: sys.exit("Usa per ora: meteohub_inventory.py, tools/catalogo/ e tools/catalogo/resoconto.py (vedi CLAUDE.md)"))
 
