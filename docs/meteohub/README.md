@@ -67,7 +67,7 @@ viene da prove dirette sull'API e dal codice di questo repository.
 
 ## Cosa è emerso
 
-- **Le 28 reti di osservazione di MeteoHub sono esattamente quelle in `DATASET_NAMES`** di `meteohub_download.py`.
+- **Le 28 reti di osservazione di MeteoHub sono esattamente quelle in `meteohub.stazioni.RETI`** (riesportate come `DATASET_NAMES` da `meteohub_download.py`).
   Non ci sono reti per Abruzzo e Valle d'Aosta, né reti nazionali tipo SYNOP.
 - **La pioggia non ha un passo unico.** Il 2025-01-01, in `dpcn-liguria`, 153 stazioni danno la pioggia come cumulata
   a 5 minuti (`1,0,300`), 20 a 1 minuto e una sola come cumulata oraria. Chiedere solo `1,0,3600` fa quindi perdere quasi
@@ -78,3 +78,43 @@ viene da prove dirette sull'API e dal codice di questo repository.
   almeno 18 ore.
 - **Un'estrazione non terminata non si cancella per 2 giorni.** `DELETE /api/requests/<id>` su una richiesta `PENDING` risponde 403 "You cannot delete an unterminated request unless grace period (of 2 days) has expired" (2026-10-14). Un'estrazione interrotta resta in coda, finisce e occupa spazio sul disco del server finché non la si cancella: `meteohub.client.MeteoHub.segui` lo segnala, e `tools/prove_estrazioni.py` riprende una richiesta già in coda con lo stesso nome invece di inviarne un'altra.
 - **Le estrazioni di osservazioni contano sulla quota e sono lente.** Dopo l'invio di una richiesta su `dpcn-lombardia`, `/api/hourly` dava `submitted: 1, remaining: 9` (2026-10-14), mentre 5 estrazioni GRIB di modelli non l'avevano mosso. Un'estrazione di 24 ore di tutte le reti (2026-09-27, 84 MB in JSON) è stata pronta 2 ore dopo l'invio. Misure sui limiti di dimensione: `tools/prove_estrazioni.py` → `docs/meteohub/limiti_estrazioni.csv` (issue #3).
+
+### Emerso il 2026-10-14, costruendo il downloader
+
+Ogni punto dice da dove viene la misura; i commit citati contengono il codice che ne tiene conto.
+
+**Osservazioni (`/api/observations`)**
+
+- **Senza `reliabilityCheck=true` ogni valore torna con `rel=1`.** Con il parametro i valori sospetti hanno `rel=0`. Su `dpcn-liguria`, provincia di Genova, 2026-10-11: 136 valori su 34181 marcati, tra cui un'umidità relativa a 126% (stazione Pian dei Ratti). Confronto fra la versione per stazione di `meteohub_stations.py`, che lo chiedeva, e quella per rete, che non lo chiedeva (b4481ba).
+- **Le risposte per rete non hanno la quota della stazione.** In `stat.details` c'è solo il nome (`B01019`), non `B07030`; la quota arriva solo interrogando la singola stazione con `lat`/`lon` e `stationDetails=true`. Per questo `meteohub_stations.py`, ora costruito sulle chiamate per rete, lascia vuota la colonna `alt` (b4481ba).
+- **Una chiamata per rete costa molto meno di una per stazione.** Provincia di Genova, `dpcn-liguria`, un giorno: stesse 4344 righe e stessi valori in 3 s invece di 20 s (b4481ba).
+
+**Estrazioni (`/api/data`) e account**
+
+- **Un'estrazione non terminata non si cancella prima di 2 giorni**, e **le estrazioni di osservazioni contano sulla quota oraria e sono lente**: vedi i due punti sopra.
+- **Il disco dell'account sul server è di 1 GB** (`/api/usage`: `quota: 1073741824`). Un'estrazione rimasta dal 2026-09-27 ne occupava 84 MB finché non è stata cancellata, il 2026-10-14.
+- **I filtri di `/api/data` accettano `area`** (definizione `Filters` di `docs/meteohub/openapi.json`). `meteohub_fetch.py modelli` lo usa per non chiedere la griglia non strutturata di `ICON_2I_EPS` (e408a80); non è ancora stato provato con un'estrazione vera.
+- **Limiti di dimensione:** le prove sono in corso con `tools/prove_estrazioni.py` e i risultati vanno in `limiti_estrazioni.csv` (issue #3).
+
+**Griglie dei modelli** (estrazioni `t2m` della corsa del 2026-10-12 su provincia di Genova, e408a80)
+
+| Dataset | Griglia (GRIB) | Che cosa è emerso |
+|---|---|---|
+| `WRF` | Lambert conforme, `tn=30` | 1399×1399, passo 1500 m (`DxInMetres`), paralleli standard 43,42° e 37,21°, meridiano centrale 11°. `/api/fields` non dà questi parametri: si leggono solo dal GRIB |
+| `WRF_OL`, `WRF_DA_ITA` | Mercator, `tn=10` | non lat/lon regolare come si pensava; passo costante 0,0138° × 0,0192° (`WRF_OL`) e 0,0236° × 0,033° (`WRF_DA_ITA`) |
+| `MOLOCH` | ruotata, `tn=1` | due griglie nella stessa estrazione: 1154×1154 (~1,25 km) con tutte le 45 scadenze orarie, 577×577 (~2,5 km) con 16. `/api/fields` elenca sei varianti, alcune sfalsate di mezza cella |
+| `BOLAM`, `MOLOCH_AIM` | ruotata, `tn=1` | una griglia; ritaglio su Genova di 6×9 celle (BOLAM, 8,3 km) e 52×77 (MOLOCH_AIM, ~1 km) |
+| `ICON_2I_EPS` | lat/lon `tn=0` più non strutturata `tn=101` | la `tn=101` non ha coordinate nel GRIB |
+| `swan-ita`, `swan-med` | GRIB1 | descritte da `/api/fields` senza `tn` |
+
+**Lettura dei GRIB con cfgrib** (e408a80)
+
+- Le griglie ruotate e Lambert escono con dimensioni `(y, x)` e latitudine e longitudine 2D; le longitudini delle ruotate possono essere in 0..360.
+- Mercator esce come lista di punti (dimensione `values`) e senza `Nx`/`Ny` negli attributi: le dimensioni della griglia si ottengono chiedendo `read_keys=["Ni", "Nj"]` e rimettendo i valori su `(Nj, Ni)`.
+- Un GRIB con la stessa variabile su più griglie (MOLOCH) non si apre con `xr.open_dataset` ("multiple values for unique key… numberOfPoints"): serve `cfgrib.open_datasets`, che dà un dataset per griglia.
+
+**Valori sui punti** (`--punti`, e408a80)
+
+- SRT1 su 61 stazioni di `dpcn-liguria` (provincia di Genova, 2026-10-11): distanza massima fra stazione e centro della cella 0,65 km, coerente con una griglia di 1 km.
+- `WRF_DA_ITA` (2,7 km): per una stazione costiera la cella più vicina cade fuori dal poligono della provincia ed è vuota; per questo si usa la cella più vicina **con dati**.
+

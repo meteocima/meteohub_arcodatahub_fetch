@@ -151,10 +151,12 @@ Le osservazioni e gli archivi Zarr si scaricano senza quota. Modelli e radar GRI
 
 | Canale | Che cosa dà | Autenticazione | Limiti |
 |---|---|---|---|
-| MeteoHub `GET /api/observations` | stazioni, una rete per chiamata | utente e password MeteoHub (token) | finestre fino a 10 giorni; i giorni interi delle reti grandi possono andare in timeout e vanno spezzati |
-| MeteoHub `POST /api/data` | qualsiasi dataset: modelli, radar GRIB, osservazioni | utente e password MeteoHub (token) | 10 richieste all'ora per account; le richieste troppo grandi sono rifiutate con 403 (soglia ancora da misurare) |
+| MeteoHub `GET /api/observations` | stazioni, una rete per chiamata | utente e password MeteoHub (token) | finestre fino a 10 giorni; i giorni interi delle reti grandi possono andare in timeout e vanno spezzati; i valori sospetti sono marcati solo con `reliabilityCheck=true`; le risposte per rete non hanno la quota delle stazioni |
+| MeteoHub `POST /api/data` | qualsiasi dataset: modelli, radar GRIB, osservazioni | utente e password MeteoHub (token) | 10 richieste all'ora per account (le estrazioni di osservazioni contano, quelle GRIB finora no); le richieste troppo grandi sono rifiutate con 403 (soglia in misura, issue #3); 1 GB di disco sul server; un'estrazione non terminata non si cancella prima di 2 giorni; un giorno di tutte le reti ha richiesto 2 ore |
 | MeteoHub `GET /api/arco/...` | `radar.zarr`, `ww3.zarr` | chiave di accesso dell'account MeteoHub (HTTP Basic) | nessuna quota nota |
 | ARCO Data Hub `https://api.arcodatahub.com/S3/<archivio>.zarr` | 13 archivi radar, ICON-2I, MSWX | utente e API key ARCO Data Hub (HTTP Basic), abbonamento per archivio | nessuna quota pubblicata; la [guida all'accesso](https://arcodatahub.com/datasets/getting-started/) chiede di scrivere prima di scaricamenti grandi, all'indirizzo usato per la registrazione |
+
+I dettagli e le misure dietro queste righe sono in [docs/meteohub/README.md](docs/meteohub/README.md#cosa-è-emerso).
 
 Quota e abbonamenti sono per account: ogni collega usa le proprie credenziali MeteoHub e ARCO Data Hub. Come configurarle è spiegato nel [README](README.md#credenziali). Licenze e attribuzioni da citare quando si usano i dati sono nel [README](README.md#licenze-dei-dati).
 
