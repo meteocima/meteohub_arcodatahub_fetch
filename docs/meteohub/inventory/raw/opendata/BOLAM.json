@@ -1,5 +1,20 @@
 [
  {
+  "date": "2026-10-14",
+  "run": "00:00",
+  "vars": [
+   "Temperature (K)",
+   "Dew point temperature (K)",
+   "Water equivalent of accumulated snow depth (kg m-2)",
+   "Total precipitation rate (kg m-2 s-1)",
+   "u-component of wind (m s-1)",
+   "v-component of wind (m s-1)",
+   "Pressure reduced to MSL (Pa)",
+   "Total cloud cover (%)"
+  ],
+  "filename": "data-20261014T052411Z-d83a21d6-5e8f-47ae-94cd-0fe37df97d2f.grib"
+ },
+ {
   "date": "2026-10-13",
   "run": "00:00",
   "vars": [
@@ -103,20 +118,5 @@
    "Total cloud cover (%)"
   ],
   "filename": "data-20261007T050848Z-7af0fca3-655a-4406-bcd8-6af69c295d5b.grib"
- },
- {
-  "date": "2026-10-06",
-  "run": "00:00",
-  "vars": [
-   "Temperature (K)",
-   "Dew point temperature (K)",
-   "Water equivalent of accumulated snow depth (kg m-2)",
-   "Total precipitation rate (kg m-2 s-1)",
-   "u-component of wind (m s-1)",
-   "v-component of wind (m s-1)",
-   "Pressure reduced to MSL (Pa)",
-   "Total cloud cover (%)"
-  ],
-  "filename": "data-20261006T050811Z-2f2eab8a-c090-4d88-abea-75adaa3ed00d.grib"
  }
 ]

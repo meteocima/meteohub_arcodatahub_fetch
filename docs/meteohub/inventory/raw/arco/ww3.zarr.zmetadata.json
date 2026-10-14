@@ -25,7 +25,7 @@
    "southernmost_latitude": "30.",
    "spinup_hours": "24",
    "start_date": "2025-11-30 01:00:00",
-   "stop_date": "2026-10-16 00:00:00",
+   "stop_date": "2026-10-17 00:00:00",
    "typeOfProcessedData": "0",
    "westernmost_longitude": "-7."
   },
@@ -80,7 +80,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -118,7 +118,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -154,7 +154,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316
+    317
    ],
    "zarr_format": 2
   },
@@ -184,7 +184,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -222,7 +222,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -320,7 +320,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -358,7 +358,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -396,7 +396,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -434,7 +434,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -527,7 +527,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -566,7 +566,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -605,7 +605,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],
@@ -644,7 +644,7 @@
    "filters": null,
    "order": "C",
    "shape": [
-    316,
+    317,
     96,
     220888
    ],

@@ -1,12 +1,8 @@
-Downloading numcodecs (1.4MiB)
-Downloading numpy (15.9MiB)
- Downloading numcodecs
- Downloading numpy
-Installed 3 packages in 18ms
 FOR ICON_2I_SURFACE_PRESSURE_LEVELS
 FOR ICON_2I_MODEL_LEVELS
 FOR ICON_2I_EPS
   /api/fields: HTTP 502; retry in 30s
+  ICON_2I_EPS: /api/fields on the whole archive failed, trying monthly windows
 FOR ICON_2I_RUC
 FOR ICON_2I_ASSIM_SURFACE_PRESSURE_LEVELS
 FOR ICON_2I_ASSIM_MODEL_LEVELS
@@ -14,6 +10,7 @@ FOR WRF
 FOR MOLOCH_AIM
 FOR SEASONAL
 FOR BOLAM
+  BOLAM: /api/fields on the whole archive failed, trying monthly windows
 FOR MOLOCH
 FOR WRF_DA_ITA
 FOR WRF_OL
@@ -31,6 +28,7 @@ OBS dpcn-puglia
 OBS dpcn-sardegna
 OBS dpcn-sicilia
   dpcn-sicilia 2025-06-15 00:00..23:59: HTTP 502, splitting at 12:00
+  dpcn-sicilia 2023-06-15 00:00..23:59: HTTP 502, splitting at 12:00
 OBS dpcn-umbria
 OBS dpcn-veneto
 OBS agrmet
@@ -57,7 +55,7 @@ SEA shyfem
 SEA swan-ita
 SEA swan-med
 RAD radar_dpc
-/home/luca-monaco/meteohub_fetch/meteohub_inventory.py:296: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+/home/luca-monaco/meteohub_fetch/meteohub_inventory.py:362: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
   t = t[t != np.datetime64("NaT")].astype("datetime64[s]")
 
 Written to docs/meteohub/inventory
