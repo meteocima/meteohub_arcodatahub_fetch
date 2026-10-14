@@ -3,16 +3,15 @@
 import csv
 import json
 import math
-import re
 from collections import defaultdict
 from datetime import datetime, timedelta
-from statistics import median
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import meteohub_download as mh
 import meteohub_stations as ms
 from meteohub.area import Area
+from meteohub.uscite import campioni_attesi, coperta, nome_file
 
 # short names accepted on the command line -> BUFR code; any BUFR code (e.g. B13215) is accepted as is
 VARIABILI = {"prec": "B13011", "temp": "B12101", "rh": "B13003", "wsp": "B11002", "wdir": "B11001"}
@@ -67,7 +66,6 @@ MEDIE = {
 DIREZIONE = ("B11001", "103,10000,0,0")
 COLONNE_ORARIE = ["rete", "stazione", "lat", "lon", "tempo", "prec_1h", "passo_prec_s", "temp_c", "rh", "wsp", "wdir",
                   "n_temp_c", "n_rh", "n_wsp", "n_wdir"]
-COPERTURA_MINIMA = 2 / 3  # share of the expected native samples an hourly mean needs
 
 
 def _t(tempo: str) -> datetime:
@@ -93,7 +91,7 @@ def _campioni_orari(serie: Dict[datetime, float]) -> Dict[datetime, Tuple[List[f
     ore: Dict[datetime, List[Tuple[float, float]]] = defaultdict(list)
     for t, passo in zip(tempi, passi):
         ore[_ora_che_termina(t)].append((serie[t], passo))
-    return {h: ([v for v, _ in c], max(1, round(3600 / median(p for _, p in c)))) for h, c in ore.items()}
+    return {h: ([v for v, _ in c], campioni_attesi(p for _, p in c)) for h, c in ore.items()}
 
 
 def righe_orarie(righe: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -119,13 +117,13 @@ def righe_orarie(righe: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 col, conv = MEDIE[(var, lev)]
                 for h, (vals, attesi) in _campioni_orari(valori).items():
                     ore[h][f"n_{col}"] = len(vals)
-                    if len(vals) >= COPERTURA_MINIMA * attesi:
+                    if coperta(len(vals), attesi):
                         m = sum(vals) / len(vals)
                         ore[h][col] = round(conv(m) if conv else m, 2)
             elif (var, lev) == DIREZIONE and el == "254,0,0":
                 for h, (vals, attesi) in _campioni_orari(valori).items():
                     ore[h]["n_wdir"] = len(vals)
-                    if len(vals) >= COPERTURA_MINIMA * attesi:
+                    if coperta(len(vals), attesi):
                         x = sum(math.sin(math.radians(d)) for d in vals)
                         y = sum(math.cos(math.radians(d)) for d in vals)
                         ore[h]["wdir"] = round(math.degrees(math.atan2(x, y)) % 360, 1)
@@ -209,13 +207,14 @@ def scarica_stazioni(fonte: Any, area: Area, inizio: datetime, fine: datetime, v
     for s in anagrafica.values():
         s["variabili"] = " ".join(sorted(s["variabili"]))
 
-    nome = re.sub(r"[^A-Za-z0-9]+", "_", area.nome).strip("_")
-    periodo = f"{inizio:%Y%m%d%H}_{fine:%Y%m%d%H}"
+    def path(prefisso: str) -> Path:
+        return cartella / nome_file(prefisso, area, inizio, fine, "csv")
+
     return {
-        "osservazioni": _scrivi_csv(cartella / f"osservazioni_{nome}_{periodo}.csv", COLONNE_LUNGHE, lunghe),
-        "orario": _scrivi_csv(cartella / f"orario_{nome}_{periodo}.csv", COLONNE_ORARIE, orarie),
-        "stazioni": _scrivi_csv(cartella / f"stazioni_{nome}.csv",
+        "osservazioni": _scrivi_csv(path("osservazioni"), COLONNE_LUNGHE, lunghe),
+        "orario": _scrivi_csv(path("orario"), COLONNE_ORARIE, orarie),
+        "stazioni": _scrivi_csv(path("stazioni"),
                                 ["rete", "stazione", "lat", "lon", "n_valori", "primo", "ultimo", "variabili"],
                                 sorted(anagrafica.values(), key=lambda s: (s["rete"], s["stazione"]))),
-        "errori": _scrivi_csv(cartella / f"errori_{nome}_{periodo}.csv", ["rete", "inizio", "fine", "errore"], errori),
+        "errori": _scrivi_csv(path("errori"), ["rete", "inizio", "fine", "errore"], errori),
     }

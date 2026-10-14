@@ -8,11 +8,12 @@ Python scripts plus a small local package `meteohub/` (not installed; `pyproject
 
 ## Commands
 
-Managed with `uv` (Python >= 3.12, only dependency `requests`; `pyproject.toml` has `package = false`).
+Managed with `uv` (Python >= 3.12; dependencies `requests`, plus `xarray`, `zarr>=3`, `fsspec`, `aiohttp`, `netcdf4`, `numpy` for radar; `pyproject.toml` has `package = false`).
 
 ```bash
 uv sync
-uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE   # new downloader (radar/modelli not yet built)
+uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE   # new downloader (modelli not yet built)
+uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-10 --to 2026-10-11 --area regione:Liguria   # ARCO Data Hub, no quota
 uv run python meteohub_download.py --dry-run          # print the chunk windows only, no network
 uv run python meteohub_download.py                    # full download with defaults
 uv run python meteohub_download.py --from 2025-01-01T00:00:00Z --to 2025-01-10T23:59:00Z --out-dir output_test --datasets dpcn-lombardia
@@ -29,10 +30,12 @@ uv run --with pytest pytest                                               # test
 
 ## Pipeline and architecture
 
-**New downloader** (`meteohub_fetch.py`, see `CONTEXT.md` for terms and `docs/adr/` for decisions): subcommands `stazioni` (built), `radar`, `modelli`, `catalogo` (not yet). Modules in `meteohub/`:
+**New downloader** (`meteohub_fetch.py`, see `CONTEXT.md` for terms and `docs/adr/` for decisions): subcommands `stazioni` and `radar` (built), `modelli`, `catalogo` (not yet). Modules in `meteohub/`:
 - `area.py`: `Area.da_testo("provincia:GE" | "regione:Liguria" | "bbox:..." | "italia" | "file:x.geojson")` → `.rettangolo`, `.contiene(lat, lon)`; openpolis boundaries cached in `output/`.
 - `client.py`: `MeteoHub().osservazioni(rete, inizio, fine, rettangolo)` → `/api/observations` JSON; login, 401 renewal, retries, 5xx windows split down to 1 h.
 - `stazioni.py`: `scarica_stazioni(fonte, area, inizio, fine, variabili, cartella, reti=None)` → CSV paths `osservazioni` (long, native, with `qc` flags), `orario` (hour ending HH:00: `prec_1h` + `passo_prec_s`, means only with ≥ 2/3 of the samples expected from that hour's step, vector-mean `wdir`, `n_*` counts), `stazioni`, `errori`. One call per network (all 28 by default) and 10-day window on the area rectangle, polygon as mask; raw answers cached in `<cartella>/raw/<rectangle>/<rete>/`; a failing network is listed in `errori` and retried on rerun. Test seams: `osservazioni_in_righe`, `righe_orarie`, `scarica_stazioni` with a fake `fonte`.
+- `arco.py`: `ArcoDataHub().apri(archivio)` → lazily opened xarray Dataset from `https://api.arcodatahub.com/S3/<archivio>` (HTTP Basic, `ARCODATAHUB_USERNAME`/`ARCODATAHUB_API_KEY`); without them, SRI falls back to MeteoHub `/api/arco/radar.zarr` with the account access key.
+- `radar.py`: `scarica_radar(fonte, area, inizio, fine, tipo, cartella)` (`TIPI`: `srt1`, `sri`) → NetCDF `nativo` (scans cropped on the area; cells outside the lat/lon rectangle or the polygon → NaN, since the grid is transverse Mercator) and `orario` (every hour of the period; `srt1` = value at HH:00, `sri` = `pioggia_oraria_sri`: per-cell mean of valid scans × 1 h, valid with ≥ 2/3 of the scans expected from the date cadence `passo_sri` (15/10/5 min, changes 2014-07 and 2020-07), `n_misure` per cell), with `license`/`attribution`/`crs`, times UTC. The period stops at the archive `last_valid`; crops over `LIMITE_BYTE` (4 GB) are refused. Time axes are preallocated (to 2049) and regular since late 2024 (missing scans = NaN fields): select times by position (`np.searchsorted`), not with `.sel` on strings. Test seams: `ritaglia`, `pioggia_oraria_sri`, `scarica_radar` with a fake `fonte`. `arco.py` falls back to MeteoHub `/api/arco/radar.zarr` for SRI also when ARCO Data Hub refuses (no subscription, outage).
 - Old scripts (below) still work; their windowing, retry and polygon code is duplicated in `meteohub/` and should be rebuilt on it.
 
 

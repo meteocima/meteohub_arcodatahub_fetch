@@ -1,10 +1,17 @@
 [project]
 name = "meteohub-download"
 version = "0.1.0"
-description = "Download MeteoHub observations in 2-day chunks."
+description = "Download a richiesta di osservazioni da stazione, radar e modelli meteorologici da MeteoHub (Agenzia ItaliaMeteo) e ARCO Data Hub, con inventario e catalogo dei dati disponibili."
 requires-python = ">=3.12"
 dependencies = [
+    "aiohttp>=3.10",
+    "fsspec>=2025.1",
+    "netcdf4>=1.7",
+    "numpy>=2.0",
+    "pandas>=2.2",
     "requests>=2.32.0",
+    "xarray>=2025.1",
+    "zarr>=3.0",
 ]
 
 [tool.uv]

@@ -37,6 +37,12 @@ class MeteoHub:
             time.sleep(attesa)
         raise SystemExit("MeteoHub rifiuta il login (401 anche dopo un nuovo accesso): controlla METEOHUB_USERNAME/METEOHUB_PASSWORD.")
 
+    def chiave_accesso(self) -> str:
+        """Account access key (/api/access-key), used with the username as HTTP Basic auth on /api/arco."""
+        r = self._get("/api/access-key", {})
+        r.raise_for_status()
+        return r.json()["key"]
+
     def osservazioni(self, rete: str, inizio: datetime, fine: datetime, rettangolo: Tuple[float, float, float, float]) -> Dict[str, Any]:
         """/api/observations of one network in [inizio, fine] (UTC, at most 10 days) inside the rectangle.
 
