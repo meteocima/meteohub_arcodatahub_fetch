@@ -1,0 +1,3 @@
+# Le stazioni si scaricano da /api/observations, non con estrazioni
+
+Le osservazioni da stazione si leggono con `GET /api/observations`, che non consuma quota ma restituisce al massimo 10 giorni per chiamata; le estrazioni `/api/data` (10 all'ora per account, usate dal vecchio `meteohub_download.py`) restano solo come riserva. Con la quota un anno di tutte le reti richiede giorni di attesa, mentre `/api/observations` ha risposto per tutte le 28 reti e i 4 giorni campione dell'inventario, con l'unica eccezione dei giorni interi di `dpcn-sicilia`, recuperati spezzandoli. La soglia oltre cui conviene `/api/data` si decide dopo il test della #3.
