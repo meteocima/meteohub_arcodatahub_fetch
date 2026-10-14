@@ -1,0 +1,3895 @@
+{
+ "items": {
+  "summarystats": {
+   "b": [
+    2024,
+    9,
+    29,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2025,
+    5,
+    26,
+    0,
+    0,
+    0
+   ],
+   "c": 3037181,
+   "s": 3718569640200
+  },
+  "origin": [
+   {
+    "type": "origin",
+    "desc": "GRIB2 from 80, subcentre 255, type Forecast, background process 0, process 62",
+    "style": "GRIB2",
+    "centre": 80,
+    "subcentre": 255,
+    "process_type": 2,
+    "background_process_id": 0,
+    "process_id": 62
+   }
+  ],
+  "product": [
+   {
+    "type": "product",
+    "desc": "Temperature (K)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 0,
+    "number": 0,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Dewpoint temperature (K)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 0,
+    "number": 6,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Latent heat net flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 0,
+    "number": 10,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Sensible heat net flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 0,
+    "number": 11,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Specific humidity (kg/kg)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 0,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Relative humidity (%)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 1,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Snow depth (m)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 11,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Total precipitation rate (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 52,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Convective snowfall rate water equivalent (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 55,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Large scale snowfall rate water equivalent (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 56,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Snow depth water equivalent (kg m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 60,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Total column integrated water vapour (kg m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 64,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Graupel (snow pellets) precipitation rate (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 75,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Convective rain rate (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 76,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Large scale rain rate (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 77,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Total column integrated water (all components including precipitation) (kg m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 78,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 001, 204, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 204,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "u-component of wind (m/s)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 2,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "v-component of wind (m/s)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 3,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Vertical velocity (pressure) (Pa/s)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 8,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Momentum flux, u-component (N m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 17,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Momentum flux, v-component (N m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 18,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Wind speed (gust) (m/s)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 22,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 002, 208, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 208,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 002, 209, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 2,
+    "number": 209,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Pressure (Pa)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 3,
+    "number": 0,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Pressure reduced to MSL (Pa)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 3,
+    "number": 1,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Geopotential (m2 s-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 3,
+    "number": 4,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Geometric height (m)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 3,
+    "number": 6,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Net short wave radiation flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 4,
+    "number": 9,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 004, 198, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 4,
+    "number": 198,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 004, 199, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 4,
+    "number": 199,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Downward long-wave radiation flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 5,
+    "number": 3,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Upward long-wave radiation flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 5,
+    "number": 4,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Net long-wave radiation flux (W m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 5,
+    "number": 5,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Total cloud cover (%)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 6,
+    "number": 1,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Cloud cover (%)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 6,
+    "number": 22,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Convective available potential energy (J/kg)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 7,
+    "number": 6,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Convective inhibition (J/kg)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 7,
+    "number": 7,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Updraft helicity (m2 s-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 7,
+    "number": 15,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 007, 193, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 7,
+    "number": 193,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "GRIB2(00080, 000, 017, 192, 015, 000)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 17,
+    "number": 192,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Albedo (%)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 19,
+    "number": 1,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Weather (Code table 4.225)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 19,
+    "number": 25,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Land cover (0 = sea, 1 = land) (Proportion)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 2,
+    "category": 0,
+    "number": 0,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Soil temperature (K)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 2,
+    "category": 3,
+    "number": 18,
+    "table_version": 15,
+    "local_table_version": 0
+   },
+   {
+    "type": "product",
+    "desc": "Column-integrated soil moisture (kg m-2)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 2,
+    "category": 3,
+    "number": 20,
+    "table_version": 15,
+    "local_table_version": 0
+   }
+  ],
+  "level": [
+   {
+    "type": "level",
+    "desc": "sfc Ground or water surface 0 0",
+    "style": "GRIB2S",
+    "level_type": 1,
+    "scale": 0,
+    "value": 0
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 25000",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 25000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 50000",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 50000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 70000",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 70000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 85000",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 85000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 92500",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 92500
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 100000",
+    "style": "GRIB2S",
+    "level_type": 100,
+    "scale": 0,
+    "value": 100000
+   },
+   {
+    "type": "level",
+    "desc": "sfc Mean sea level 0 0",
+    "style": "GRIB2S",
+    "level_type": 101,
+    "scale": 0,
+    "value": 0
+   },
+   {
+    "type": "level",
+    "desc": "sfc Specified height level above ground (m) 0 2",
+    "style": "GRIB2S",
+    "level_type": 103,
+    "scale": 0,
+    "value": 2
+   },
+   {
+    "type": "level",
+    "desc": "sfc Specified height level above ground (m) 0 10",
+    "style": "GRIB2S",
+    "level_type": 103,
+    "scale": 0,
+    "value": 10
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 0 0",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 0,
+    "value": 0
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 2",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 2
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 6",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 6
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 18",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 18
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 54",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 54
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 162",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 162
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 486",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 486
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 1458",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 2,
+    "value": 1458
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 3 5",
+    "style": "GRIB2S",
+    "level_type": 106,
+    "scale": 3,
+    "value": 5
+   },
+   {
+    "type": "level",
+    "desc": "GRIB2S(192, 000, 0000000000)",
+    "style": "GRIB2S",
+    "level_type": 192,
+    "scale": 0,
+    "value": 0
+   },
+   {
+    "type": "level",
+    "desc": "sfc Ground or water surface 0 0 sfc Mean sea level 0 0",
+    "style": "GRIB2D",
+    "l1": 1,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 101,
+    "scale2": 0,
+    "value2": 0
+   },
+   {
+    "type": "level",
+    "desc": "sfc Ground or water surface 0 0 sfc Mean sea level - -",
+    "style": "GRIB2D",
+    "l1": 1,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 101,
+    "scale2": null,
+    "value2": null
+   },
+   {
+    "type": "level",
+    "desc": "4 Level of 0 degree C isotherm 0 0 sfc Mean sea level 0 0",
+    "style": "GRIB2D",
+    "l1": 4,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 101,
+    "scale2": 0,
+    "value2": 0
+   },
+   {
+    "type": "level",
+    "desc": "4 Level of 0 degree C isotherm 0 0 sfc Mean sea level - -",
+    "style": "GRIB2D",
+    "l1": 4,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 101,
+    "scale2": null,
+    "value2": null
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 0 pl Isobaric surface (Pa) 0 40000",
+    "style": "GRIB2D",
+    "l1": 100,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 100,
+    "scale2": 0,
+    "value2": 40000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 40000 pl Isobaric surface (Pa) 0 80000",
+    "style": "GRIB2D",
+    "l1": 100,
+    "scale1": 0,
+    "value1": 40000,
+    "l2": 100,
+    "scale2": 0,
+    "value2": 80000
+   },
+   {
+    "type": "level",
+    "desc": "pl Isobaric surface (Pa) 0 80000 sfc Ground or water surface 0 0",
+    "style": "GRIB2D",
+    "l1": 100,
+    "scale1": 0,
+    "value1": 80000,
+    "l2": 1,
+    "scale2": 0,
+    "value2": 0
+   },
+   {
+    "type": "level",
+    "desc": "102 Specific altitude above mean sea level (m) 0 2000 102 Specific altitude above mean sea level (m) 0 8000",
+    "style": "GRIB2D",
+    "l1": 102,
+    "scale1": 0,
+    "value1": 2000,
+    "l2": 102,
+    "scale2": 0,
+    "value2": 8000
+   },
+   {
+    "type": "level",
+    "desc": "102 Specific altitude above mean sea level (m) 0 2000 102 Specific altitude above mean sea level (m) - 8000",
+    "style": "GRIB2D",
+    "l1": 102,
+    "scale1": 0,
+    "value1": 2000,
+    "l2": 102,
+    "scale2": null,
+    "value2": 8000
+   },
+   {
+    "type": "level",
+    "desc": "sfc Specified height level above ground (m) 0 6000 sfc Specified height level above ground (m) 0 0",
+    "style": "GRIB2D",
+    "l1": 103,
+    "scale1": 0,
+    "value1": 6000,
+    "l2": 103,
+    "scale2": 0,
+    "value2": 0
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 0 0 sfc Depth below land surface (m) 2 1",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 1
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 1 sfc Depth below land surface (m) 2 3",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 1,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 3
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 3 sfc Depth below land surface (m) 2 9",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 3,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 9
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 9 sfc Depth below land surface (m) 2 27",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 9,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 27
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 27 sfc Depth below land surface (m) 2 81",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 27,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 81
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 81 sfc Depth below land surface (m) 2 243",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 81,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 243
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 243 sfc Depth below land surface (m) 2 729",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 243,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 729
+   },
+   {
+    "type": "level",
+    "desc": "sfc Depth below land surface (m) 2 729 sfc Depth below land surface (m) 2 2187",
+    "style": "GRIB2D",
+    "l1": 106,
+    "scale1": 2,
+    "value1": 729,
+    "l2": 106,
+    "scale2": 2,
+    "value2": 2187
+   }
+  ],
+  "timerange": [
+   {
+    "type": "timerange",
+    "desc": "Average over 0 second at forecast time 0 second",
+    "style": "Timedef",
+    "step_len": 0,
+    "step_unit": 13,
+    "stat_type": 0,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 0 second at forecast time 0 second",
+    "style": "Timedef",
+    "step_len": 0,
+    "step_unit": 13,
+    "stat_type": 1,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 0 second at forecast time 0 second",
+    "style": "Timedef",
+    "step_len": 0,
+    "step_unit": 13,
+    "stat_type": 2,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Analysis or observation, istantaneous value",
+    "style": "Timedef",
+    "step_len": 0,
+    "step_unit": 13,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 60 minute at forecast time 60 minute",
+    "style": "Timedef",
+    "step_len": 60,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 60 minute at forecast time 60 minute",
+    "style": "Timedef",
+    "step_len": 60,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 60 minute",
+    "style": "Timedef",
+    "step_len": 60,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+60 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 60,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 120 minute at forecast time 120 minute",
+    "style": "Timedef",
+    "step_len": 120,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 120,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 120 minute at forecast time 120 minute",
+    "style": "Timedef",
+    "step_len": 120,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 120,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 120 minute",
+    "style": "Timedef",
+    "step_len": 120,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+120 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 120,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 180 minute at forecast time 180 minute",
+    "style": "Timedef",
+    "step_len": 180,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 180,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 180 minute at forecast time 180 minute",
+    "style": "Timedef",
+    "step_len": 180,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 180,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 180 minute",
+    "style": "Timedef",
+    "step_len": 180,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+180 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 180,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 240 minute at forecast time 240 minute",
+    "style": "Timedef",
+    "step_len": 240,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 240,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 240 minute at forecast time 240 minute",
+    "style": "Timedef",
+    "step_len": 240,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 240,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 240 minute",
+    "style": "Timedef",
+    "step_len": 240,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+240 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 240,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 300 minute at forecast time 300 minute",
+    "style": "Timedef",
+    "step_len": 300,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 300,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 300 minute at forecast time 300 minute",
+    "style": "Timedef",
+    "step_len": 300,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 300,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 300 minute",
+    "style": "Timedef",
+    "step_len": 300,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+300 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 300,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 360 minute at forecast time 360 minute",
+    "style": "Timedef",
+    "step_len": 360,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 360,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 360 minute at forecast time 360 minute",
+    "style": "Timedef",
+    "step_len": 360,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 360,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 360 minute",
+    "style": "Timedef",
+    "step_len": 360,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+360 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 360,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 420 minute at forecast time 420 minute",
+    "style": "Timedef",
+    "step_len": 420,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 420,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 420 minute at forecast time 420 minute",
+    "style": "Timedef",
+    "step_len": 420,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 420,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 420 minute",
+    "style": "Timedef",
+    "step_len": 420,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+420 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 420,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 480 minute at forecast time 480 minute",
+    "style": "Timedef",
+    "step_len": 480,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 480,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 480 minute at forecast time 480 minute",
+    "style": "Timedef",
+    "step_len": 480,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 480,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 480 minute",
+    "style": "Timedef",
+    "step_len": 480,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+480 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 480,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 540 minute at forecast time 540 minute",
+    "style": "Timedef",
+    "step_len": 540,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 540,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 540 minute at forecast time 540 minute",
+    "style": "Timedef",
+    "step_len": 540,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 540,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 540 minute",
+    "style": "Timedef",
+    "step_len": 540,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+540 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 540,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 600 minute at forecast time 600 minute",
+    "style": "Timedef",
+    "step_len": 600,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 600,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 600 minute at forecast time 600 minute",
+    "style": "Timedef",
+    "step_len": 600,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 600,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 600 minute",
+    "style": "Timedef",
+    "step_len": 600,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+600 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 600,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 660 minute at forecast time 660 minute",
+    "style": "Timedef",
+    "step_len": 660,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 660,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 660 minute at forecast time 660 minute",
+    "style": "Timedef",
+    "step_len": 660,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 660,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 660 minute",
+    "style": "Timedef",
+    "step_len": 660,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+660 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 660,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 720 minute at forecast time 720 minute",
+    "style": "Timedef",
+    "step_len": 720,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 720,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 720 minute at forecast time 720 minute",
+    "style": "Timedef",
+    "step_len": 720,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 720,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 720 minute",
+    "style": "Timedef",
+    "step_len": 720,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+720 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 720,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 780 minute at forecast time 780 minute",
+    "style": "Timedef",
+    "step_len": 780,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 780,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 780 minute at forecast time 780 minute",
+    "style": "Timedef",
+    "step_len": 780,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 780,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 780 minute",
+    "style": "Timedef",
+    "step_len": 780,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+780 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 780,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 840 minute at forecast time 840 minute",
+    "style": "Timedef",
+    "step_len": 840,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 840,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 840 minute at forecast time 840 minute",
+    "style": "Timedef",
+    "step_len": 840,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 840,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 840 minute",
+    "style": "Timedef",
+    "step_len": 840,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+840 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 840,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 900 minute at forecast time 900 minute",
+    "style": "Timedef",
+    "step_len": 900,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 900,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 900 minute at forecast time 900 minute",
+    "style": "Timedef",
+    "step_len": 900,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 900,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 900 minute",
+    "style": "Timedef",
+    "step_len": 900,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+900 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 900,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 960 minute at forecast time 960 minute",
+    "style": "Timedef",
+    "step_len": 960,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 960,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 960 minute at forecast time 960 minute",
+    "style": "Timedef",
+    "step_len": 960,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 960,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 960 minute",
+    "style": "Timedef",
+    "step_len": 960,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+960 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 960,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1020 minute at forecast time 1020 minute",
+    "style": "Timedef",
+    "step_len": 1020,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1020,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1020 minute at forecast time 1020 minute",
+    "style": "Timedef",
+    "step_len": 1020,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1020,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1020 minute",
+    "style": "Timedef",
+    "step_len": 1020,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1020 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1020,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1080 minute at forecast time 1080 minute",
+    "style": "Timedef",
+    "step_len": 1080,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1080,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1080 minute at forecast time 1080 minute",
+    "style": "Timedef",
+    "step_len": 1080,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1080,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1080 minute",
+    "style": "Timedef",
+    "step_len": 1080,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1080 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1080,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1140 minute at forecast time 1140 minute",
+    "style": "Timedef",
+    "step_len": 1140,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1140,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1140 minute at forecast time 1140 minute",
+    "style": "Timedef",
+    "step_len": 1140,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1140,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1140 minute",
+    "style": "Timedef",
+    "step_len": 1140,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1140 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1140,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1200 minute at forecast time 1200 minute",
+    "style": "Timedef",
+    "step_len": 1200,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1200,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1200 minute at forecast time 1200 minute",
+    "style": "Timedef",
+    "step_len": 1200,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1200,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1200 minute",
+    "style": "Timedef",
+    "step_len": 1200,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1200 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1200,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1260 minute at forecast time 1260 minute",
+    "style": "Timedef",
+    "step_len": 1260,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1260,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1260 minute at forecast time 1260 minute",
+    "style": "Timedef",
+    "step_len": 1260,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1260,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1260 minute",
+    "style": "Timedef",
+    "step_len": 1260,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1260 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1260,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1320 minute at forecast time 1320 minute",
+    "style": "Timedef",
+    "step_len": 1320,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1320,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1320 minute at forecast time 1320 minute",
+    "style": "Timedef",
+    "step_len": 1320,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1320,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1320 minute",
+    "style": "Timedef",
+    "step_len": 1320,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1320 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1320,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1380 minute at forecast time 1380 minute",
+    "style": "Timedef",
+    "step_len": 1380,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1380,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1380 minute at forecast time 1380 minute",
+    "style": "Timedef",
+    "step_len": 1380,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1380,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1380 minute",
+    "style": "Timedef",
+    "step_len": 1380,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1380 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1380,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1440 minute at forecast time 1440 minute",
+    "style": "Timedef",
+    "step_len": 1440,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1440,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1440 minute at forecast time 1440 minute",
+    "style": "Timedef",
+    "step_len": 1440,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1440,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1440 minute",
+    "style": "Timedef",
+    "step_len": 1440,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1440 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1440,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1500 minute at forecast time 1500 minute",
+    "style": "Timedef",
+    "step_len": 1500,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1500,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1500 minute at forecast time 1500 minute",
+    "style": "Timedef",
+    "step_len": 1500,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1500,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1500 minute",
+    "style": "Timedef",
+    "step_len": 1500,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1500 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1500,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1560 minute at forecast time 1560 minute",
+    "style": "Timedef",
+    "step_len": 1560,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1560,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1560 minute at forecast time 1560 minute",
+    "style": "Timedef",
+    "step_len": 1560,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1560,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1560 minute",
+    "style": "Timedef",
+    "step_len": 1560,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1560 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1560,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1620 minute at forecast time 1620 minute",
+    "style": "Timedef",
+    "step_len": 1620,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1620,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1620 minute at forecast time 1620 minute",
+    "style": "Timedef",
+    "step_len": 1620,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1620,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1620 minute",
+    "style": "Timedef",
+    "step_len": 1620,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1620 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1620,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1680 minute at forecast time 1680 minute",
+    "style": "Timedef",
+    "step_len": 1680,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1680,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1680 minute at forecast time 1680 minute",
+    "style": "Timedef",
+    "step_len": 1680,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1680,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1680 minute",
+    "style": "Timedef",
+    "step_len": 1680,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1680 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1680,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1740 minute at forecast time 1740 minute",
+    "style": "Timedef",
+    "step_len": 1740,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1740,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1740 minute at forecast time 1740 minute",
+    "style": "Timedef",
+    "step_len": 1740,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1740,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1740 minute",
+    "style": "Timedef",
+    "step_len": 1740,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1740 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1740,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1800 minute at forecast time 1800 minute",
+    "style": "Timedef",
+    "step_len": 1800,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1800,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1800 minute at forecast time 1800 minute",
+    "style": "Timedef",
+    "step_len": 1800,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1800,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1800 minute",
+    "style": "Timedef",
+    "step_len": 1800,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1800 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1800,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1860 minute at forecast time 1860 minute",
+    "style": "Timedef",
+    "step_len": 1860,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1860,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1860 minute at forecast time 1860 minute",
+    "style": "Timedef",
+    "step_len": 1860,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1860,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1860 minute",
+    "style": "Timedef",
+    "step_len": 1860,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1860 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1860,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1920 minute at forecast time 1920 minute",
+    "style": "Timedef",
+    "step_len": 1920,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1920,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1920 minute at forecast time 1920 minute",
+    "style": "Timedef",
+    "step_len": 1920,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1920,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1920 minute",
+    "style": "Timedef",
+    "step_len": 1920,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1920 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1920,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 1980 minute at forecast time 1980 minute",
+    "style": "Timedef",
+    "step_len": 1980,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 1980,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 1980 minute at forecast time 1980 minute",
+    "style": "Timedef",
+    "step_len": 1980,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 1980,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 1980 minute",
+    "style": "Timedef",
+    "step_len": 1980,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+1980 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 1980,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2040 minute at forecast time 2040 minute",
+    "style": "Timedef",
+    "step_len": 2040,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2040,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2040 minute at forecast time 2040 minute",
+    "style": "Timedef",
+    "step_len": 2040,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2040,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2040 minute",
+    "style": "Timedef",
+    "step_len": 2040,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2040 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2040,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2100 minute at forecast time 2100 minute",
+    "style": "Timedef",
+    "step_len": 2100,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2100,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2100 minute at forecast time 2100 minute",
+    "style": "Timedef",
+    "step_len": 2100,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2100,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2100 minute",
+    "style": "Timedef",
+    "step_len": 2100,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2100 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2100,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2160 minute at forecast time 2160 minute",
+    "style": "Timedef",
+    "step_len": 2160,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2160,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2160 minute at forecast time 2160 minute",
+    "style": "Timedef",
+    "step_len": 2160,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2160,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2160 minute",
+    "style": "Timedef",
+    "step_len": 2160,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2160 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2160,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2220 minute at forecast time 2220 minute",
+    "style": "Timedef",
+    "step_len": 2220,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2220,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2220 minute at forecast time 2220 minute",
+    "style": "Timedef",
+    "step_len": 2220,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2220,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2220 minute",
+    "style": "Timedef",
+    "step_len": 2220,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2220 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2220,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2280 minute at forecast time 2280 minute",
+    "style": "Timedef",
+    "step_len": 2280,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2280,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2280 minute at forecast time 2280 minute",
+    "style": "Timedef",
+    "step_len": 2280,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2280,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2280 minute",
+    "style": "Timedef",
+    "step_len": 2280,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2280 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2280,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2340 minute at forecast time 2340 minute",
+    "style": "Timedef",
+    "step_len": 2340,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2340,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2340 minute at forecast time 2340 minute",
+    "style": "Timedef",
+    "step_len": 2340,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2340,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2340 minute",
+    "style": "Timedef",
+    "step_len": 2340,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2340 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2340,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2400 minute at forecast time 2400 minute",
+    "style": "Timedef",
+    "step_len": 2400,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2400,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2400 minute at forecast time 2400 minute",
+    "style": "Timedef",
+    "step_len": 2400,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2400,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2400 minute",
+    "style": "Timedef",
+    "step_len": 2400,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2400 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2400,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2460 minute at forecast time 2460 minute",
+    "style": "Timedef",
+    "step_len": 2460,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2460,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2460 minute at forecast time 2460 minute",
+    "style": "Timedef",
+    "step_len": 2460,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2460,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2460 minute",
+    "style": "Timedef",
+    "step_len": 2460,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2460 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2460,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2520 minute at forecast time 2520 minute",
+    "style": "Timedef",
+    "step_len": 2520,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2520,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2520 minute at forecast time 2520 minute",
+    "style": "Timedef",
+    "step_len": 2520,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2520,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2520 minute",
+    "style": "Timedef",
+    "step_len": 2520,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2520 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2520,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2580 minute at forecast time 2580 minute",
+    "style": "Timedef",
+    "step_len": 2580,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2580,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2580 minute at forecast time 2580 minute",
+    "style": "Timedef",
+    "step_len": 2580,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2580,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2580 minute",
+    "style": "Timedef",
+    "step_len": 2580,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2580 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2580,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2640 minute at forecast time 2640 minute",
+    "style": "Timedef",
+    "step_len": 2640,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2640,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2640 minute at forecast time 2640 minute",
+    "style": "Timedef",
+    "step_len": 2640,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2640,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2640 minute",
+    "style": "Timedef",
+    "step_len": 2640,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2640 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2640,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2700 minute at forecast time 2700 minute",
+    "style": "Timedef",
+    "step_len": 2700,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2700,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2700 minute at forecast time 2700 minute",
+    "style": "Timedef",
+    "step_len": 2700,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2700,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2700 minute",
+    "style": "Timedef",
+    "step_len": 2700,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2700 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2700,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2760 minute at forecast time 2760 minute",
+    "style": "Timedef",
+    "step_len": 2760,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2760,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2760 minute at forecast time 2760 minute",
+    "style": "Timedef",
+    "step_len": 2760,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2760,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2760 minute",
+    "style": "Timedef",
+    "step_len": 2760,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2760 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2760,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2820 minute at forecast time 2820 minute",
+    "style": "Timedef",
+    "step_len": 2820,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2820,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2820 minute at forecast time 2820 minute",
+    "style": "Timedef",
+    "step_len": 2820,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2820,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2820 minute",
+    "style": "Timedef",
+    "step_len": 2820,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2820 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2820,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2880 minute at forecast time 2880 minute",
+    "style": "Timedef",
+    "step_len": 2880,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2880,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2880 minute at forecast time 2880 minute",
+    "style": "Timedef",
+    "step_len": 2880,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2880,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2880 minute",
+    "style": "Timedef",
+    "step_len": 2880,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2880 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2880,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 2940 minute at forecast time 2940 minute",
+    "style": "Timedef",
+    "step_len": 2940,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 2940,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 2940 minute at forecast time 2940 minute",
+    "style": "Timedef",
+    "step_len": 2940,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 2940,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 2940 minute",
+    "style": "Timedef",
+    "step_len": 2940,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+2940 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 2940,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3000 minute at forecast time 3000 minute",
+    "style": "Timedef",
+    "step_len": 3000,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3000,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3000 minute at forecast time 3000 minute",
+    "style": "Timedef",
+    "step_len": 3000,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3000,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3000 minute",
+    "style": "Timedef",
+    "step_len": 3000,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3000 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3000,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3060 minute at forecast time 3060 minute",
+    "style": "Timedef",
+    "step_len": 3060,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3060,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3060 minute at forecast time 3060 minute",
+    "style": "Timedef",
+    "step_len": 3060,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3060,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3060 minute",
+    "style": "Timedef",
+    "step_len": 3060,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3060 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3060,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3120 minute at forecast time 3120 minute",
+    "style": "Timedef",
+    "step_len": 3120,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3120,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3120 minute at forecast time 3120 minute",
+    "style": "Timedef",
+    "step_len": 3120,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3120,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3120 minute",
+    "style": "Timedef",
+    "step_len": 3120,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3120 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3120,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3180 minute at forecast time 3180 minute",
+    "style": "Timedef",
+    "step_len": 3180,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3180,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3180 minute at forecast time 3180 minute",
+    "style": "Timedef",
+    "step_len": 3180,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3180,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3180 minute",
+    "style": "Timedef",
+    "step_len": 3180,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3180 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3180,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3240 minute at forecast time 3240 minute",
+    "style": "Timedef",
+    "step_len": 3240,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3240,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3240 minute at forecast time 3240 minute",
+    "style": "Timedef",
+    "step_len": 3240,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3240,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3240 minute",
+    "style": "Timedef",
+    "step_len": 3240,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3240 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3240,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3300 minute at forecast time 3300 minute",
+    "style": "Timedef",
+    "step_len": 3300,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3300,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3300 minute at forecast time 3300 minute",
+    "style": "Timedef",
+    "step_len": 3300,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3300,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3300 minute",
+    "style": "Timedef",
+    "step_len": 3300,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3300 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3300,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3360 minute at forecast time 3360 minute",
+    "style": "Timedef",
+    "step_len": 3360,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3360,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3360 minute at forecast time 3360 minute",
+    "style": "Timedef",
+    "step_len": 3360,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3360,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3360 minute",
+    "style": "Timedef",
+    "step_len": 3360,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3360 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3360,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3420 minute at forecast time 3420 minute",
+    "style": "Timedef",
+    "step_len": 3420,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3420,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3420 minute at forecast time 3420 minute",
+    "style": "Timedef",
+    "step_len": 3420,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3420,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3420 minute",
+    "style": "Timedef",
+    "step_len": 3420,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3420 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3420,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3480 minute at forecast time 3480 minute",
+    "style": "Timedef",
+    "step_len": 3480,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3480,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3480 minute at forecast time 3480 minute",
+    "style": "Timedef",
+    "step_len": 3480,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3480,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3480 minute",
+    "style": "Timedef",
+    "step_len": 3480,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3480 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3480,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3540 minute at forecast time 3540 minute",
+    "style": "Timedef",
+    "step_len": 3540,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3540,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3540 minute at forecast time 3540 minute",
+    "style": "Timedef",
+    "step_len": 3540,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3540,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3540 minute",
+    "style": "Timedef",
+    "step_len": 3540,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3540 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3540,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3600 minute at forecast time 3600 minute",
+    "style": "Timedef",
+    "step_len": 3600,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3600,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3600 minute at forecast time 3600 minute",
+    "style": "Timedef",
+    "step_len": 3600,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3600,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3600 minute",
+    "style": "Timedef",
+    "step_len": 3600,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3600 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3600,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3660 minute at forecast time 3660 minute",
+    "style": "Timedef",
+    "step_len": 3660,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3660,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3660 minute at forecast time 3660 minute",
+    "style": "Timedef",
+    "step_len": 3660,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3660,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3660 minute",
+    "style": "Timedef",
+    "step_len": 3660,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3660 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3660,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3720 minute at forecast time 3720 minute",
+    "style": "Timedef",
+    "step_len": 3720,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3720,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3720 minute at forecast time 3720 minute",
+    "style": "Timedef",
+    "step_len": 3720,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3720,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3720 minute",
+    "style": "Timedef",
+    "step_len": 3720,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3720 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3720,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3780 minute at forecast time 3780 minute",
+    "style": "Timedef",
+    "step_len": 3780,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3780,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3780 minute at forecast time 3780 minute",
+    "style": "Timedef",
+    "step_len": 3780,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3780,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3780 minute",
+    "style": "Timedef",
+    "step_len": 3780,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3780 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3780,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3840 minute at forecast time 3840 minute",
+    "style": "Timedef",
+    "step_len": 3840,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3840,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3840 minute at forecast time 3840 minute",
+    "style": "Timedef",
+    "step_len": 3840,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3840,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3840 minute",
+    "style": "Timedef",
+    "step_len": 3840,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3840 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3840,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3900 minute at forecast time 3900 minute",
+    "style": "Timedef",
+    "step_len": 3900,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3900,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3900 minute at forecast time 3900 minute",
+    "style": "Timedef",
+    "step_len": 3900,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3900,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3900 minute",
+    "style": "Timedef",
+    "step_len": 3900,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3900 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3900,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 3960 minute at forecast time 3960 minute",
+    "style": "Timedef",
+    "step_len": 3960,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 3960,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 3960 minute at forecast time 3960 minute",
+    "style": "Timedef",
+    "step_len": 3960,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 3960,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 3960 minute",
+    "style": "Timedef",
+    "step_len": 3960,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+3960 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 3960,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4020 minute at forecast time 4020 minute",
+    "style": "Timedef",
+    "step_len": 4020,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4020,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4020 minute at forecast time 4020 minute",
+    "style": "Timedef",
+    "step_len": 4020,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4020,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4020 minute",
+    "style": "Timedef",
+    "step_len": 4020,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4020 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4020,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4080 minute at forecast time 4080 minute",
+    "style": "Timedef",
+    "step_len": 4080,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4080,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4080 minute at forecast time 4080 minute",
+    "style": "Timedef",
+    "step_len": 4080,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4080,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4080 minute",
+    "style": "Timedef",
+    "step_len": 4080,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4080 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4080,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4140 minute at forecast time 4140 minute",
+    "style": "Timedef",
+    "step_len": 4140,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4140,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4140 minute at forecast time 4140 minute",
+    "style": "Timedef",
+    "step_len": 4140,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4140,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4140 minute",
+    "style": "Timedef",
+    "step_len": 4140,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4140 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4140,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4200 minute at forecast time 4200 minute",
+    "style": "Timedef",
+    "step_len": 4200,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4200,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4200 minute at forecast time 4200 minute",
+    "style": "Timedef",
+    "step_len": 4200,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4200,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4200 minute",
+    "style": "Timedef",
+    "step_len": 4200,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4200 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4200,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4260 minute at forecast time 4260 minute",
+    "style": "Timedef",
+    "step_len": 4260,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4260,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4260 minute at forecast time 4260 minute",
+    "style": "Timedef",
+    "step_len": 4260,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4260,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4260 minute",
+    "style": "Timedef",
+    "step_len": 4260,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4260 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4260,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   },
+   {
+    "type": "timerange",
+    "desc": "Average over 4320 minute at forecast time 4320 minute",
+    "style": "Timedef",
+    "step_len": 4320,
+    "step_unit": 0,
+    "stat_type": 0,
+    "stat_len": 4320,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Accumulation over 4320 minute at forecast time 4320 minute",
+    "style": "Timedef",
+    "step_len": 4320,
+    "step_unit": 0,
+    "stat_type": 1,
+    "stat_len": 4320,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Maximum over 60 minute at forecast time 4320 minute",
+    "style": "Timedef",
+    "step_len": 4320,
+    "step_unit": 0,
+    "stat_type": 2,
+    "stat_len": 60,
+    "stat_unit": 0
+   },
+   {
+    "type": "timerange",
+    "desc": "Forecast at t+4320 minute, instantaneous value",
+    "style": "Timedef",
+    "step_len": 4320,
+    "step_unit": 0,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   }
+  ],
+  "area": [
+   {
+    "type": "area",
+    "desc": "GRIB(Ni=761, Nj=761, latfirst=33700000, latlast=48900000, lonfirst=3000000, lonlast=22000000, tn=0)",
+    "style": "GRIB",
+    "value": {
+     "Ni": 761,
+     "Nj": 761,
+     "latfirst": 33700000,
+     "latlast": 48900000,
+     "lonfirst": 3000000,
+     "lonlast": 22000000,
+     "tn": 0
+    }
+   }
+  ],
+  "proddef": [
+   {
+    "type": "proddef",
+    "desc": "GRIB(tod=1)",
+    "style": "GRIB",
+    "value": {
+     "tod": 1
+    }
+   }
+  ],
+  "run": [
+   {
+    "type": "run",
+    "desc": "MINUTE(00:00)",
+    "style": "MINUTE",
+    "value": 0
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:00)",
+    "style": "MINUTE",
+    "value": 720
+   }
+  ]
+ },
+ "descriptions": {
+  "leveltypes": [
+   "sfc Ground or water",
+   "pl Isobaric surface",
+   "sfc Mean sea",
+   "sfc Specified height level above ground",
+   "sfc Depth below land surface",
+   "GRIB2S(192, 000, 0000000000)",
+   "sfc Ground or water surface 0 0 sfc Mean sea",
+   "4 Level of 0 degree C isotherm 0 0 sfc Mean sea",
+   "pl Isobaric surface (Pa) 0 0 pl Isobaric surface",
+   "pl Isobaric surface (Pa) 0 80000 sfc Ground or water",
+   "102 Specific altitude above mean sea level (m) 0 2000 102 Specific altitude above mean sea level",
+   "sfc Specified height level above ground (m) 0 6000 sfc Specified height level above ground",
+   "sfc Depth below land surface (m) 0 0 sfc Depth below land surface"
+  ],
+  "timerangetypes": []
+ }
+}

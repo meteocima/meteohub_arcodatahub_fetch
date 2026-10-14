@@ -1,0 +1,165 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 255410930,
+   "s": 39089953693,
+   "b": [
+    2020,
+    10,
+    12,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    15,
+    53,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "dpcn-umbria",
+    "desc": "dpcn-umbria",
+    "longdesc": "DPCN-UMBRIA - Sensor data collected by ground stations of the meteo hydro pluviometric monitoring network - Umbria Region - DPCN Network"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "1,0,60",
+    "desc": "Accumulation over 1m at forecast time 0"
+   },
+   {
+    "code": "1,0,120",
+    "desc": "Accumulation over 2m at forecast time 0"
+   },
+   {
+    "code": "1,0,300",
+    "desc": "Accumulation over 5m at forecast time 0"
+   },
+   {
+    "code": "1,0,600",
+    "desc": "Accumulation over 10m at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,4500",
+    "desc": "Accumulation over 1h 15m at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

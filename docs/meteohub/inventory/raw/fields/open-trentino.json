@@ -1,0 +1,117 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 20766540,
+   "s": 3560949474,
+   "b": [
+    2020,
+    11,
+    17,
+    16,
+    30,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    16,
+    0,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "open-trentino",
+    "desc": "open-trentino",
+    "longdesc": "OPEN-TRENTINO - Sensor data collected by ground stations of the meteo hydro pluviometric monitoring network - Autonomous Province of Trento"
+   }
+  ],
+  "product": [
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,900",
+    "desc": "Average over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

@@ -1,0 +1,177 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 436538,
+   "s": 83416034,
+   "b": [
+    2007,
+    5,
+    23,
+    9,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    16,
+    0,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "boa",
+    "desc": "boa-emiliaromagna",
+    "longdesc": "ER - BOA - Meteorological and oceanographic data from stations of Northern Adriatic"
+   }
+  ],
+  "product": [
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B22001",
+    "desc": "DIRECTION OF WAVES"
+   },
+   {
+    "code": "B22004",
+    "desc": "DIRECTION OF CURRENT"
+   },
+   {
+    "code": "B22032",
+    "desc": "SPEED OF SEA SURFACE CURRENT"
+   },
+   {
+    "code": "B22037",
+    "desc": "Tidal elevation with respect to national land datum"
+   },
+   {
+    "code": "B22043",
+    "desc": "SEA/WATER TEMPERATURE"
+   },
+   {
+    "code": "B22070",
+    "desc": "SIGNIFICANT WAVE HEIGHT"
+   },
+   {
+    "code": "B22071",
+    "desc": "SPECTRAL PEAK WAVE PERIOD"
+   },
+   {
+    "code": "B22073",
+    "desc": "MAXIMUM WAVE HEIGHT"
+   },
+   {
+    "code": "B22074",
+    "desc": "AVERAGE WAVE PERIOD"
+   },
+   {
+    "code": "B22196",
+    "desc": "Period of maximum wave"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "101,0,0,0",
+    "desc": "Mean sea level"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "161,350,0,0",
+    "desc": "161 350"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,1800",
+    "desc": "Average over 30m at forecast time 0"
+   },
+   {
+    "code": "0,0,86400",
+    "desc": "Average over 1d at forecast time 0"
+   },
+   {
+    "code": "2,0,1800",
+    "desc": "Maximum over 30m at forecast time 0"
+   },
+   {
+    "code": "2,0,86400",
+    "desc": "Maximum over 1d at forecast time 0"
+   },
+   {
+    "code": "3,0,86400",
+    "desc": "Minimum over 1d at forecast time 0"
+   },
+   {
+    "code": "205,0,1800",
+    "desc": "Product with a valid time ranging over 30m at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B22001",
+    "desc": "DIRECTION OF WAVES"
+   },
+   {
+    "code": "B22004",
+    "desc": "DIRECTION OF CURRENT"
+   },
+   {
+    "code": "B22032",
+    "desc": "SPEED OF SEA SURFACE CURRENT"
+   },
+   {
+    "code": "B22037",
+    "desc": "Tidal elevation with respect to national land datum"
+   },
+   {
+    "code": "B22043",
+    "desc": "SEA/WATER TEMPERATURE"
+   },
+   {
+    "code": "B22070",
+    "desc": "SIGNIFICANT WAVE HEIGHT"
+   },
+   {
+    "code": "B22071",
+    "desc": "SPECTRAL PEAK WAVE PERIOD"
+   },
+   {
+    "code": "B22073",
+    "desc": "MAXIMUM WAVE HEIGHT"
+   },
+   {
+    "code": "B22074",
+    "desc": "AVERAGE WAVE PERIOD"
+   },
+   {
+    "code": "B22196",
+    "desc": "Period of maximum wave"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

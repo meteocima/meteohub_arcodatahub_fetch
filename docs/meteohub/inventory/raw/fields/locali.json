@@ -1,0 +1,309 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 11251803,
+   "s": 2046474038,
+   "b": [
+    1985,
+    11,
+    9,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    16,
+    0,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "locali",
+    "desc": "locali-emiliaromagna",
+    "longdesc": "ER - LOCALI - Meteorological stations of Emilia Romagna"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11043",
+    "desc": "MAXIMUM WIND GUST DIRECTION"
+   },
+   {
+    "code": "B11209",
+    "desc": "Persistent wind gust speed"
+   },
+   {
+    "code": "B11210",
+    "desc": "Maximum persistent wind gust direction"
+   },
+   {
+    "code": "B11211",
+    "desc": "Wind speed <1 m/s frequency"
+   },
+   {
+    "code": "B11212",
+    "desc": "Wind speed >=1 <2 m/s frequency"
+   },
+   {
+    "code": "B11213",
+    "desc": "Wind speed >=2 <4 m/s frequency"
+   },
+   {
+    "code": "B11214",
+    "desc": "Wind speed >=4 <7 m/s frequency"
+   },
+   {
+    "code": "B11215",
+    "desc": "Wind speed >=7 <10 m/s frequency"
+   },
+   {
+    "code": "B11216",
+    "desc": "Wind speed >=10 m/s frequency"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   },
+   {
+    "code": "B14199",
+    "desc": "Visible irradiance (upward)"
+   },
+   {
+    "code": "B14200",
+    "desc": "Infrared irradiance (downward)"
+   },
+   {
+    "code": "B14201",
+    "desc": "Infrared irradiance (upward)"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,900",
+    "desc": "Average over 15m at forecast time 0"
+   },
+   {
+    "code": "0,0,3600",
+    "desc": "Average over 1h at forecast time 0"
+   },
+   {
+    "code": "0,0,86400",
+    "desc": "Average over 1d at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,86400",
+    "desc": "Accumulation over 1d at forecast time 0"
+   },
+   {
+    "code": "2,0,900",
+    "desc": "Maximum over 15m at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "2,0,86400",
+    "desc": "Maximum over 1d at forecast time 0"
+   },
+   {
+    "code": "3,0,900",
+    "desc": "Minimum over 15m at forecast time 0"
+   },
+   {
+    "code": "3,0,3600",
+    "desc": "Minimum over 1h at forecast time 0"
+   },
+   {
+    "code": "3,0,86400",
+    "desc": "Minimum over 1d at forecast time 0"
+   },
+   {
+    "code": "9,0,900",
+    "desc": "Ratio over 15m at forecast time 0"
+   },
+   {
+    "code": "200,0,900",
+    "desc": "Vectorial mean over 15m at forecast time 0"
+   },
+   {
+    "code": "200,0,3600",
+    "desc": "Vectorial mean over 1h at forecast time 0"
+   },
+   {
+    "code": "201,0,3600",
+    "desc": "Mode over 1h at forecast time 0"
+   },
+   {
+    "code": "201,0,86400",
+    "desc": "Mode over 1d at forecast time 0"
+   },
+   {
+    "code": "205,0,900",
+    "desc": "Product with a valid time ranging over 15m at forecast time 0"
+   },
+   {
+    "code": "205,0,3600",
+    "desc": "Product with a valid time ranging over 1h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11043",
+    "desc": "MAXIMUM WIND GUST DIRECTION"
+   },
+   {
+    "code": "B11209",
+    "desc": "Persistent wind gust speed"
+   },
+   {
+    "code": "B11210",
+    "desc": "Maximum persistent wind gust direction"
+   },
+   {
+    "code": "B11211",
+    "desc": "Wind speed <1 m/s frequency"
+   },
+   {
+    "code": "B11212",
+    "desc": "Wind speed >=1 <2 m/s frequency"
+   },
+   {
+    "code": "B11213",
+    "desc": "Wind speed >=2 <4 m/s frequency"
+   },
+   {
+    "code": "B11214",
+    "desc": "Wind speed >=4 <7 m/s frequency"
+   },
+   {
+    "code": "B11215",
+    "desc": "Wind speed >=7 <10 m/s frequency"
+   },
+   {
+    "code": "B11216",
+    "desc": "Wind speed >=10 m/s frequency"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   },
+   {
+    "code": "B14199",
+    "desc": "Visible irradiance (upward)"
+   },
+   {
+    "code": "B14200",
+    "desc": "Infrared irradiance (downward)"
+   },
+   {
+    "code": "B14201",
+    "desc": "Infrared irradiance (upward)"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

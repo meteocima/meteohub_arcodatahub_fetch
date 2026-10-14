@@ -1,0 +1,129 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 114814,
+   "s": 21105093,
+   "b": [
+    2026,
+    7,
+    1,
+    14,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    15,
+    0,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "arpafvg",
+    "desc": "ARPAFVG-Friuli Venezia Giulia",
+    "longdesc": "ARPAFVG-FRIULI-VENEZIA-GIULIA | Sensor data collected by ground stations of the meteo hydro pluviometric monitoring network"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,43200",
+    "desc": "Accumulation over 12h at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

@@ -1,0 +1,197 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 29688663,
+   "s": 4846649557,
+   "b": [
+    1990,
+    3,
+    7,
+    0,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    16,
+    0,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "agrmet",
+    "desc": "agrmet-emiliaromagna",
+    "longdesc": "ER - AGRMET - Agrometeorological stations of Emilia Romagna"
+   }
+  ],
+  "product": [
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13227",
+    "desc": "Soil volumetric water content"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   },
+   {
+    "code": "106,250,0,0",
+    "desc": "0.250m below land surface"
+   },
+   {
+    "code": "106,450,0,0",
+    "desc": "0.450m below land surface"
+   },
+   {
+    "code": "106,700,0,0",
+    "desc": "0.700m below land surface"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,900",
+    "desc": "Average over 15m at forecast time 0"
+   },
+   {
+    "code": "0,0,3600",
+    "desc": "Average over 1h at forecast time 0"
+   },
+   {
+    "code": "0,0,86400",
+    "desc": "Average over 1d at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,86400",
+    "desc": "Accumulation over 1d at forecast time 0"
+   },
+   {
+    "code": "2,0,900",
+    "desc": "Maximum over 15m at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "2,0,86400",
+    "desc": "Maximum over 1d at forecast time 0"
+   },
+   {
+    "code": "3,0,900",
+    "desc": "Minimum over 15m at forecast time 0"
+   },
+   {
+    "code": "3,0,3600",
+    "desc": "Minimum over 1h at forecast time 0"
+   },
+   {
+    "code": "3,0,86400",
+    "desc": "Minimum over 1d at forecast time 0"
+   },
+   {
+    "code": "200,0,3600",
+    "desc": "Vectorial mean over 1h at forecast time 0"
+   },
+   {
+    "code": "201,0,86400",
+    "desc": "Mode over 1d at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13227",
+    "desc": "Soil volumetric water content"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

@@ -1,0 +1,253 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 96127004,
+   "s": 15313224666,
+   "b": [
+    1987,
+    1,
+    2,
+    8,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    15,
+    45,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "simnpr",
+    "desc": "simnpr-emiliaromagna",
+    "longdesc": "ER - SIMNPR - Hydrometeorological network of the central-western Emilia Romagna"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11043",
+    "desc": "MAXIMUM WIND GUST DIRECTION"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13080",
+    "desc": "WATER PH"
+   },
+   {
+    "code": "B13081",
+    "desc": "WATER CONDUCTIVITY"
+   },
+   {
+    "code": "B13082",
+    "desc": "WATER TEMPERATURE"
+   },
+   {
+    "code": "B13083",
+    "desc": "DISSOLVED OXYGEN"
+   },
+   {
+    "code": "B13084",
+    "desc": "TURBIDITY"
+   },
+   {
+    "code": "B13085",
+    "desc": "OXIDATION REDUCTION POTENTIAL (ORP)"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   },
+   {
+    "code": "B13226",
+    "desc": "River discharge"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   },
+   {
+    "code": "160,1000,0,0",
+    "desc": "1.000m below sea level"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,86400",
+    "desc": "Average over 1d at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "1,0,1800",
+    "desc": "Accumulation over 30m at forecast time 0"
+   },
+   {
+    "code": "1,0,3600",
+    "desc": "Accumulation over 1h at forecast time 0"
+   },
+   {
+    "code": "1,0,86400",
+    "desc": "Accumulation over 1d at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "2,0,86400",
+    "desc": "Maximum over 1d at forecast time 0"
+   },
+   {
+    "code": "3,0,86400",
+    "desc": "Minimum over 1d at forecast time 0"
+   },
+   {
+    "code": "201,0,86400",
+    "desc": "Mode over 1d at forecast time 0"
+   },
+   {
+    "code": "205,0,600",
+    "desc": "Product with a valid time ranging over 10m at forecast time 0"
+   },
+   {
+    "code": "205,0,3600",
+    "desc": "Product with a valid time ranging over 1h at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11043",
+    "desc": "MAXIMUM WIND GUST DIRECTION"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13013",
+    "desc": "TOTAL SNOW DEPTH"
+   },
+   {
+    "code": "B13080",
+    "desc": "WATER PH"
+   },
+   {
+    "code": "B13081",
+    "desc": "WATER CONDUCTIVITY"
+   },
+   {
+    "code": "B13082",
+    "desc": "WATER TEMPERATURE"
+   },
+   {
+    "code": "B13083",
+    "desc": "DISSOLVED OXYGEN"
+   },
+   {
+    "code": "B13084",
+    "desc": "TURBIDITY"
+   },
+   {
+    "code": "B13085",
+    "desc": "OXIDATION REDUCTION POTENTIAL (ORP)"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   },
+   {
+    "code": "B13226",
+    "desc": "River discharge"
+   },
+   {
+    "code": "B14198",
+    "desc": "Global (visible) irradiance (downward)"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

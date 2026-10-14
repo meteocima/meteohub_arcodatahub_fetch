@@ -1,0 +1,669 @@
+{
+ "metadata": {
+  ".zattrs": {
+   "NCO": "netCDF Operators version 5.1.4 (Homepage = http://nco.sf.net, Code = http://github.com/nco/nco)",
+   "SIN4 namelist parameter BETAMAX": 1.5,
+   "WAVEWATCH_III_switches": "F90 NOGRB NC4 SHRD PR3 UQ FLX0 LN1 ST4 STAB0 NL1 BT1 DB1 MLIM TR1 BS0 IC0 IS0 REF1 XX0 WNT1 WNX1 CRT1 CRX1 TRKNC O0 O1 O2 O4 O5 O6 O7",
+   "WAVEWATCH_III_version_number": "6.07",
+   "altitude_resolution": "n/a",
+   "area": "Mediterranean",
+   "attribution": "ItaliaMeteo-ARPAE",
+   "category": "SEA",
+   "description": "WW3 sea wave model, forecast range +72h, run 00 UTC, Mediterranean domain: 46°N, 30°N, 7°W, 36°E ; experimental distribution in Zarr format",
+   "easternmost_longitude": "36.",
+   "emission_date": "2026-09-20 00:00 UTC",
+   "forecast_length_hours": "72",
+   "history": "Produced by the WW3 model, converted to Zarr using Python and Xarray",
+   "latitude_resolution": "n/a",
+   "license": "CCBY4.0",
+   "longitude_resolution": "n/a",
+   "maximum_altitude": "9000 m",
+   "minimum_altitude": "-12000 m",
+   "model": "WW3 MEDITA",
+   "northernmost_latitude": "46.",
+   "product_name": "WW3 MEDITA",
+   "southernmost_latitude": "30.",
+   "spinup_hours": "24",
+   "start_date": "2025-11-30 01:00:00",
+   "stop_date": "2026-10-16 00:00:00",
+   "typeOfProcessedData": "0",
+   "westernmost_longitude": "-7."
+  },
+  ".zgroup": {
+   "zarr_format": 2
+  },
+  "MAPSTA/.zarray": {
+   "chunks": [
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dtype": "<i2",
+   "fill_value": null,
+   "filters": null,
+   "order": "C",
+   "shape": [
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "MAPSTA/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "node"
+   ],
+   "long_name": "status map",
+   "standard_name": "status map",
+   "valid_max": 32,
+   "valid_min": -32
+  },
+  "dir/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "dir/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "wave_from_direction",
+   "long_name": "wave mean direction",
+   "standard_name": "sea_surface_wave_from_direction",
+   "valid_max": 3600,
+   "valid_min": 0
+  },
+  "fbb/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "fbb/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "wave_dissipation_in_bbl",
+   "long_name": "wave dissipation in bbl",
+   "standard_name": "wave_energy_dissipation_in_bottom_boundary_layer",
+   "valid_max": 9990,
+   "valid_min": 0
+  },
+  "forecast_reference_time/.zarray": {
+   "chunks": [
+    1
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<i8",
+   "fill_value": null,
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316
+   ],
+   "zarr_format": 2
+  },
+  "forecast_reference_time/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time"
+   ],
+   "long_name": "Forecast reference time",
+   "standard_name": "forecast_reference_time"
+  },
+  "fp/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "fp/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "dominant_wave_frequency",
+   "long_name": "wave peak frequency",
+   "standard_name": "sea_surface_wave_peak_frequency",
+   "valid_max": 10000,
+   "valid_min": 0
+  },
+  "hs/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "hs/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "significant_wave_height",
+   "long_name": "significant height of wind and swell waves",
+   "standard_name": "sea_surface_wave_significant_height",
+   "valid_max": 32000,
+   "valid_min": 0
+  },
+  "latitude/.zarray": {
+   "chunks": [
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "latitude/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "node"
+   ],
+   "axis": "Y",
+   "long_name": "latitude",
+   "standard_name": "latitude",
+   "valid_max": 180.0,
+   "valid_min": -90.0
+  },
+  "longitude/.zarray": {
+   "chunks": [
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "longitude/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "node"
+   ],
+   "axis": "X",
+   "long_name": "longitude",
+   "standard_name": "longitude",
+   "valid_max": 360.0,
+   "valid_min": -180.0
+  },
+  "sxx/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "sxx/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "wave_from_direction",
+   "long_name": "Radiation stress component Sxx",
+   "standard_name": "radiation_stress_component_sxx",
+   "valid_max": 3000,
+   "valid_min": -3000
+  },
+  "sxy/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "sxy/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "",
+   "long_name": "Radiation stress component Sxy",
+   "standard_name": "radiation_stress_component_sxy",
+   "valid_max": 3000,
+   "valid_min": -3000
+  },
+  "syy/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "syy/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "northward_sea_water_velocity",
+   "long_name": "Radiation stress component Syy",
+   "standard_name": "radiation_stress_component_syy",
+   "valid_max": 3000,
+   "valid_min": -3000
+  },
+  "t01/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "t01/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "globwave_name": "mean_period_t01",
+   "long_name": "mean period T01",
+   "standard_name": "sea_surface_wind_wave_mean_period_from_variance_spectral_density_first_frequency_moment",
+   "valid_max": 5000,
+   "valid_min": 0
+  },
+  "time/.zarray": {
+   "chunks": [
+    6
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 5,
+    "cname": "lz4",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dtype": "<f8",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    96
+   ],
+   "zarr_format": 2
+  },
+  "time/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "time"
+   ],
+   "long_name": "Forecast time",
+   "standard_name": "forecast_period"
+  },
+  "tri/.zarray": {
+   "chunks": [
+    403822,
+    3
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dtype": "<i4",
+   "fill_value": null,
+   "filters": null,
+   "order": "C",
+   "shape": [
+    403822,
+    3
+   ],
+   "zarr_format": 2
+  },
+  "tri/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "element",
+    "noel"
+   ]
+  },
+  "uubr/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "uubr/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "comment": "ubr=sqrt(uubr**2+vubr**2)",
+   "globwave_name": "rms_of_bottom_velocity_amplitude_zonal",
+   "long_name": "rms of bottom velocity amplitude zonal",
+   "standard_name": "rms_of_bottom_velocity_amplitude_zonal",
+   "valid_max": 18000,
+   "valid_min": -18000
+  },
+  "uuss/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "uuss/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "comment": "uss=sqrt(uuss**2+vuss**2)",
+   "globwave_name": "eastward_surface_stokes_drift",
+   "long_name": "eastward surface stokes drift",
+   "standard_name": "eastward_surface_stokes_drift",
+   "valid_max": 9900,
+   "valid_min": -9900
+  },
+  "vubr/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "vubr/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "comment": "ubr=sqrt(uubr**2+vubr**2)",
+   "globwave_name": "rms_of_bottom_velocity_amplitude_meridional",
+   "long_name": "rms of bottom velocity amplitude meridional",
+   "standard_name": "rms_of_bottom_velocity_amplitude_meridional",
+   "valid_max": 18000,
+   "valid_min": -18000
+  },
+  "vuss/.zarray": {
+   "chunks": [
+    1,
+    6,
+    220888
+   ],
+   "compressor": {
+    "blocksize": 0,
+    "clevel": 6,
+    "cname": "zstd",
+    "id": "blosc",
+    "shuffle": 1
+   },
+   "dimension_separator": ".",
+   "dtype": "<f4",
+   "fill_value": "NaN",
+   "filters": null,
+   "order": "C",
+   "shape": [
+    316,
+    96,
+    220888
+   ],
+   "zarr_format": 2
+  },
+  "vuss/.zattrs": {
+   "_ARRAY_DIMENSIONS": [
+    "forecast_reference_time",
+    "time",
+    "node"
+   ],
+   "cell_methods": "time: mean",
+   "comment": "Frequency range   0.0500 to   0.7932 Hz",
+   "globwave_name": "northward_surface_stokes_drift",
+   "long_name": "northward surface stokes drift",
+   "standard_name": "northward_surface_stokes_drift",
+   "valid_max": 9900,
+   "valid_min": -9900
+  }
+ },
+ "zarr_consolidated_format": 1
+}

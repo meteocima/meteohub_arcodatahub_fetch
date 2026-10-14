@@ -1,4 +1,63 @@
+Downloading numcodecs (1.4MiB)
+Downloading numpy (15.9MiB)
+ Downloading numcodecs
+ Downloading numpy
+Installed 3 packages in 18ms
 FOR ICON_2I_SURFACE_PRESSURE_LEVELS
 FOR ICON_2I_MODEL_LEVELS
 FOR ICON_2I_EPS
   /api/fields: HTTP 502; retry in 30s
+FOR ICON_2I_RUC
+FOR ICON_2I_ASSIM_SURFACE_PRESSURE_LEVELS
+FOR ICON_2I_ASSIM_MODEL_LEVELS
+FOR WRF
+FOR MOLOCH_AIM
+FOR SEASONAL
+FOR BOLAM
+FOR MOLOCH
+FOR WRF_DA_ITA
+FOR WRF_OL
+OBS dpcn-basilicata
+OBS dpcn-bolzanoboze
+OBS dpcn-calabria
+OBS dpcn-campania
+OBS dpcn-lazio
+OBS dpcn-liguria
+OBS dpcn-lombardia
+OBS dpcn-marche
+OBS dpcn-molise
+OBS dpcn-piemonte
+OBS dpcn-puglia
+OBS dpcn-sardegna
+OBS dpcn-sicilia
+  dpcn-sicilia 2025-06-15 00:00..23:59: HTTP 502, splitting at 12:00
+OBS dpcn-umbria
+OBS dpcn-veneto
+OBS agrmet
+OBS boa
+OBS claster
+OBS locali
+OBS simnbo
+OBS simnpr
+OBS spdsra
+OBS urbane
+OBS open-trentino
+OBS sir-toscana
+OBS mnw
+SEA ww3
+RAD radar_sri_dpc
+OBS arpafvg
+OBS marefe
+FOR ICON_2I_ASSIM_all2km
+FOR ICON_2I_ASSIM_ita2km
+FOR ICON_2I_FCENS
+FOR ICON_2I_all2km
+FOR ICON_2I_ita2km
+SEA shyfem
+SEA swan-ita
+SEA swan-med
+RAD radar_dpc
+/home/luca-monaco/meteohub_fetch/meteohub_inventory.py:296: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  t = t[t != np.datetime64("NaT")].astype("datetime64[s]")
+
+Written to docs/meteohub/inventory

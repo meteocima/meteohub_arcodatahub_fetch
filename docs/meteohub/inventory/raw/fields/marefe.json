@@ -1,0 +1,261 @@
+{
+ "items": {
+  "summarystats": {
+   "c": 21993,
+   "s": 5234553,
+   "b": [
+    2026,
+    6,
+    21,
+    8,
+    0,
+    0
+   ],
+   "e": [
+    2026,
+    10,
+    13,
+    15,
+    50,
+    0
+   ]
+  },
+  "network": [
+   {
+    "code": "marefe",
+    "desc": "marefe",
+    "longdesc": "ER - MAREFE - Meteorological and oceanographic data from stations of Northern Adriatic - Catalogue integration carried out within the framework of the AdriaClimPlus project"
+   }
+  ],
+  "product": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11209",
+    "desc": "Persistent wind gust speed"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13080",
+    "desc": "WATER PH"
+   },
+   {
+    "code": "B13081",
+    "desc": "WATER CONDUCTIVITY"
+   },
+   {
+    "code": "B13083",
+    "desc": "DISSOLVED OXYGEN"
+   },
+   {
+    "code": "B13084",
+    "desc": "TURBIDITY"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   },
+   {
+    "code": "B13231",
+    "desc": "Ossigeno disciolto sat"
+   },
+   {
+    "code": "B22037",
+    "desc": "Tidal elevation with respect to national land datum"
+   },
+   {
+    "code": "B22043",
+    "desc": "SEA/WATER TEMPERATURE"
+   },
+   {
+    "code": "B22062",
+    "desc": "SALINITY"
+   }
+  ],
+  "level": [
+   {
+    "code": "1,0,0,0",
+    "desc": "Ground or water surface"
+   },
+   {
+    "code": "101,0,0,0",
+    "desc": "Mean sea level"
+   },
+   {
+    "code": "103,2000,0,0",
+    "desc": "2.000m above ground"
+   },
+   {
+    "code": "103,10000,0,0",
+    "desc": "10.000m above ground"
+   },
+   {
+    "code": "160,1000,0,0",
+    "desc": "1.000m below sea level"
+   }
+  ],
+  "timerange": [
+   {
+    "code": "0,0,600",
+    "desc": "Average over 10m at forecast time 0"
+   },
+   {
+    "code": "0,0,900",
+    "desc": "Average over 15m at forecast time 0"
+   },
+   {
+    "code": "0,0,3600",
+    "desc": "Average over 1h at forecast time 0"
+   },
+   {
+    "code": "0,0,86400",
+    "desc": "Average over 1d at forecast time 0"
+   },
+   {
+    "code": "1,0,900",
+    "desc": "Accumulation over 15m at forecast time 0"
+   },
+   {
+    "code": "2,0,900",
+    "desc": "Maximum over 15m at forecast time 0"
+   },
+   {
+    "code": "2,0,3600",
+    "desc": "Maximum over 1h at forecast time 0"
+   },
+   {
+    "code": "2,0,86400",
+    "desc": "Maximum over 1d at forecast time 0"
+   },
+   {
+    "code": "3,0,900",
+    "desc": "Minimum over 15m at forecast time 0"
+   },
+   {
+    "code": "3,0,3600",
+    "desc": "Minimum over 1h at forecast time 0"
+   },
+   {
+    "code": "3,0,86400",
+    "desc": "Minimum over 1d at forecast time 0"
+   },
+   {
+    "code": "200,0,900",
+    "desc": "Vectorial mean over 15m at forecast time 0"
+   },
+   {
+    "code": "200,0,3600",
+    "desc": "Vectorial mean over 1h at forecast time 0"
+   },
+   {
+    "code": "201,0,86400",
+    "desc": "Mode over 1d at forecast time 0"
+   },
+   {
+    "code": "254,0,0",
+    "desc": "Analysis or observation, istantaneous value"
+   }
+  ],
+  "available_products": [
+   {
+    "code": "B10004",
+    "desc": "PRESSURE"
+   },
+   {
+    "code": "B11001",
+    "desc": "WIND DIRECTION"
+   },
+   {
+    "code": "B11002",
+    "desc": "WIND SPEED"
+   },
+   {
+    "code": "B11041",
+    "desc": "MAXIMUM WIND GUST SPEED"
+   },
+   {
+    "code": "B11209",
+    "desc": "Persistent wind gust speed"
+   },
+   {
+    "code": "B12101",
+    "desc": "TEMPERATURE/DRY-BULB TEMPERATURE"
+   },
+   {
+    "code": "B13003",
+    "desc": "RELATIVE HUMIDITY"
+   },
+   {
+    "code": "B13011",
+    "desc": "TOTAL PRECIPITATION / TOTAL WATER EQUIVALENT"
+   },
+   {
+    "code": "B13080",
+    "desc": "WATER PH"
+   },
+   {
+    "code": "B13081",
+    "desc": "WATER CONDUCTIVITY"
+   },
+   {
+    "code": "B13083",
+    "desc": "DISSOLVED OXYGEN"
+   },
+   {
+    "code": "B13084",
+    "desc": "TURBIDITY"
+   },
+   {
+    "code": "B13215",
+    "desc": "River level"
+   },
+   {
+    "code": "B13231",
+    "desc": "Ossigeno disciolto sat"
+   },
+   {
+    "code": "B22037",
+    "desc": "Tidal elevation with respect to national land datum"
+   },
+   {
+    "code": "B22043",
+    "desc": "SEA/WATER TEMPERATURE"
+   },
+   {
+    "code": "B22062",
+    "desc": "SALINITY"
+   }
+  ],
+  "all_licenses": [
+   {
+    "code": "CCBY_COMPLIANT",
+    "desc": "CCBY COMPLIANT"
+   }
+  ]
+ }
+}

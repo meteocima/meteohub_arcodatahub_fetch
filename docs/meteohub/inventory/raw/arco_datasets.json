@@ -1,0 +1,40 @@
+[
+ {
+  "id": "radar.zarr",
+  "name": "Italian Radar DPC SRI Archive",
+  "description": "Live-updated Weather Radar Surface Rainfall Intensity (SRI) Composite precipitation product, covering the Italian peninsula from 2010 until now.",
+  "category": "RAD",
+  "format": "zarr",
+  "source": "arco",
+  "bounding": "POLYGON((4.52 35.06, 20.48 35.06, 20.48 47.57, 4.52 47.57, 4.52 35.06))",
+  "attribution": "FBK-DPCN",
+  "attribution_description": "FBK in cooperation with the National Civil Protection Department",
+  "attribution_url": null,
+  "group_license": "CCBY-SA_COMPLIANT",
+  "group_license_description": "Group of licenses CC BY-SA compliant",
+  "license": "CCBY-SA4.0",
+  "license_description": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "is_public": true,
+  "authorized": true
+ },
+ {
+  "id": "ww3.zarr",
+  "name": "WW3 MEDITA",
+  "description": "WW3 sea wave model, forecast range +72h, run 00 UTC, Mediterranean domain: 46°N, 30°N, 7°W, 36°E ; experimental distribution in Zarr format",
+  "category": "SEA",
+  "format": "zarr",
+  "source": "arco",
+  "bounding": "POLYGON((-7.0 30.0, 36.0 30.0, 36.0 46.0, -7.0 46.0, -7.0 30.0))",
+  "attribution": "ItaliaMeteo-ARPAE",
+  "attribution_description": "Agenzia ItaliaMeteo in cooperation with Arpae Emilia-Romagna Idro-Meteo-Clima Service",
+  "attribution_url": null,
+  "group_license": "CCBY_COMPLIANT",
+  "group_license_description": "Group of licenses CC BY compliant",
+  "license": "CCBY4.0",
+  "license_description": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+  "is_public": true,
+  "authorized": true
+ }
+]

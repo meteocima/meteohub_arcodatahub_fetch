@@ -1,0 +1,1844 @@
+{
+ "items": {
+  "summarystats": {
+   "b": [
+    2020,
+    10,
+    19,
+    14,
+    50,
+    0
+   ],
+   "e": [
+    2026,
+    2,
+    3,
+    9,
+    55,
+    0
+   ],
+   "c": 528175,
+   "s": 64552584653
+  },
+  "origin": [
+   {
+    "type": "origin",
+    "desc": "GRIB2 from 80, subcentre 65535, type Observation, background process 255, process 50",
+    "style": "GRIB2",
+    "centre": 80,
+    "subcentre": 65535,
+    "process_type": 8,
+    "background_process_id": 255,
+    "process_id": 50
+   }
+  ],
+  "product": [
+   {
+    "type": "product",
+    "desc": "Total precipitation rate (kg m-2 s-1)",
+    "style": "GRIB2",
+    "centre": 80,
+    "discipline": 0,
+    "category": 1,
+    "number": 52,
+    "table_version": 2,
+    "local_table_version": 0
+   }
+  ],
+  "level": [
+   {
+    "type": "level",
+    "desc": "sfc Ground or water surface 0 0 sfc Ground or water surface 0 0",
+    "style": "GRIB2D",
+    "l1": 1,
+    "scale1": 0,
+    "value1": 0,
+    "l2": 1,
+    "scale2": 0,
+    "value2": 0
+   }
+  ],
+  "timerange": [
+   {
+    "type": "timerange",
+    "desc": "Analysis or observation, istantaneous value",
+    "style": "Timedef",
+    "step_len": 0,
+    "step_unit": 13,
+    "stat_type": 254,
+    "stat_len": 0,
+    "stat_unit": 13
+   }
+  ],
+  "area": [
+   {
+    "type": "area",
+    "desc": "GRIB(Ni=1439, Nj=1153, latfirst=35071222, latlast=47843446, lonfirst=4528935, lonlast=20472041, tn=0)",
+    "style": "GRIB",
+    "value": {
+     "Ni": 1439,
+     "Nj": 1153,
+     "latfirst": 35071222,
+     "latlast": 47843446,
+     "lonfirst": 4528935,
+     "lonlast": 20472041,
+     "tn": 0
+    }
+   },
+   {
+    "type": "area",
+    "desc": "GRIB(tn=12)",
+    "style": "GRIB",
+    "value": {
+     "tn": 12
+    }
+   }
+  ],
+  "proddef": [
+   {
+    "type": "proddef",
+    "desc": "GRIB(tod=255)",
+    "style": "GRIB",
+    "value": {
+     "tod": 255
+    }
+   }
+  ],
+  "run": [
+   {
+    "type": "run",
+    "desc": "MINUTE(00:00)",
+    "style": "MINUTE",
+    "value": 0
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:05)",
+    "style": "MINUTE",
+    "value": 5
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:10)",
+    "style": "MINUTE",
+    "value": 10
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:15)",
+    "style": "MINUTE",
+    "value": 15
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:20)",
+    "style": "MINUTE",
+    "value": 20
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:25)",
+    "style": "MINUTE",
+    "value": 25
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:30)",
+    "style": "MINUTE",
+    "value": 30
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:35)",
+    "style": "MINUTE",
+    "value": 35
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:40)",
+    "style": "MINUTE",
+    "value": 40
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:45)",
+    "style": "MINUTE",
+    "value": 45
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:50)",
+    "style": "MINUTE",
+    "value": 50
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(00:55)",
+    "style": "MINUTE",
+    "value": 55
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:00)",
+    "style": "MINUTE",
+    "value": 60
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:05)",
+    "style": "MINUTE",
+    "value": 65
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:10)",
+    "style": "MINUTE",
+    "value": 70
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:15)",
+    "style": "MINUTE",
+    "value": 75
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:20)",
+    "style": "MINUTE",
+    "value": 80
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:25)",
+    "style": "MINUTE",
+    "value": 85
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:30)",
+    "style": "MINUTE",
+    "value": 90
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:35)",
+    "style": "MINUTE",
+    "value": 95
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:40)",
+    "style": "MINUTE",
+    "value": 100
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:45)",
+    "style": "MINUTE",
+    "value": 105
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:50)",
+    "style": "MINUTE",
+    "value": 110
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(01:55)",
+    "style": "MINUTE",
+    "value": 115
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:00)",
+    "style": "MINUTE",
+    "value": 120
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:05)",
+    "style": "MINUTE",
+    "value": 125
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:10)",
+    "style": "MINUTE",
+    "value": 130
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:15)",
+    "style": "MINUTE",
+    "value": 135
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:20)",
+    "style": "MINUTE",
+    "value": 140
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:25)",
+    "style": "MINUTE",
+    "value": 145
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:30)",
+    "style": "MINUTE",
+    "value": 150
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:35)",
+    "style": "MINUTE",
+    "value": 155
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:40)",
+    "style": "MINUTE",
+    "value": 160
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:45)",
+    "style": "MINUTE",
+    "value": 165
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:50)",
+    "style": "MINUTE",
+    "value": 170
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(02:55)",
+    "style": "MINUTE",
+    "value": 175
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:00)",
+    "style": "MINUTE",
+    "value": 180
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:05)",
+    "style": "MINUTE",
+    "value": 185
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:10)",
+    "style": "MINUTE",
+    "value": 190
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:15)",
+    "style": "MINUTE",
+    "value": 195
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:20)",
+    "style": "MINUTE",
+    "value": 200
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:25)",
+    "style": "MINUTE",
+    "value": 205
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:30)",
+    "style": "MINUTE",
+    "value": 210
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:35)",
+    "style": "MINUTE",
+    "value": 215
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:40)",
+    "style": "MINUTE",
+    "value": 220
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:45)",
+    "style": "MINUTE",
+    "value": 225
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:50)",
+    "style": "MINUTE",
+    "value": 230
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(03:55)",
+    "style": "MINUTE",
+    "value": 235
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:00)",
+    "style": "MINUTE",
+    "value": 240
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:05)",
+    "style": "MINUTE",
+    "value": 245
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:10)",
+    "style": "MINUTE",
+    "value": 250
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:15)",
+    "style": "MINUTE",
+    "value": 255
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:20)",
+    "style": "MINUTE",
+    "value": 260
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:25)",
+    "style": "MINUTE",
+    "value": 265
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:30)",
+    "style": "MINUTE",
+    "value": 270
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:35)",
+    "style": "MINUTE",
+    "value": 275
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:40)",
+    "style": "MINUTE",
+    "value": 280
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:45)",
+    "style": "MINUTE",
+    "value": 285
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:50)",
+    "style": "MINUTE",
+    "value": 290
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(04:55)",
+    "style": "MINUTE",
+    "value": 295
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:00)",
+    "style": "MINUTE",
+    "value": 300
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:05)",
+    "style": "MINUTE",
+    "value": 305
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:10)",
+    "style": "MINUTE",
+    "value": 310
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:15)",
+    "style": "MINUTE",
+    "value": 315
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:20)",
+    "style": "MINUTE",
+    "value": 320
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:25)",
+    "style": "MINUTE",
+    "value": 325
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:30)",
+    "style": "MINUTE",
+    "value": 330
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:35)",
+    "style": "MINUTE",
+    "value": 335
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:40)",
+    "style": "MINUTE",
+    "value": 340
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:45)",
+    "style": "MINUTE",
+    "value": 345
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:50)",
+    "style": "MINUTE",
+    "value": 350
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(05:55)",
+    "style": "MINUTE",
+    "value": 355
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:00)",
+    "style": "MINUTE",
+    "value": 360
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:05)",
+    "style": "MINUTE",
+    "value": 365
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:10)",
+    "style": "MINUTE",
+    "value": 370
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:15)",
+    "style": "MINUTE",
+    "value": 375
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:20)",
+    "style": "MINUTE",
+    "value": 380
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:25)",
+    "style": "MINUTE",
+    "value": 385
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:30)",
+    "style": "MINUTE",
+    "value": 390
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:35)",
+    "style": "MINUTE",
+    "value": 395
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:40)",
+    "style": "MINUTE",
+    "value": 400
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:45)",
+    "style": "MINUTE",
+    "value": 405
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:50)",
+    "style": "MINUTE",
+    "value": 410
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(06:55)",
+    "style": "MINUTE",
+    "value": 415
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:00)",
+    "style": "MINUTE",
+    "value": 420
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:05)",
+    "style": "MINUTE",
+    "value": 425
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:10)",
+    "style": "MINUTE",
+    "value": 430
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:15)",
+    "style": "MINUTE",
+    "value": 435
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:20)",
+    "style": "MINUTE",
+    "value": 440
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:25)",
+    "style": "MINUTE",
+    "value": 445
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:30)",
+    "style": "MINUTE",
+    "value": 450
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:35)",
+    "style": "MINUTE",
+    "value": 455
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:40)",
+    "style": "MINUTE",
+    "value": 460
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:45)",
+    "style": "MINUTE",
+    "value": 465
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:50)",
+    "style": "MINUTE",
+    "value": 470
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(07:55)",
+    "style": "MINUTE",
+    "value": 475
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:00)",
+    "style": "MINUTE",
+    "value": 480
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:05)",
+    "style": "MINUTE",
+    "value": 485
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:10)",
+    "style": "MINUTE",
+    "value": 490
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:15)",
+    "style": "MINUTE",
+    "value": 495
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:20)",
+    "style": "MINUTE",
+    "value": 500
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:25)",
+    "style": "MINUTE",
+    "value": 505
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:30)",
+    "style": "MINUTE",
+    "value": 510
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:35)",
+    "style": "MINUTE",
+    "value": 515
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:40)",
+    "style": "MINUTE",
+    "value": 520
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:45)",
+    "style": "MINUTE",
+    "value": 525
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:50)",
+    "style": "MINUTE",
+    "value": 530
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(08:55)",
+    "style": "MINUTE",
+    "value": 535
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:00)",
+    "style": "MINUTE",
+    "value": 540
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:05)",
+    "style": "MINUTE",
+    "value": 545
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:10)",
+    "style": "MINUTE",
+    "value": 550
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:15)",
+    "style": "MINUTE",
+    "value": 555
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:20)",
+    "style": "MINUTE",
+    "value": 560
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:25)",
+    "style": "MINUTE",
+    "value": 565
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:30)",
+    "style": "MINUTE",
+    "value": 570
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:35)",
+    "style": "MINUTE",
+    "value": 575
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:40)",
+    "style": "MINUTE",
+    "value": 580
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:45)",
+    "style": "MINUTE",
+    "value": 585
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:50)",
+    "style": "MINUTE",
+    "value": 590
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(09:55)",
+    "style": "MINUTE",
+    "value": 595
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:00)",
+    "style": "MINUTE",
+    "value": 600
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:05)",
+    "style": "MINUTE",
+    "value": 605
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:10)",
+    "style": "MINUTE",
+    "value": 610
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:15)",
+    "style": "MINUTE",
+    "value": 615
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:20)",
+    "style": "MINUTE",
+    "value": 620
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:25)",
+    "style": "MINUTE",
+    "value": 625
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:30)",
+    "style": "MINUTE",
+    "value": 630
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:35)",
+    "style": "MINUTE",
+    "value": 635
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:40)",
+    "style": "MINUTE",
+    "value": 640
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:45)",
+    "style": "MINUTE",
+    "value": 645
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:50)",
+    "style": "MINUTE",
+    "value": 650
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(10:55)",
+    "style": "MINUTE",
+    "value": 655
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:00)",
+    "style": "MINUTE",
+    "value": 660
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:05)",
+    "style": "MINUTE",
+    "value": 665
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:10)",
+    "style": "MINUTE",
+    "value": 670
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:15)",
+    "style": "MINUTE",
+    "value": 675
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:20)",
+    "style": "MINUTE",
+    "value": 680
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:25)",
+    "style": "MINUTE",
+    "value": 685
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:30)",
+    "style": "MINUTE",
+    "value": 690
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:35)",
+    "style": "MINUTE",
+    "value": 695
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:40)",
+    "style": "MINUTE",
+    "value": 700
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:45)",
+    "style": "MINUTE",
+    "value": 705
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:50)",
+    "style": "MINUTE",
+    "value": 710
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(11:55)",
+    "style": "MINUTE",
+    "value": 715
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:00)",
+    "style": "MINUTE",
+    "value": 720
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:05)",
+    "style": "MINUTE",
+    "value": 725
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:10)",
+    "style": "MINUTE",
+    "value": 730
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:15)",
+    "style": "MINUTE",
+    "value": 735
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:20)",
+    "style": "MINUTE",
+    "value": 740
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:25)",
+    "style": "MINUTE",
+    "value": 745
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:30)",
+    "style": "MINUTE",
+    "value": 750
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:35)",
+    "style": "MINUTE",
+    "value": 755
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:40)",
+    "style": "MINUTE",
+    "value": 760
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:45)",
+    "style": "MINUTE",
+    "value": 765
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:50)",
+    "style": "MINUTE",
+    "value": 770
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(12:55)",
+    "style": "MINUTE",
+    "value": 775
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:00)",
+    "style": "MINUTE",
+    "value": 780
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:05)",
+    "style": "MINUTE",
+    "value": 785
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:10)",
+    "style": "MINUTE",
+    "value": 790
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:15)",
+    "style": "MINUTE",
+    "value": 795
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:20)",
+    "style": "MINUTE",
+    "value": 800
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:25)",
+    "style": "MINUTE",
+    "value": 805
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:30)",
+    "style": "MINUTE",
+    "value": 810
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:35)",
+    "style": "MINUTE",
+    "value": 815
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:40)",
+    "style": "MINUTE",
+    "value": 820
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:45)",
+    "style": "MINUTE",
+    "value": 825
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:50)",
+    "style": "MINUTE",
+    "value": 830
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(13:55)",
+    "style": "MINUTE",
+    "value": 835
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:00)",
+    "style": "MINUTE",
+    "value": 840
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:05)",
+    "style": "MINUTE",
+    "value": 845
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:10)",
+    "style": "MINUTE",
+    "value": 850
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:15)",
+    "style": "MINUTE",
+    "value": 855
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:20)",
+    "style": "MINUTE",
+    "value": 860
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:25)",
+    "style": "MINUTE",
+    "value": 865
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:30)",
+    "style": "MINUTE",
+    "value": 870
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:35)",
+    "style": "MINUTE",
+    "value": 875
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:40)",
+    "style": "MINUTE",
+    "value": 880
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:45)",
+    "style": "MINUTE",
+    "value": 885
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:50)",
+    "style": "MINUTE",
+    "value": 890
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(14:55)",
+    "style": "MINUTE",
+    "value": 895
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:00)",
+    "style": "MINUTE",
+    "value": 900
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:05)",
+    "style": "MINUTE",
+    "value": 905
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:10)",
+    "style": "MINUTE",
+    "value": 910
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:15)",
+    "style": "MINUTE",
+    "value": 915
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:20)",
+    "style": "MINUTE",
+    "value": 920
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:25)",
+    "style": "MINUTE",
+    "value": 925
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:30)",
+    "style": "MINUTE",
+    "value": 930
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:35)",
+    "style": "MINUTE",
+    "value": 935
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:40)",
+    "style": "MINUTE",
+    "value": 940
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:45)",
+    "style": "MINUTE",
+    "value": 945
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:50)",
+    "style": "MINUTE",
+    "value": 950
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(15:55)",
+    "style": "MINUTE",
+    "value": 955
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:00)",
+    "style": "MINUTE",
+    "value": 960
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:05)",
+    "style": "MINUTE",
+    "value": 965
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:10)",
+    "style": "MINUTE",
+    "value": 970
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:15)",
+    "style": "MINUTE",
+    "value": 975
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:20)",
+    "style": "MINUTE",
+    "value": 980
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:25)",
+    "style": "MINUTE",
+    "value": 985
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:30)",
+    "style": "MINUTE",
+    "value": 990
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:35)",
+    "style": "MINUTE",
+    "value": 995
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:40)",
+    "style": "MINUTE",
+    "value": 1000
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:45)",
+    "style": "MINUTE",
+    "value": 1005
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:50)",
+    "style": "MINUTE",
+    "value": 1010
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(16:55)",
+    "style": "MINUTE",
+    "value": 1015
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:00)",
+    "style": "MINUTE",
+    "value": 1020
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:05)",
+    "style": "MINUTE",
+    "value": 1025
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:10)",
+    "style": "MINUTE",
+    "value": 1030
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:15)",
+    "style": "MINUTE",
+    "value": 1035
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:20)",
+    "style": "MINUTE",
+    "value": 1040
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:25)",
+    "style": "MINUTE",
+    "value": 1045
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:30)",
+    "style": "MINUTE",
+    "value": 1050
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:35)",
+    "style": "MINUTE",
+    "value": 1055
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:40)",
+    "style": "MINUTE",
+    "value": 1060
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:45)",
+    "style": "MINUTE",
+    "value": 1065
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:50)",
+    "style": "MINUTE",
+    "value": 1070
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(17:55)",
+    "style": "MINUTE",
+    "value": 1075
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:00)",
+    "style": "MINUTE",
+    "value": 1080
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:05)",
+    "style": "MINUTE",
+    "value": 1085
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:10)",
+    "style": "MINUTE",
+    "value": 1090
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:15)",
+    "style": "MINUTE",
+    "value": 1095
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:20)",
+    "style": "MINUTE",
+    "value": 1100
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:25)",
+    "style": "MINUTE",
+    "value": 1105
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:30)",
+    "style": "MINUTE",
+    "value": 1110
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:35)",
+    "style": "MINUTE",
+    "value": 1115
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:40)",
+    "style": "MINUTE",
+    "value": 1120
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:45)",
+    "style": "MINUTE",
+    "value": 1125
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:50)",
+    "style": "MINUTE",
+    "value": 1130
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(18:55)",
+    "style": "MINUTE",
+    "value": 1135
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:00)",
+    "style": "MINUTE",
+    "value": 1140
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:05)",
+    "style": "MINUTE",
+    "value": 1145
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:10)",
+    "style": "MINUTE",
+    "value": 1150
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:15)",
+    "style": "MINUTE",
+    "value": 1155
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:20)",
+    "style": "MINUTE",
+    "value": 1160
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:25)",
+    "style": "MINUTE",
+    "value": 1165
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:30)",
+    "style": "MINUTE",
+    "value": 1170
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:35)",
+    "style": "MINUTE",
+    "value": 1175
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:40)",
+    "style": "MINUTE",
+    "value": 1180
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:45)",
+    "style": "MINUTE",
+    "value": 1185
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:50)",
+    "style": "MINUTE",
+    "value": 1190
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(19:55)",
+    "style": "MINUTE",
+    "value": 1195
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:00)",
+    "style": "MINUTE",
+    "value": 1200
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:05)",
+    "style": "MINUTE",
+    "value": 1205
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:10)",
+    "style": "MINUTE",
+    "value": 1210
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:15)",
+    "style": "MINUTE",
+    "value": 1215
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:20)",
+    "style": "MINUTE",
+    "value": 1220
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:25)",
+    "style": "MINUTE",
+    "value": 1225
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:30)",
+    "style": "MINUTE",
+    "value": 1230
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:35)",
+    "style": "MINUTE",
+    "value": 1235
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:40)",
+    "style": "MINUTE",
+    "value": 1240
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:45)",
+    "style": "MINUTE",
+    "value": 1245
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:50)",
+    "style": "MINUTE",
+    "value": 1250
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(20:55)",
+    "style": "MINUTE",
+    "value": 1255
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:00)",
+    "style": "MINUTE",
+    "value": 1260
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:05)",
+    "style": "MINUTE",
+    "value": 1265
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:10)",
+    "style": "MINUTE",
+    "value": 1270
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:15)",
+    "style": "MINUTE",
+    "value": 1275
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:20)",
+    "style": "MINUTE",
+    "value": 1280
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:25)",
+    "style": "MINUTE",
+    "value": 1285
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:30)",
+    "style": "MINUTE",
+    "value": 1290
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:35)",
+    "style": "MINUTE",
+    "value": 1295
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:40)",
+    "style": "MINUTE",
+    "value": 1300
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:45)",
+    "style": "MINUTE",
+    "value": 1305
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:50)",
+    "style": "MINUTE",
+    "value": 1310
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(21:55)",
+    "style": "MINUTE",
+    "value": 1315
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:00)",
+    "style": "MINUTE",
+    "value": 1320
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:05)",
+    "style": "MINUTE",
+    "value": 1325
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:10)",
+    "style": "MINUTE",
+    "value": 1330
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:15)",
+    "style": "MINUTE",
+    "value": 1335
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:20)",
+    "style": "MINUTE",
+    "value": 1340
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:25)",
+    "style": "MINUTE",
+    "value": 1345
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:30)",
+    "style": "MINUTE",
+    "value": 1350
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:35)",
+    "style": "MINUTE",
+    "value": 1355
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:40)",
+    "style": "MINUTE",
+    "value": 1360
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:45)",
+    "style": "MINUTE",
+    "value": 1365
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:50)",
+    "style": "MINUTE",
+    "value": 1370
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(22:55)",
+    "style": "MINUTE",
+    "value": 1375
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:00)",
+    "style": "MINUTE",
+    "value": 1380
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:05)",
+    "style": "MINUTE",
+    "value": 1385
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:10)",
+    "style": "MINUTE",
+    "value": 1390
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:15)",
+    "style": "MINUTE",
+    "value": 1395
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:20)",
+    "style": "MINUTE",
+    "value": 1400
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:25)",
+    "style": "MINUTE",
+    "value": 1405
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:30)",
+    "style": "MINUTE",
+    "value": 1410
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:35)",
+    "style": "MINUTE",
+    "value": 1415
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:40)",
+    "style": "MINUTE",
+    "value": 1420
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:45)",
+    "style": "MINUTE",
+    "value": 1425
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:50)",
+    "style": "MINUTE",
+    "value": 1430
+   },
+   {
+    "type": "run",
+    "desc": "MINUTE(23:55)",
+    "style": "MINUTE",
+    "value": 1435
+   }
+  ]
+ },
+ "descriptions": {
+  "leveltypes": [
+   "sfc Ground or water surface 0 0 sfc Ground or water"
+  ],
+  "timerangetypes": []
+ }
+}
