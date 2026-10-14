@@ -1,7 +1,7 @@
 """MeteoHub client: bearer login, token renewal, retries, gateway-timeout splitting (CONTEXT.md, "MeteoHub")."""
 
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -16,23 +16,37 @@ FINESTRA_MINIMA = timedelta(hours=1)  # windows that still fail with 5xx are not
 
 
 class MeteoHub:
-    def __init__(self, username: Optional[str] = None, password: Optional[str] = None) -> None:
+    def __init__(self, username: Optional[str] = None, password: Optional[str] = None,
+                 registro: Optional[List[Dict[str, Any]]] = None) -> None:
+        """registro, if given, gets one row per HTTP attempt (meteohub_inventory.py writes it to api_calls.csv)."""
+        self.http = requests
+        self.registro = registro
         self.username = username or mh.USERNAME
         self.password = password or mh.PASSWORD
         if not self.username or not self.password:
             raise SystemExit("Imposta METEOHUB_USERNAME/METEOHUB_PASSWORD (per esempio in ~/.config/meteohub.env).")
         self.token = mh.login(self.username, self.password)
 
-    def _get(self, path: str, params: Dict[str, Any]) -> requests.Response:
-        for tentativo, attesa in enumerate(ATTESE + [None], 1):
+    def _get(self, path: str, params: Dict[str, Any], tentativi: int = len(ATTESE) + 1) -> requests.Response:
+        """GET with token renewal on 401; 5xx answers and network errors are retried up to tentativi times in all."""
+        attese = ATTESE[:tentativi - 1] + [None]
+        for tentativo, attesa in enumerate(attese, 1):
+            riga = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "path": path,
+                    "dataset": params.get("networks") or params.get("datasets") or "", "q": params.get("q", ""),
+                    "attempt": tentativo, "read_timeout_s": 300}
+            if self.registro is not None:
+                self.registro.append(riga)
+            t0 = time.time()
             try:
-                r = requests.get(f"{mh.BASE}{path}", params=params, headers=mh.auth_headers(self.token), timeout=(30, 300))
+                r = self.http.get(f"{mh.BASE}{path}", params=params, headers=mh.auth_headers(self.token), timeout=(30, 300))
+                riga.update(status=r.status_code, seconds=round(time.time() - t0, 1), bytes=len(r.content))
                 if r.status_code == 401:
                     self.token = mh.login(self.username, self.password)
                     continue
                 if r.status_code < 500 or attesa is None:
                     return r
-            except requests.RequestException:
+            except requests.RequestException as exc:
+                riga.update(status=0, seconds=round(time.time() - t0, 1), error=type(exc).__name__)
                 if attesa is None:
                     raise
             print(f"  {path}: tentativo {tentativo} fallito, riprovo tra {attesa} s", flush=True)
@@ -45,23 +59,43 @@ class MeteoHub:
         r.raise_for_status()
         return r.json()["key"]
 
-    def osservazioni(self, rete: str, inizio: datetime, fine: datetime, rettangolo: Tuple[float, float, float, float]) -> Dict[str, Any]:
-        """/api/observations of one network in [inizio, fine] (UTC, at most 10 days) inside the rectangle.
+    def osservazioni(self, rete: str, inizio: datetime, fine: datetime,
+                     rettangolo: Optional[Tuple[float, float, float, float]] = None,
+                     errori: Optional[List[str]] = None) -> Dict[str, Any]:
+        """/api/observations of one network in [inizio, fine] (UTC, at most 10 days), inside the rectangle if given.
 
-        A window the gateway gives up on (5xx) is split in two down to one hour and the answers are joined.
+        A window the gateway gives up on (5xx or no answer) is split in two down to one hour and the answers are
+        joined. A window that still fails raises, or, with an errori list, is appended to it and left empty.
         """
-        lonmin, latmin, lonmax, latmax = rettangolo
         q = f"reftime: >={inizio:%Y-%m-%d %H:%M},<={fine:%Y-%m-%d %H:%M};license:{LICENZA}"
-        r = self._get("/api/observations", {"networks": rete, "q": q,
-                                            "lonmin": lonmin, "latmin": latmin, "lonmax": lonmax, "latmax": latmax})
-        if r.status_code == 200:
-            return r.json() if r.content else {"data": []}
-        if r.status_code >= 500 and fine - inizio >= 2 * FINESTRA_MINIMA:
+        params: Dict[str, Any] = {"networks": rete, "q": q, "reliabilityCheck": "true"}  # else every value has rel=1
+        if rettangolo:
+            params.update(zip(("lonmin", "latmin", "lonmax", "latmax"), rettangolo))
+        divisibile = fine - inizio >= 2 * FINESTRA_MINIMA
+        try:
+            r = self._get("/api/observations", params, tentativi=1 if divisibile else len(ATTESE) + 1)
+            stato = r.status_code
+        except requests.RequestException:
+            if not divisibile and errori is None:
+                raise
+            r, stato = None, 0
+        if self.registro:
+            self.registro[-1]["window_h"] = round((fine - inizio).total_seconds() / 3600, 2)
+        if stato == 200:
+            risposta = r.json() if r.content else {"data": []}
+            if self.registro:
+                self.registro[-1]["n_stations"] = len(risposta.get("data", []))
+            return risposta
+        if (stato >= 500 or stato == 0) and divisibile:
             meta = (inizio + (fine - inizio) / 2).replace(minute=0, second=0, microsecond=0)
-            a = self.osservazioni(rete, inizio, meta - timedelta(minutes=1), rettangolo)
-            b = self.osservazioni(rete, meta, fine, rettangolo)
+            print(f"  {rete} {inizio:%Y-%m-%d %H:%M}..{fine:%H:%M}: HTTP {stato}, divido alle {meta:%H:%M}", flush=True)
+            a = self.osservazioni(rete, inizio, meta - timedelta(minutes=1), rettangolo, errori)
+            b = self.osservazioni(rete, meta, fine, rettangolo, errori)
             return {"data": a.get("data", []) + b.get("data", [])}
-        r.raise_for_status()
+        if errori is None:
+            r.raise_for_status()
+            return {"data": []}
+        errori.append(f"{inizio:%Y-%m-%d %H:%M}..{fine:%H:%M}: {stato} {(r.text if r is not None else 'nessuna risposta')[:150]}")
         return {"data": []}
 
     # --- extractions (/api/data), used by meteohub.modelli ---

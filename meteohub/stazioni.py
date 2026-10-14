@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import meteohub_download as mh
-import meteohub_stations as ms
 from meteohub.area import Area
 from meteohub.uscite import campioni_attesi, coperta, nome_file
 
@@ -68,6 +67,27 @@ COLONNE_ORARIE = ["rete", "stazione", "lat", "lon", "tempo", "prec_1h", "passo_p
                   "n_temp_c", "n_rh", "n_wsp", "n_wdir"]
 
 
+def passo_cumulata(elaborazione: Optional[str]) -> Optional[int]:
+    """Accumulation step in seconds of a precipitation timerange ("1,0,300" -> 300), None if it is not one of PREC_STEPS_S."""
+    parti = (elaborazione or "").split(",")
+    if len(parti) == 3 and parti[0] == "1" and parti[2].isdigit() and int(parti[2]) in mh.PREC_STEPS_S:
+        return int(parti[2])
+    return None
+
+
+def somma_oraria(valori: Dict[datetime, float], passo_s: int) -> Dict[datetime, float]:
+    """Totals over the hour ending at HH:00 from accumulations of passo_s seconds, only for hours with every step."""
+    if passo_s == 3600:
+        return {t: v for t, v in valori.items() if t.minute == 0}
+    n, passo = 3600 // passo_s, timedelta(seconds=passo_s)
+    out = {}
+    for h in {_ora_che_termina(t) for t in valori}:
+        parti = [valori.get(h - i * passo) for i in range(n)]
+        if all(p is not None for p in parti):
+            out[h] = round(sum(parti), 2)
+    return out
+
+
 def _t(tempo: str) -> datetime:
     return datetime.strptime(tempo, "%Y-%m-%dT%H:%M:%SZ")
 
@@ -108,7 +128,7 @@ def righe_orarie(righe: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         ore: Dict[datetime, Dict[str, Any]] = defaultdict(dict)
         pioggia: Dict[int, Dict[datetime, float]] = defaultdict(dict)  # accumulation step (s) -> values
         for (var, lev, el), valori in serie.items():
-            passo = ms.prec_period(el) if var == "B13011" else None
+            passo = passo_cumulata(el) if var == "B13011" else None
             if passo:
                 pioggia[passo].update(valori)
                 for t in valori:
@@ -128,7 +148,7 @@ def righe_orarie(righe: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                         y = sum(math.cos(math.radians(d)) for d in vals)
                         ore[h]["wdir"] = round(math.degrees(math.atan2(x, y)) % 360, 1)
         for passo in sorted(pioggia, reverse=True):  # native hourly first, then the longest complete shorter step
-            for h, v in ms.hourly_precipitation(pioggia[passo], passo).items():
+            for h, v in somma_oraria(pioggia[passo], passo).items():
                 if "prec_1h" not in ore[h]:
                     ore[h].update(prec_1h=v, passo_prec_s=passo)
         for h in sorted(ore):

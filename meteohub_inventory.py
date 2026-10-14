@@ -33,6 +33,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import requests
 
 import meteohub_download as mh
+from meteohub.client import MeteoHub
 
 OUT = Path("docs/meteohub/inventory")
 # arkimet timedef units -> seconds
@@ -251,32 +252,9 @@ def ref_step_seconds(vals: List[Dict[str, Any]]) -> Optional[float]:
     return median(d) if d else None
 
 
-MIN_WINDOW = timedelta(hours=1)
-
-
-def fetch_observations(api: Api, net: str, w_start: datetime, w_end: datetime, license_: str) -> Tuple[List[Dict], List[str]]:
-    """Fetch a window; if the gateway gives up (5xx/timeout), split it in two down to MIN_WINDOW."""
-    q = f"reftime: >={w_start:%Y-%m-%d %H:%M},<={w_end:%Y-%m-%d %H:%M}"
-    if license_:
-        q += f";license:{license_}"
-    small = w_end - w_start < 2 * MIN_WINDOW
-    status, body = api.get("/api/observations", {"networks": net, "q": q}, read_timeout=300, attempts=2 if small else 1)
-    api.calls[-1]["window_h"] = round((w_end - w_start).total_seconds() / 3600, 2)
-    if status == 200 and isinstance(body, dict):
-        api.calls[-1]["n_stations"] = len(body.get("data", []))
-        return body.get("data", []), []
-    if (status >= 500 or status == 0) and not small:
-        mid = w_start + (w_end - w_start + timedelta(minutes=1)) / 2
-        mid = mid.replace(minute=0, second=0, microsecond=0)
-        print(f"  {net} {w_start:%Y-%m-%d %H:%M}..{w_end:%H:%M}: HTTP {status}, splitting at {mid:%H:%M}", flush=True)
-        a, ea = fetch_observations(api, net, w_start, mid - timedelta(minutes=1), license_)
-        b, eb = fetch_observations(api, net, mid, w_end, license_)
-        return a + b, ea + eb
-    return [], [f"{w_start:%Y-%m-%d %H:%M}..{w_end:%H:%M}: {status} {str(body)[:150]}"]
-
-
-def sample_network(api: Api, net: str, day: datetime, license_: str) -> Tuple[List[Dict], Dict, List[str]]:
-    data, errors = fetch_observations(api, net, day, day + timedelta(hours=23, minutes=59), license_)
+def sample_network(obs: MeteoHub, net: str, day: datetime) -> Tuple[List[Dict], Dict, List[str]]:
+    errors: List[str] = []  # windows still failing after splitting down to one hour
+    data = obs.osservazioni(net, day, day + timedelta(hours=23, minutes=59), errori=errors).get("data", [])
 
     # merge the pieces station by station
     merged: Dict[Tuple, Dict[str, Any]] = {}
@@ -459,6 +437,7 @@ def main() -> None:
     days = [datetime.strptime(d, "%Y-%m-%d") for d in (args.sample_day or [yesterday])]
     raw = args.out_dir / "raw"
     api = Api(args.username, args.password, raw)
+    obs = MeteoHub(args.username, args.password, registro=api.calls)  # /api/observations, logged with the other calls
 
     _, specs = api.get("/api/specs", save="specs.json")
     _, quota = api.get("/api/hourly", save="hourly_quota.json")
@@ -504,9 +483,8 @@ def main() -> None:
             row["opendata_files"] = len(od) if isinstance(od, list) else f"{st2}"
 
         if ds["category"] == "OBS":
-            license_ = (row.get("licenses") or "").split(" ")[0]
             for day in days:
-                stations, products, errors = sample_network(api, ds["id"], day, license_)
+                stations, products, errors = sample_network(obs, ds["id"], day)
                 if errors:
                     row[f"sample_errors_{day:%Y%m%d}"] = " | ".join(errors)
                 if not stations:

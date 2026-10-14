@@ -11,7 +11,6 @@ from typing import Any, List, Optional, Tuple
 import numpy as np
 import requests
 
-from filter_provincia import point_in_ring
 
 Rettangolo = Tuple[float, float, float, float]  # lonmin, latmin, lonmax, latmax
 Anello = List[Tuple[float, float]]
@@ -82,7 +81,7 @@ class Area:
             return False
         if self.poligoni is None:
             return True
-        return any(point_in_ring(lon, lat, outer) and not any(point_in_ring(lon, lat, h) for h in holes)
+        return any(_in_anello(lon, lat, outer) and not any(_in_anello(lon, lat, h) for h in holes)
                    for outer, holes in self.poligoni)
 
     def maschera(self, lon: np.ndarray, lat: np.ndarray) -> np.ndarray:
@@ -98,6 +97,17 @@ class Area:
                 d &= ~_dentro_anello(lon, lat, buco)
             nel_poligono |= d
         return dentro & nel_poligono
+
+
+def _in_anello(lon: float, lat: float, anello: Anello) -> bool:
+    """Ray casting of one point against one ring of (lon, lat) vertices."""
+    dentro, j = False, len(anello) - 1
+    for i in range(len(anello)):
+        (xi, yi), (xj, yj) = anello[i][:2], anello[j][:2]
+        if (yi > lat) != (yj > lat) and lon < (xj - xi) * (lat - yi) / (yj - yi) + xi:
+            dentro = not dentro
+        j = i
+    return dentro
 
 
 def _dentro_anello(lon: np.ndarray, lat: np.ndarray, anello: Anello) -> np.ndarray:

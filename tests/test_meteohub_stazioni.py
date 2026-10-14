@@ -146,3 +146,33 @@ def test_a_failing_network_is_reported_and_retried_without_stopping_the_others(t
     fonte.chiamate.clear()
     scarica_stazioni(fonte, **args)
     assert fonte.chiamate == ["simnpr"]
+
+
+def pioggia(passo_min, primo, ultimo, mm, elaborazione=None):
+    """Long B13011 rows every passo_min minutes from primo to ultimo (HH:MM on 2026-10-10) at one Genoa station."""
+    t, fine = datetime.fromisoformat(f"2026-10-10T{primo}"), datetime.fromisoformat(f"2026-10-10T{ultimo}")
+    righe = []
+    while t <= fine:
+        righe.append({"rete": "dpcn-liguria", "stazione": "Genova", "lat": 44.4, "lon": 8.93,
+                      "tempo": t.strftime("%Y-%m-%dT%H:%M:%SZ"), "variabile": "B13011", "livello": "1,0,0,0",
+                      "elaborazione": elaborazione or f"1,0,{passo_min * 60}", "valore": mm, "affidabile": 1, "qc": ""})
+        t += timedelta(minutes=passo_min)
+    return righe
+
+
+def pioggia_oraria(righe):
+    return {r["tempo"]: r["prec_1h"] for r in righe_orarie(righe) if r["prec_1h"] != ""}
+
+
+def test_five_minute_rain_is_summed_into_the_hour_ending_at_hh00():
+    assert pioggia_oraria(pioggia(5, "09:05", "10:00", 0.2)) == {"2026-10-10T10:00:00Z": 2.4}
+
+
+def test_native_hourly_total_wins_over_the_sum_of_shorter_steps():
+    assert pioggia_oraria(pioggia(5, "09:05", "10:00", 0.2) + pioggia(60, "10:00", "10:00", 3.0)) == {"2026-10-10T10:00:00Z": 3.0}
+
+
+def test_an_hour_with_a_missing_step_has_no_total():
+    righe = [r for r in pioggia(15, "09:15", "11:00", 0.5) if r["tempo"] != "2026-10-10T10:45:00Z"]
+
+    assert pioggia_oraria(righe) == {"2026-10-10T10:00:00Z": 2.0}

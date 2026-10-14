@@ -1,68 +1,20 @@
 #!/usr/bin/env python3
 """Extract the stations of one Italian province from the merged MeteoHub CSV.
 
-Province boundaries: openpolis/geojson-italy (limits_IT_provinces.geojson).
+Province boundaries: openpolis/geojson-italy, through meteohub.area.
 """
 
 import argparse
 import csv
-import json
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple
-
-import requests
+from typing import Dict, Iterable, Iterator, List, Tuple
 
 import meteohub_download as mh
-
-PROVINCES_URL = (
-    "https://raw.githubusercontent.com/openpolis/geojson-italy/master/geojson/limits_IT_provinces.geojson"
-)
-PROVINCES_CACHE = Path("output") / "limits_IT_provinces.geojson"
+from meteohub.area import Area
 
 META_COLUMNS = ["dataset", "station_code", "station_name", "lat", "lon", "alt", "date"]
 PREC_COLUMNS = [f"prec_{step}s" for step in mh.PREC_STEPS_S]  # precipitation accumulated over each step, mm
 VAR_COLUMNS = ["temp_c", "rh", "wsp", "wdir"] + PREC_COLUMNS
-
-Ring = List[Tuple[float, float]]
-
-
-def load_province_rings(prov_acr: str) -> List[Tuple[Ring, List[Ring]]]:
-    if not PROVINCES_CACHE.exists():
-        PROVINCES_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        r = requests.get(PROVINCES_URL, timeout=60)
-        r.raise_for_status()
-        PROVINCES_CACHE.write_bytes(r.content)
-
-    data = json.loads(PROVINCES_CACHE.read_text(encoding="utf-8"))
-    feature = next(
-        (f for f in data["features"] if f["properties"].get("prov_acr") == prov_acr.upper()),
-        None,
-    )
-    if feature is None:
-        raise SystemExit(f"Province {prov_acr} not found in {PROVINCES_CACHE}")
-
-    geom = feature["geometry"]
-    polygons = geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
-    return [(poly[0], poly[1:]) for poly in polygons]
-
-
-def point_in_ring(lon: float, lat: float, ring: Ring) -> bool:
-    inside = False
-    j = len(ring) - 1
-    for i in range(len(ring)):
-        xi, yi = ring[i][0], ring[i][1]
-        xj, yj = ring[j][0], ring[j][1]
-        if (yi > lat) != (yj > lat) and lon < (xj - xi) * (lat - yi) / (yj - yi) + xi:
-            inside = not inside
-        j = i
-    return inside
-
-
-def point_in_province(lon: float, lat: float, rings: List[Tuple[Ring, List[Ring]]]) -> bool:
-    for outer, holes in rings:
-        if point_in_ring(lon, lat, outer) and not any(point_in_ring(lon, lat, h) for h in holes):
-            return True
-    return False
 
 
 def iter_rows(paths: List[Path]) -> Iterable[Dict[str, str]]:
@@ -73,6 +25,32 @@ def iter_rows(paths: List[Path]) -> Iterable[Dict[str, str]]:
 
 def has_any_value(row: Dict[str, str]) -> bool:
     return any(row.get(c) for c in ["temp", "rh", "wsp", "wdir"] + PREC_COLUMNS)
+
+
+def filtra(rows: Iterable[Dict[str, str]], area: Area) -> Iterator[Dict[str, str]]:
+    """Rows of the stations inside the area that have at least one value, with temp (K) converted to temp_c (°C)."""
+    inside_cache: Dict[Tuple[str, str], bool] = {}
+    for row in rows:
+        key = (row["lat"], row["lon"])
+        inside = inside_cache.get(key)
+        if inside is None:
+            try:
+                inside = area.contiene(float(row["lat"]), float(row["lon"]))
+            except ValueError:
+                inside = False
+            inside_cache[key] = inside
+        if not inside or not has_any_value(row):
+            continue
+        temp = row.get("temp")
+        out = {c: row.get(c, "") for c in META_COLUMNS}
+        out.update(
+            temp_c=f"{float(temp) - 273.15:.2f}" if temp else "",
+            rh=row.get("rh", ""),
+            wsp=row.get("wsp", ""),
+            wdir=row.get("wdir", ""),
+            **{c: row.get(c, "") for c in PREC_COLUMNS},
+        )
+        yield out
 
 
 def main() -> None:
@@ -89,13 +67,12 @@ def main() -> None:
     parser.add_argument("--name", default=None, help="Output file stem (default: first input stem)")
     args = parser.parse_args()
 
-    rings = load_province_rings(args.province)
+    area = Area.da_testo(f"provincia:{args.province}")
     out_dir = args.output_dir or Path("output") / f"provincia_{args.province.lower()}"
     out_dir.mkdir(parents=True, exist_ok=True)
     data_path = out_dir / f"{args.name or args.input[0].stem}_{args.province.upper()}.csv"
     stations_path = out_dir / f"stazioni_{args.province.upper()}.csv"
 
-    inside_cache: Dict[Tuple[str, str], bool] = {}
     stations: Dict[Tuple[str, str], Dict[str, object]] = {}
     written = 0
 
@@ -103,39 +80,19 @@ def main() -> None:
         writer = csv.DictWriter(fout, fieldnames=META_COLUMNS + VAR_COLUMNS)
         writer.writeheader()
 
-        for row in iter_rows(sorted(args.input)):
-            key = (row["lat"], row["lon"])
-            inside = inside_cache.get(key)
-            if inside is None:
-                try:
-                    inside = point_in_province(float(row["lon"]), float(row["lat"]), rings)
-                except ValueError:
-                    inside = False
-                inside_cache[key] = inside
-            if not inside or not has_any_value(row):
-                continue
-
-            temp = row.get("temp")
-            out = {c: row.get(c, "") for c in META_COLUMNS}
-            out.update(
-                temp_c=f"{float(temp) - 273.15:.2f}" if temp else "",
-                rh=row.get("rh", ""),
-                wsp=row.get("wsp", ""),
-                wdir=row.get("wdir", ""),
-                **{c: row.get(c, "") for c in PREC_COLUMNS},
-            )
+        for out in filtra(iter_rows(sorted(args.input)), area):
             writer.writerow(out)
             written += 1
 
             st = stations.setdefault(
-                (row["dataset"], row["station_code"]),
-                {c: row.get(c, "") for c in ("dataset", "station_code", "station_name", "lat", "lon", "alt")}
-                | {"n_rows": 0, "first": row["date"], "last": row["date"]}
+                (out["dataset"], out["station_code"]),
+                {c: out[c] for c in ("dataset", "station_code", "station_name", "lat", "lon", "alt")}
+                | {"n_rows": 0, "first": out["date"], "last": out["date"]}
                 | {f"n_{v}": 0 for v in VAR_COLUMNS},
             )
             st["n_rows"] += 1
-            st["first"] = min(st["first"], row["date"])
-            st["last"] = max(st["last"], row["date"])
+            st["first"] = min(st["first"], out["date"])
+            st["last"] = max(st["last"], out["date"])
             for v in VAR_COLUMNS:
                 if out[v]:
                     st[f"n_{v}"] += 1

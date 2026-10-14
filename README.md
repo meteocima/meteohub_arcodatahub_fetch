@@ -268,8 +268,8 @@ uv run python meteohub_stations.py --province MI --from 2025-01-01T00:00:00Z --t
 uv run python clean_and_hourly.py output_2025_MI/meteohub_20250101_20251231_MI.csv
 ```
 
-- Reti interrogate con `--networks` (predefinite `dpcn-lombardia,mnw`). Le stazioni trovate restano in `output_<anno>_<PROV>/stations_<PROV>.json`: per rifare la ricerca basta cancellare quel file.
-- `meteohub_<da>_<a>_<PROV>.csv`: `temp_c`, `rh`, `wsp`, `wdir` al passo nativo e `prec_1h`, la pioggia dell'ora che termina al timestamp (solo ore complete). `stazioni_<PROV>.csv`: elenco stazioni con il numero di dati per variabile. `raw/`: risposte per stazione e finestra, usate per riprendere.
+- È una scorciatoia di `meteohub_fetch.py stazioni` sull'area `provincia:<PROV>`, con le reti di `--networks` (predefinite `dpcn-lombardia,mnw`): nella stessa cartella trovi anche i file `osservazioni_`, `orario_`, `stazioni_` ed `errori_` del sottocomando e la sua cache `raw/`, usata per riprendere.
+- `meteohub_<da>_<a>_<PROV>.csv`: `temp_c`, `rh`, `wsp`, `wdir` al passo nativo e `prec_1h`, la pioggia dell'ora che termina al timestamp (solo ore complete); i valori che MeteoHub giudica non affidabili sono esclusi. La colonna `alt` resta vuota, perché le risposte per rete non hanno la quota. `stazioni_<PROV>.csv`: elenco stazioni con il numero di dati per variabile.
 - `clean_and_hourly.py` scrive `*_clean.csv`, con `temp_c` fuori da [-30, 45] °C svuotata, e `*_orario.csv`, con le medie orarie calcolate con almeno 2/3 dei valori attesi, `wdir` come media vettoriale e `prec_1h`.
 
 </details>
