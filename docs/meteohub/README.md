@@ -67,7 +67,7 @@ viene da prove dirette sull'API e dal codice di questo repository.
   Non ci sono reti per Abruzzo e Valle d'Aosta, né reti nazionali tipo SYNOP.
 - **La pioggia non ha un passo unico.** Il 2025-01-01, in `dpcn-liguria`, 153 stazioni danno la pioggia come cumulata
   a 5 minuti (`1,0,300`), 20 a 1 minuto e una sola come cumulata oraria. Chiedere solo `1,0,3600` fa quindi perdere quasi
-  tutte le stazioni. `meteohub_stations.py` considera 60, 600 e 3600 secondi, ma non 300.
+  tutte le stazioni. Ora `meteohub_stations.py` somma in ore tutti i passi elencati in `meteohub_download.PREC_STEPS_S` (1, 2, 3, 5, 10, 15, 30 e 60 min) e `meteohub_download.py` li chiede tutti, con una colonna per passo (`prec_300s`…). Verifica: `meteohub_stations.py --province GE --from 2026-10-10T00:00:00Z --to 2026-10-11T23:59:00Z --networks dpcn-liguria,mnw`, eseguito il 2026-10-14, dà la pioggia oraria per 62 stazioni `dpcn-liguria` su 63 (8 prima della correzione).
 - **Radar.** `radar_sri_dpc` (GRIB, arkimet) va solo dal 2026-01-28. L'archivio ARCO `radar.zarr`
   (FBK con DPC, CC BY-SA 4.0) contiene invece la variabile `RR` (mm/h) su una griglia 1400×1200 dal 2010 a oggi.
 - **Quota di estrazione: 10 richieste all'ora.** Con blocchi da 2 giorni, un anno di `meteohub_download.py` richiede

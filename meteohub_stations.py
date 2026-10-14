@@ -40,7 +40,6 @@ PRODUCTS = {
     ("B11001", "103,10000,0,0", "254,0,0"): "wdir",
 }
 PREC_VAR = "B13011"
-PREC_TRANGES = {"1,0,60": 60, "1,0,600": 600, "1,0,3600": 3600}
 
 COLUMNS = ["dataset", "station_name", "lat", "lon", "alt", "date", "temp_c", "rh", "wsp", "wdir", "prec_1h"]
 
@@ -178,6 +177,14 @@ def download_station(
     return paths
 
 
+def prec_period(trange: Optional[str]) -> Optional[int]:
+    """Accumulation step in seconds of a precipitation timerange ("1,0,300" -> 300), None if it is not one of PREC_STEPS_S."""
+    parts = (trange or "").split(",")
+    if len(parts) == 3 and parts[0] == "1" and parts[2].isdigit() and int(parts[2]) in mh.PREC_STEPS_S:
+        return int(parts[2])
+    return None
+
+
 def hourly_precipitation(values: Dict[datetime, float], period_s: int) -> Dict[datetime, float]:
     """Sum sub-hourly accumulations into totals over the hour ending at HH:00."""
     if period_s == 3600:
@@ -208,7 +215,7 @@ def build_station_rows(st: Dict[str, Any], paths: List[Path], start: datetime, e
             for prod in item.get("prod", []):
                 key = (prod["var"], prod.get("lev"), prod.get("trange"))
                 col = PRODUCTS.get(key)
-                period = PREC_TRANGES.get(prod.get("trange")) if prod["var"] == PREC_VAR else None
+                period = prec_period(prod.get("trange")) if prod["var"] == PREC_VAR else None
                 if not col and not period:
                     continue
                 for v in prod.get("val", []):
@@ -220,9 +227,9 @@ def build_station_rows(st: Dict[str, Any], paths: List[Path], start: datetime, e
                     else:
                         prec[period][t] = v["val"]
 
-    # Prefer native hourly totals, fill remaining hours from 10-minute data.
+    # Prefer native hourly totals, then the longest sub-hourly step that completes the hour.
     prec_1h: Dict[datetime, float] = {}
-    for period in sorted(PREC_TRANGES.values(), reverse=True):
+    for period in sorted(prec, reverse=True):
         for t, v in hourly_precipitation(prec.get(period, {}), period).items():
             prec_1h.setdefault(t, v)
     for t, v in prec_1h.items():
@@ -279,8 +286,8 @@ def main() -> None:
     )
     print(f"\n{len(stations)} stations in province {prov}", flush=True)
 
-    # Start 50 minutes early so the first hourly precipitation total is complete.
-    dl_start = start - timedelta(minutes=50)
+    # Start 59 minutes early so the first hourly precipitation total is complete even for 1-minute steps.
+    dl_start = start - timedelta(minutes=59)
     data_path = out_dir / f"meteohub_{start:%Y%m%d}_{end:%Y%m%d}_{prov}.csv"
     summary = []
     with data_path.open("w", newline="", encoding="utf-8") as f:

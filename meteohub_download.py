@@ -65,6 +65,11 @@ DATASET_NAMES = [
     "simnpr",
 ]
 
+# Precipitation (B13011) is accumulated over a different step in each network (dpcn-liguria 5 min,
+# sir-toscana 15 min, mnw 1 h...; steps seen 2021-2026 in docs/meteohub/catalogo/meteohub_osservazioni_variabili.csv).
+# Asking only 1,0,3600 drops most regional stations. Each step gets its own CSV column, prec_<step>s.
+PREC_STEPS_S = (60, 120, 180, 300, 600, 900, 1800, 3600)
+
 FILTERS = {
     "level": [
         {"code": "1,0,0,0", "desc": "Ground or water surface", "active": True},
@@ -90,11 +95,10 @@ FILTERS = {
             "desc": "Analysis or observation, istantaneous value",
             "active": True,
         },
-        {
-            "code": "1,0,3600",
-            "desc": "Accumulation over 1h at forecast time 0",
-            "active": True,
-        },
+        *(
+            {"code": f"1,0,{s}", "desc": f"Accumulation over {s // 60} min" if s < 3600 else "Accumulation over 1h", "active": True}
+            for s in PREC_STEPS_S
+        ),
     ],
 }
 
@@ -490,10 +494,10 @@ def flatten_vars_into_row(
 
         if is_metadata_entry and var in META_RENAME_MAP:
             row[META_RENAME_MAP[var]] = value
+        elif not is_metadata_entry and var == "B13011" and entry.get("timerange"):
+            row[f"prec_{entry['timerange'][2]}s"] = value
         elif not is_metadata_entry and var in DATA_RENAME_MAP:
             row[DATA_RENAME_MAP[var]] = value
-            if var == "B13011" and entry.get("timerange"):
-                row["prec_period_s"] = entry["timerange"][2]
 
 
 def convert_json_to_csv(json_path: Path, csv_path: Path) -> Path:

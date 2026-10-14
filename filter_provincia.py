@@ -12,13 +12,16 @@ from typing import Dict, Iterable, List, Tuple
 
 import requests
 
+import meteohub_download as mh
+
 PROVINCES_URL = (
     "https://raw.githubusercontent.com/openpolis/geojson-italy/master/geojson/limits_IT_provinces.geojson"
 )
 PROVINCES_CACHE = Path("output") / "limits_IT_provinces.geojson"
 
 META_COLUMNS = ["dataset", "station_code", "station_name", "lat", "lon", "alt", "date"]
-VAR_COLUMNS = ["temp_c", "rh", "wsp", "wdir", "prec", "prec_period_s"]
+PREC_COLUMNS = [f"prec_{step}s" for step in mh.PREC_STEPS_S]  # precipitation accumulated over each step, mm
+VAR_COLUMNS = ["temp_c", "rh", "wsp", "wdir"] + PREC_COLUMNS
 
 Ring = List[Tuple[float, float]]
 
@@ -69,7 +72,7 @@ def iter_rows(paths: List[Path]) -> Iterable[Dict[str, str]]:
 
 
 def has_any_value(row: Dict[str, str]) -> bool:
-    return any(row.get(c) for c in ("temp", "rh", "wsp", "wdir", "prec"))
+    return any(row.get(c) for c in ["temp", "rh", "wsp", "wdir"] + PREC_COLUMNS)
 
 
 def main() -> None:
@@ -119,8 +122,7 @@ def main() -> None:
                 rh=row.get("rh", ""),
                 wsp=row.get("wsp", ""),
                 wdir=row.get("wdir", ""),
-                prec=row.get("prec", ""),
-                prec_period_s=row.get("prec_period_s", "") if row.get("prec") else "",
+                **{c: row.get(c, "") for c in PREC_COLUMNS},
             )
             writer.writerow(out)
             written += 1
@@ -129,12 +131,12 @@ def main() -> None:
                 (row["dataset"], row["station_code"]),
                 {c: row.get(c, "") for c in ("dataset", "station_code", "station_name", "lat", "lon", "alt")}
                 | {"n_rows": 0, "first": row["date"], "last": row["date"]}
-                | {f"n_{v}": 0 for v in VAR_COLUMNS[:-1]},
+                | {f"n_{v}": 0 for v in VAR_COLUMNS},
             )
             st["n_rows"] += 1
             st["first"] = min(st["first"], row["date"])
             st["last"] = max(st["last"], row["date"])
-            for v in VAR_COLUMNS[:-1]:
+            for v in VAR_COLUMNS:
                 if out[v]:
                     st[f"n_{v}"] += 1
 
