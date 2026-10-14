@@ -271,7 +271,7 @@ uv run python filter_provincia.py --province MI --input output_test/csv/*.csv --
 - Il download riprende da dove si era fermato: i blocchi con il CSV già scritto si saltano, e una richiesta già presente sul server con lo stesso nome si riusa. `--force` riscarica tutto, `--cleanup-start` cancella prima le richieste rimaste sul server, `--keep-requests` non le cancella dopo il download.
 - Uscite: `<out-dir>/raw_json/`, `<out-dir>/csv/` (un CSV per blocco) e un CSV unito. La temperatura resta in kelvin; la pioggia ha una colonna per passo di cumulata (`prec_60s` … `prec_3600s`).
 - `filter_provincia.py` converte la temperatura in °C (`temp_c`) e scrive `stazioni_<PROV>.csv`. Non calcola `prec_1h`, quindi il suo output non si può dare a `clean_and_hourly.py`.
-- `run_meteohub_download_background.sh` lancia il download in background, ma ha percorsi scritti per una macchina macOS specifica e va adattato prima dell'uso.
+- `run_meteohub_download_background.sh` lancia `meteohub_download.py` in background con gli stessi argomenti (log in `meteohub_download.log`), caricando le credenziali da `~/.config/meteohub.env` se c'è.
 
 </details>
 

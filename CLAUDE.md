@@ -29,7 +29,7 @@ python3 tools/catalogo/resoconto.py                                       # docs
 uv run --with pytest pytest                                               # tests (tests/)
 ```
 
-`run_meteohub_download_background.sh` is hard-coded to another user's macOS machine (`/Users/andrea/...`, zsh, Homebrew uv); it needs adapting before use here.
+`run_meteohub_download_background.sh [args]` runs `meteohub_download.py` with those args under nohup from the repo folder (uv from PATH, credentials from `~/.config/meteohub.env` if present), appending to `meteohub_download.log`.
 
 ## Pipeline and architecture
 
