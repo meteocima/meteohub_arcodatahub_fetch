@@ -1,0 +1,1104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datasets - ArcoDataHub</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="/static/datasets/css/style.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+
+    
+</head>
+
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="/datasets/">
+                <span class="me-2">🌍</span>
+                <span>ArcoDataHub</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    
+                        <a class="btn btn-outline-light me-2" href="/datasets/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/datasets/">
+                            <i class="fas fa-database me-1"></i>Datasets
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/dashboard/">
+                            <i class="fas fa-table me-1"></i>Dashboard
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/getting-started/">
+                            <i class="fas fa-rocket me-1"></i>Getting Started
+                        </a>
+                        <a class="btn btn-light me-2" href="/datasets/login/">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a class="btn btn-light" href="/datasets/register/">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed navbar -->
+    <div style="height: 80px;"></div>
+
+    <!-- Messages with enhanced styling -->
+    <div class="container mt-4">
+        
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="container-main">
+            
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h1 class="text-gradient mb-2">
+            <i class="fas fa-database me-3"></i>Available Datasets
+        </h1>
+        <p class="text-muted">Explore our collection of live-updated ARCO datasets across diverse domains</p>
+    </div>
+</div>
+
+
+    <h3 class="text-gradient mb-4">
+        <i class="fas fa-layer-group me-2"></i>Collections
+    </h3>
+    <div class="row g-4 mb-5">
+        
+            
+<!-- Reusable Collection Card Component -->
+<div class="col-md-6 col-xl-3">
+    <div class="card h-100 border-0 shadow-custom">
+        <a href="/datasets/collections/italian-radar-dpc/" class="position-relative d-block">
+            
+                <img src="/static/datasets/images/thumbnails/collection-italian-radar-dpc.webp" class="card-img-top" alt="Italian Weather Radar (DPC)"
+                     style="aspect-ratio: 2 / 1; object-fit: cover;">
+                <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+            
+        </a>
+        <div class="card-body p-4 d-flex flex-column">
+            <h5 class="card-title mb-2">
+                <a href="/datasets/collections/italian-radar-dpc/" class="text-gradient text-decoration-none">
+                    Italian Weather Radar (DPC)
+                </a>
+            </h5>
+            <p class="card-text text-muted mb-3">Live-updated composite products from the Italian national weather radar network operated by the Department of Civil Protection (DPC): maximum reflectivity (VMI), surface rainfall intensity (SRI), …</p>
+            <div class="mt-auto">
+                <a href="/datasets/collections/italian-radar-dpc/" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-layer-group me-2"></i>12 datasets
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Collection Card Component -->
+<div class="col-md-6 col-xl-3">
+    <div class="card h-100 border-0 shadow-custom">
+        <a href="/datasets/collections/european-radar/" class="position-relative d-block">
+            
+                <img src="/static/datasets/images/thumbnails/collection-european-radar.webp" class="card-img-top" alt="European Weather Radar (OPERA + DPC)"
+                     style="aspect-ratio: 2 / 1; object-fit: cover;">
+                <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+            
+        </a>
+        <div class="card-body p-4 d-flex flex-column">
+            <h5 class="card-title mb-2">
+                <a href="/datasets/collections/european-radar/" class="text-gradient text-decoration-none">
+                    European Weather Radar (OPERA + DPC)
+                </a>
+            </h5>
+            <p class="card-text text-muted mb-3">Merged European radar mosaics combining the European Weather Radar Network (OPERA) with the Italian DPC network, covering the whole continent at 2 km / 5 …</p>
+            <div class="mt-auto">
+                <a href="/datasets/collections/european-radar/" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-layer-group me-2"></i>1 dataset
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Collection Card Component -->
+<div class="col-md-6 col-xl-3">
+    <div class="card h-100 border-0 shadow-custom">
+        <a href="/datasets/collections/forecasts/" class="position-relative d-block">
+            
+                <img src="/static/datasets/images/thumbnails/collection-forecasts.webp" class="card-img-top" alt="Weather Forecasts"
+                     style="aspect-ratio: 2 / 1; object-fit: cover;">
+                <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T00:00 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">12 h ago</span>
+</span>
+
+
+            
+        </a>
+        <div class="card-body p-4 d-flex flex-column">
+            <h5 class="card-title mb-2">
+                <a href="/datasets/collections/forecasts/" class="text-gradient text-decoration-none">
+                    Weather Forecasts
+                </a>
+            </h5>
+            <p class="card-text text-muted mb-3">Numerical weather prediction products, starting with the ICON-2I 2.2 km forecast for Italy run by ItaliaMeteo-ARPAE.</p>
+            <div class="mt-auto">
+                <a href="/datasets/collections/forecasts/" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-layer-group me-2"></i>2 datasets
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Collection Card Component -->
+<div class="col-md-6 col-xl-3">
+    <div class="card h-100 border-0 shadow-custom">
+        <a href="/datasets/collections/climate/" class="position-relative d-block">
+            
+                <img src="/static/datasets/images/thumbnails/collection-climate.webp" class="card-img-top" alt="Climate"
+                     style="aspect-ratio: 2 / 1; object-fit: cover;">
+                <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+
+            
+        </a>
+        <div class="card-body p-4 d-flex flex-column">
+            <h5 class="card-title mb-2">
+                <a href="/datasets/collections/climate/" class="text-gradient text-decoration-none">
+                    Climate
+                </a>
+            </h5>
+            <p class="card-text text-muted mb-3">Long-term climate records for climatological analysis, currently featuring a sample of the MSWX bias-corrected meteorological dataset over Italy.</p>
+            <div class="mt-auto">
+                <a href="/datasets/collections/climate/" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-layer-group me-2"></i>1 dataset
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+    </div>
+    <h3 class="text-gradient mb-4">
+        <i class="fas fa-database me-2"></i>All Datasets
+    </h3>
+
+
+
+    <div class="row g-4">
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/icon-2i-forecast-3-day.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/icon-2i-forecast-3-day.webp" class="card-img-top" alt="icon-2i-forecast-3-day.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T00:00 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">12 h ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/icon-2i-forecast-3-day.zarr/" class="text-gradient text-decoration-none">
+                        icon-2i-forecast-3-day.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/forecasts/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Weather Forecasts
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    ICON-2I 2.2 km forecasts for Italy by ItaliaMeteo-ARPAE: all 66 surface and 7 pressure-level variables, 0-72 h hourly from the …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/icon-2i.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/icon-2i.webp" class="card-img-top" alt="icon-2i.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T00:00 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">12 h ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/icon-2i.zarr/" class="text-gradient text-decoration-none">
+                        icon-2i.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/forecasts/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Weather Forecasts
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Zarrified ICON-2I surface and pressure levels forecast run by ItaliaMeteo. Currently only contains temperature and precipitation.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi2.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi2.webp" class="card-img-top" alt="italian-radar-dpc-cappi2.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi2.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi2.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 2000 m (CAPPI2) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi3.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi3.webp" class="card-img-top" alt="italian-radar-dpc-cappi3.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi3.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi3.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 3000 m (CAPPI3) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi4.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi4.webp" class="card-img-top" alt="italian-radar-dpc-cappi4.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi4.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi4.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 4000 m (CAPPI4) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi5.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi5.webp" class="card-img-top" alt="italian-radar-dpc-cappi5.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi5.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi5.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 5000 m (CAPPI5) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi6.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi6.webp" class="card-img-top" alt="italian-radar-dpc-cappi6.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi6.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi6.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 6000 m (CAPPI6) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi7.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi7.webp" class="card-img-top" alt="italian-radar-dpc-cappi7.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:50 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">15 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi7.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi7.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 7000 m (CAPPI7) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-cappi8.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-cappi8.webp" class="card-img-top" alt="italian-radar-dpc-cappi8.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-cappi8.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-cappi8.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Constant Altitude Plan Position Indicator at 8000 m (CAPPI8) Composite precipitation product, covering the Italian peninsula from …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-etm.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-etm.webp" class="card-img-top" alt="italian-radar-dpc-etm.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-etm.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-etm.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Echo Top Map Composite precipitation product, covering the Italian peninsula from 2018 until now.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-sri.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-sri.webp" class="card-img-top" alt="italian-radar-dpc-sri.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-sri.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-sri.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Surface Rainfall Intensity (SRI) Composite precipitation product (mm/h), covering the Italian peninsula from 2010 until now.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-srt1-adj.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-srt1-adj.webp" class="card-img-top" alt="italian-radar-dpc-srt1-adj.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-srt1-adj.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-srt1-adj.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated weather radar 1-hour precipitation accumulation (SRT1_adj, radar estimate adjusted with rain gauges), covering the Italian peninsula from 2018-07 until …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-vil.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-vil.webp" class="card-img-top" alt="italian-radar-dpc-vil.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-vil.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-vil.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Vertical Integrated Liquid (VIL) Composite precipitation product, covering the Italian peninsula from 2018-07 until now.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/italian-radar-dpc-vmi.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/italian-radar-dpc-vmi.webp" class="card-img-top" alt="italian-radar-dpc-vmi.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/italian-radar-dpc-vmi.zarr/" class="text-gradient text-decoration-none">
+                        italian-radar-dpc-vmi.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/italian-radar-dpc/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Italian Weather Radar (DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    Live-updated Weather Radar Vertical Maximum Intensity (VMI) Composite reflectivity product (dBZ), covering the Italian peninsula from 2018 until now.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/mswx.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/mswx.webp" class="card-img-top" alt="mswx.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/mswx.zarr/" class="text-gradient text-decoration-none">
+                        mswx.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/climate/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>Climate
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    A small sample of MSWX dataset over Italy with temperature(min and max) and precipitation.
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+            
+<!-- Reusable Dataset Card Component -->
+<div class="col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-custom">
+        
+        <a href="/datasets/datasets/opera-plus-it-vmi.zarr/" class="position-relative d-block">
+            <img src="/static/datasets/images/thumbnails/opera-plus-it-vmi.webp" class="card-img-top" alt="opera-plus-it-vmi.zarr"
+                 style="aspect-ratio: 2 / 1; object-fit: cover;">
+            <!-- Pulsing LIVE badge. Expects: dataset. Optional: overlay (render for
+     placement on top of a thumbnail). Shown only while the feed is fresh. -->
+
+<span class="live-badge live-badge-overlay"
+      title="Last update: 2026-10-14T11:55 UTC">
+    <span class="live-dot"></span>LIVE
+    <span class="live-badge-ago">10 min ago</span>
+</span>
+
+
+        </a>
+        
+        <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <h5 class="card-title mb-0">
+                    <a href="/datasets/datasets/opera-plus-it-vmi.zarr/" class="text-gradient text-decoration-none">
+                        opera-plus-it-vmi.zarr
+                    </a>
+                </h5>
+                
+            </div>
+
+            
+            
+                <div class="mb-2">
+                    <a href="/datasets/collections/european-radar/" class="badge bg-secondary text-decoration-none">
+                        <i class="fas fa-layer-group me-1"></i>European Weather Radar (OPERA + DPC)
+                    </a>
+                </div>
+            
+            <p class="card-text text-muted mb-0">
+                
+                    A merged vertical maximum intensity (VMI) radar mosaic combining data from the European Weather Radar Network (OPERA) and the Italian …
+                
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+    </div>
+
+    <!-- Summary Statistics -->
+    <!-- Reusable User Statistics Component -->
+<div class="row g-4 mt-5">
+    
+        <!-- Datasets list page stats -->
+        
+            <div class="col-md-4">
+                <div class="card border-0 bg-primary bg-opacity-10 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-database fa-2x text-primary mb-2"></i>
+                        <h4 class="text-primary">16</h4>
+                        <p class="text-muted mb-0">Total Datasets</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-success bg-opacity-10 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <h4 class="text-success">235</h4>
+                        <p class="text-muted mb-0">Registered Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-warning bg-opacity-10 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-download fa-2x text-warning mb-2"></i>
+                        <h4 class="text-warning">446.7 TB</h4>
+                        <p class="text-muted mb-0">Raw Data</p>
+                    </div>
+                </div>
+            </div>
+        
+    
+</div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 footer-dark text-white text-center">
+        <div class="container">
+            <!-- IT4LIA AI Factory promoters (same as it4lia-aifactory.eu) -->
+            <div class="footer-promoters mb-3">
+                <img src="/static/datasets/images/promoters/logo-ue-1.svg" alt="European Union">
+                <img src="/static/datasets/images/promoters/logo-euro-hpc-1.svg" alt="EuroHPC Joint Undertaking">
+                <img src="/static/datasets/images/promoters/logo-ai-factories-1.svg" alt="AI Factories">
+                <img src="/static/datasets/images/promoters/logo-mur-1.svg" alt="Ministero dell'Università e della Ricerca">
+                <img src="/static/datasets/images/promoters/logo-ACN-spazio.svg" alt="Agenzia per la Cybersicurezza Nazionale">
+                <img src="/static/datasets/images/promoters/logo-cineca-footer.svg" alt="Cineca">
+            </div>
+            <p class="footer-funding small text-light mx-auto mb-4">
+                IT4LIA AI FACTORY is funded by the Ministry of University and Research and the
+                National Cybersecurity Agency. The initiative is co-funded by the European
+                Commission through the European High Performance Computing Joint Undertaking
+                under Grant Agreement No. 101234224. Additional contributions come from Austria,
+                Slovenia, as well as from Cineca, the Emilia-Romagna Region, the Italian National
+                Institute for Nuclear Physics, the Italian Institute of Artificial Intelligence
+                for Industry, Fondazione Bruno Kessler, and the ItaliaMeteo Agency.
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-2">ArcoDataHub</h6>
+                    <p class="mb-0">Your gateway to live-updated ARCO datasets</p>
+                    <small class="text-light">Part of the Italian AI Factory (IT4LIA)</small>
+                    <small class="d-block mt-1">
+                        <a href="/datasets/status/" class="text-light"><i class="fas fa-heart-pulse me-1"></i>Service status</a>
+                        <span class="mx-1">&middot;</span>
+                        <a href="https://catalog.arcodatahub.com/" class="text-light"><i class="fas fa-sitemap me-1"></i>STAC catalogue</a>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 ArcoDataHub - Italian AI Factory. All rights reserved.</p>
+                    <small class="text-light">Made with <i class="fas fa-heart"> </i> by <a href="https://www.fbk.eu/en/">FBK</a>, Powered by <a href="https://www.cineca.it/">CINECA</a></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-bash.min.js"></script>
+
+    
+</body>
+
+</html>

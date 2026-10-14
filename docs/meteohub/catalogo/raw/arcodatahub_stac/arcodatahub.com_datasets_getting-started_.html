@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - ArcoDataHub</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="/static/datasets/css/style.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+
+    
+</head>
+
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="/datasets/">
+                <span class="me-2">🌍</span>
+                <span>ArcoDataHub</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    
+                        <a class="btn btn-outline-light me-2" href="/datasets/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/datasets/">
+                            <i class="fas fa-database me-1"></i>Datasets
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/dashboard/">
+                            <i class="fas fa-table me-1"></i>Dashboard
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/getting-started/">
+                            <i class="fas fa-rocket me-1"></i>Getting Started
+                        </a>
+                        <a class="btn btn-light me-2" href="/datasets/login/">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a class="btn btn-light" href="/datasets/register/">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed navbar -->
+    <div style="height: 80px;"></div>
+
+    <!-- Messages with enhanced styling -->
+    <div class="container mt-4">
+        
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="container-main">
+            
+<div class="gs">
+
+    <p class="gs-eyebrow">Getting started</p>
+    <h1 class="gs-title">From sign-up to your first frame in five minutes</h1>
+    <p class="gs-lede">
+        ArcoDataHub serves analysis-ready, cloud-optimized datasets (Zarr, COG, GeoParquet) that
+        update live, some every five minutes. You stream the slice you need over HTTPS, you never
+        download an archive unless you want one.
+    </p>
+
+    <!-- The three things to do before any code runs: a real sequence -->
+    <section class="gs-section">
+        <div class="gs-path">
+            <div class="gs-step">
+                <div class="gs-num">1</div>
+                <div>
+                    <h3>Create an account</h3>
+                    <p><a href="/datasets/register/">Register</a>, then confirm the link we email you.</p>
+                </div>
+            </div>
+            <div class="gs-step">
+                <div class="gs-num">2</div>
+                <div>
+                    <h3>Subscribe to a dataset</h3>
+                    <p>Pick one in the <a href="/datasets/datasets/">catalogue</a> and press Subscribe. Access is granted immediately.</p>
+                </div>
+            </div>
+            <div class="gs-step">
+                <div class="gs-num">3</div>
+                <div>
+                    <h3>Get your credentials</h3>
+                    <p>Your username and access key are on <a href="/datasets/my-requests/">My Requests</a>. Keep the key out of code and notebooks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gs-section">
+        <h2 class="gs-h2"><span class="gs-n">01</span>Open a dataset in Python</h2>
+        <p>
+            Everything below assumes xarray with the Zarr engine. Credentials come from environment
+            variables so the same code runs on your laptop, in a notebook and in a job.
+        </p>
+        <div class="gs-code">
+            <div class="gs-code-bar"><span>bash</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-bash">pip install xarray "zarr>=3" dask aiohttp
+export ARCODATAHUB_USERNAME=your_username
+export ARCODATAHUB_ACCESS_KEY=your_access_key</code></pre>
+        </div>
+        <div class="gs-code">
+            <div class="gs-code-bar"><span>python</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-python">import os, aiohttp, xarray as xr
+
+auth = (os.environ["ARCODATAHUB_USERNAME"], os.environ["ARCODATAHUB_ACCESS_KEY"])
+ds = xr.open_zarr(
+    "https://api.arcodatahub.com/S3/italian-radar-dpc-vmi.zarr",
+    storage_options={"client_kwargs": {"auth": aiohttp.BasicAuth(*auth)}},
+)
+
+# the newest time step that contains data
+frame = ds["vmi"].sel(time=ds.attrs["last_valid"])
+frame.plot()</code></pre>
+        </div>
+        <div class="gs-callout">
+            <p>
+                <strong>Look timestamps up, never compute them.</strong> Live datasets pre-allocate
+                their time axis years ahead, so most of it is empty, and the spacing changed over
+                the life of some archives (the Italian radar products moved from a 10-minute to a
+                5-minute cadence in July 2018). Select with <code>.sel(time=…)</code> or
+                <code>ds.indexes["time"].get_loc(…)</code>; the <code>last_valid</code> attribute
+                is the end of the real data. Every dataset page has a ready-made notebook that does
+                this for you.
+            </p>
+        </div>
+    </section>
+
+    <section class="gs-section">
+        <h2 class="gs-h2"><span class="gs-n">02</span>Other ways in</h2>
+        <p>Same URL, same credentials. Choose the tool you already use.</p>
+
+        <ul class="nav nav-tabs gs-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="gs-tab-gdal" data-bs-toggle="tab" data-bs-target="#gs-pane-gdal" type="button" role="tab" aria-controls="gs-pane-gdal" aria-selected="true">GDAL / QGIS</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="gs-tab-archive" data-bs-toggle="tab" data-bs-target="#gs-pane-archive" type="button" role="tab" aria-controls="gs-pane-archive" aria-selected="false">Download an archive</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="gs-tab-stac" data-bs-toggle="tab" data-bs-target="#gs-pane-stac" type="button" role="tab" aria-controls="gs-pane-stac" aria-selected="false">STAC catalogue</button>
+            </li>
+        </ul>
+        <div class="tab-content gs-tab-content">
+
+            <div class="tab-pane fade show active" id="gs-pane-gdal" role="tabpanel" aria-labelledby="gs-tab-gdal">
+                <p>
+                    GDAL 3.11 or newer reads the stores directly, sharded ones included. One time
+                    step becomes a GeoTIFF in about a second, and QGIS opens the same URL through
+                    its Zarr driver. GDAL addresses the time axis by position, so first ask the
+                    time-index API which position a timestamp has; it takes the same credentials.
+                </p>
+                <div class="gs-code">
+                    <div class="gs-code-bar"><span>bash</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-bash">export GDAL_HTTP_USERPWD="$ARCODATAHUB_USERNAME:$ARCODATAHUB_ACCESS_KEY"
+STORE='ZARR:"/vsicurl/https://api.arcodatahub.com/S3/italian-radar-dpc-vmi.zarr"'   # keep both kinds of quotes
+
+# position of 2026-09-10 15:00 UTC on the time axis
+IDX=$(curl -s -u "$GDAL_HTTP_USERPWD" \
+  "https://arcodatahub.com/datasets/api/time-index/italian-radar-dpc-vmi.zarr/?t=2026-09-10T15:00" | jq .index)
+
+gdalmdiminfo "$STORE"                                   # structure, attributes, last_valid
+gdalmdimtranslate "$STORE" vmi_20260910T1500.tif -array "name=vmi,view=[$IDX,:,:]"</code></pre>
+                </div>
+                <p>
+                    The API answers with the exact position, or 404 with the nearest positions on
+                    either side when the timestamp is not on the axis; add <code>method=nearest</code>
+                    to snap. Several <code>t=</code> parameters can be passed at once.
+                </p>
+            </div>
+
+            <div class="tab-pane fade" id="gs-pane-archive" role="tabpanel" aria-labelledby="gs-tab-archive">
+                <p>
+                    The gateway serves objects, not listings, so S3 sync tools cannot walk a store
+                    on their own. Every store publishes a <code>keys.txt</code> manifest instead,
+                    refreshed nightly, that lists every object it contains. Fetch it, then hand it
+                    to the tool you prefer.
+                </p>
+                <div class="gs-code">
+                    <div class="gs-code-bar"><span>bash</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-bash">B=https://api.arcodatahub.com/S3/italian-radar-dpc-vmi.zarr
+curl -u "$ARCODATAHUB_USERNAME:$ARCODATAHUB_ACCESS_KEY" -O "$B/keys.txt"
+
+# whole archive with rclone (parallel, resumable)
+rclone copy --files-from keys.txt --no-traverse --transfers 4 \
+  --header "Authorization: Basic $(printf '%s:%s' "$ARCODATAHUB_USERNAME" "$ARCODATAHUB_ACCESS_KEY" | base64)" \
+  ":http,url=\"$B/\":" ./italian-radar-dpc-vmi.zarr
+
+# or with wget
+sed "s|^|$B/|" keys.txt | wget -x -nH --cut-dirs=2 --user "$ARCODATAHUB_USERNAME" --password "$ARCODATAHUB_ACCESS_KEY" -i -</code></pre>
+                </div>
+                <p>
+                    For a period, filter the manifest first. On the sharded stores one shard is one
+                    day, numbered from the start of the series, so a range of shard numbers is a
+                    range of days. Keep the metadata lines so the copy still opens.
+                </p>
+                <div class="gs-code">
+                    <div class="gs-code-bar"><span>bash</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-bash">grep -vE '^vmi/c/' keys.txt &gt; period.txt                         # metadata and coordinates
+grep -E  '^vmi/c/(30[0-9][0-9])/' keys.txt &gt;&gt; period.txt          # shards 3000 to 3099</code></pre>
+                </div>
+                <p>
+                    In Python, <code>ds.sel(time=slice("2026-08-01", "2026-08-31")).to_zarr("vmi-aug.zarr", zarr_format=2)</code>
+                    does the same by date; a Zarr v2 target keeps the original compression.
+                </p>
+            </div>
+
+            <div class="tab-pane fade" id="gs-pane-stac" role="tabpanel" aria-labelledby="gs-tab-stac">
+                <p>
+                    Every dataset is a STAC collection with its extent, grid and variables. Browse
+                    at <a href="https://catalog.arcodatahub.com">catalog.arcodatahub.com</a> or
+                    query the API; note that <code>/collections</code> is paginated, follow the
+                    <code>next</code> link.
+                </p>
+                <div class="gs-code">
+                    <div class="gs-code-bar"><span>python</span><button type="button" class="gs-copy">Copy</button></div>
+<pre><code class="language-python">from pystac_client import Client
+
+cat = Client.open("https://stac.arcodatahub.com")
+for c in cat.get_collections():
+    print(c.id, c.extent.temporal.intervals[0][1])</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="gs-section">
+        <h2 class="gs-h2"><span class="gs-n">03</span>Good to know</h2>
+        <ul class="gs-tips">
+            <li><strong>One chunk is one time step.</strong> Read along time in the shape the store is chunked; the dataset page shows the chunking. S3 sync tools need the store's <code>keys.txt</code>, see “Download an archive”.</li>
+            <li><strong>Don't reduce the whole cube.</strong> A mean over eight years of radar reads terabytes. Subset first, or ask us for a precomputed product.</li>
+            <li><strong>Special values are documented in the store.</strong> Read the variable's <code>comment</code> attribute before masking; fill values differ between products.</li>
+            <li><strong>Fair use.</strong> Access is monitored. If you plan a large pull, tell us first and we will help you do it efficiently.</li>
+            <li><strong>Keys are personal.</strong> Never commit them; regenerate from your <a href="/datasets/profile/">profile</a> if one leaks.</li>
+            <li><strong>Cite the dataset.</strong> Each collection carries its license and attribution in the STAC record and in the store attributes.</li>
+        </ul>
+    </section>
+
+    <section class="gs-section">
+        <h2 class="gs-h2">Where next</h2>
+        <p>Questions, a dataset you'd like to see, or a large project to plan: write to us at the registration address.</p>
+        <div class="gs-next">
+            <a class="gs-btn gs-btn-primary" href="/datasets/datasets/">Browse the catalogue</a>
+            <a class="gs-btn" href="/datasets/my-requests/">My Requests</a>
+            <a class="gs-btn" href="https://catalog.arcodatahub.com">STAC catalogue</a>
+            <a class="gs-btn" href="/datasets/status/">Status page</a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+document.querySelectorAll('.gs-copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        var text = btn.closest('.gs-code').querySelector('pre').innerText;
+        if (!navigator.clipboard) { return; }
+        navigator.clipboard.writeText(text).then(function () {
+            btn.textContent = 'Copied';
+            setTimeout(function () { btn.textContent = 'Copy'; }, 1200);
+        });
+    });
+});
+</script>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 footer-dark text-white text-center">
+        <div class="container">
+            <!-- IT4LIA AI Factory promoters (same as it4lia-aifactory.eu) -->
+            <div class="footer-promoters mb-3">
+                <img src="/static/datasets/images/promoters/logo-ue-1.svg" alt="European Union">
+                <img src="/static/datasets/images/promoters/logo-euro-hpc-1.svg" alt="EuroHPC Joint Undertaking">
+                <img src="/static/datasets/images/promoters/logo-ai-factories-1.svg" alt="AI Factories">
+                <img src="/static/datasets/images/promoters/logo-mur-1.svg" alt="Ministero dell'Università e della Ricerca">
+                <img src="/static/datasets/images/promoters/logo-ACN-spazio.svg" alt="Agenzia per la Cybersicurezza Nazionale">
+                <img src="/static/datasets/images/promoters/logo-cineca-footer.svg" alt="Cineca">
+            </div>
+            <p class="footer-funding small text-light mx-auto mb-4">
+                IT4LIA AI FACTORY is funded by the Ministry of University and Research and the
+                National Cybersecurity Agency. The initiative is co-funded by the European
+                Commission through the European High Performance Computing Joint Undertaking
+                under Grant Agreement No. 101234224. Additional contributions come from Austria,
+                Slovenia, as well as from Cineca, the Emilia-Romagna Region, the Italian National
+                Institute for Nuclear Physics, the Italian Institute of Artificial Intelligence
+                for Industry, Fondazione Bruno Kessler, and the ItaliaMeteo Agency.
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-2">ArcoDataHub</h6>
+                    <p class="mb-0">Your gateway to live-updated ARCO datasets</p>
+                    <small class="text-light">Part of the Italian AI Factory (IT4LIA)</small>
+                    <small class="d-block mt-1">
+                        <a href="/datasets/status/" class="text-light"><i class="fas fa-heart-pulse me-1"></i>Service status</a>
+                        <span class="mx-1">&middot;</span>
+                        <a href="https://catalog.arcodatahub.com/" class="text-light"><i class="fas fa-sitemap me-1"></i>STAC catalogue</a>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 ArcoDataHub - Italian AI Factory. All rights reserved.</p>
+                    <small class="text-light">Made with <i class="fas fa-heart"> </i> by <a href="https://www.fbk.eu/en/">FBK</a>, Powered by <a href="https://www.cineca.it/">CINECA</a></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-bash.min.js"></script>
+
+    
+</body>
+
+</html>

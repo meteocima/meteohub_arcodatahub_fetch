@@ -19,6 +19,9 @@ uv run python filter_provincia.py --province MI --input output/csv/*.csv --name 
 uv run python meteohub_stations.py --province MI --from 2025-01-01T00:00:00Z --to 2025-12-31T23:59:00Z
 uv run python clean_and_hourly.py output_2025_MI/meteohub_20250101_20251231_MI.csv
 uv run --with numcodecs --with numpy python meteohub_inventory.py --sample-day 2026-10-12   # inventory of all datasets → docs/meteohub/inventory/
+uv run python tools/catalogo/model_vars.py docs/meteohub/catalogo/_work   # per-product levels/timeranges of every model (no quota)
+python3 tools/catalogo/resoconto.py                                       # docs/meteohub/catalogo/RESOCONTO.md from the CSVs
+uv run --with pytest pytest                                               # tests (tests/)
 ```
 
 `run_meteohub_download_background.sh` and the `cd` path in README are hard-coded to another user's macOS machine (`/Users/andrea/...`, zsh, Homebrew uv); they need adapting before use here.
@@ -66,7 +69,7 @@ There are two independent download routes. Both end in a per-province CSV, but w
 
 ## Credentials
 
-No credentials in the code: `meteohub_download.USERNAME`/`PASSWORD` read `METEOHUB_USERNAME`/`METEOHUB_PASSWORD`, and all scripts (`meteohub_stations.py` and `meteohub_inventory.py` use them as `--username`/`--password` defaults) exit if they are missing. Never commit credentials or the ARCO access key.
+ArcoDataHub (`https://api.arcodatahub.com/S3/<store>.zarr`, HTTP Basic) uses `ARCODATAHUB_USERNAME`/`ARCODATAHUB_API_KEY`. No credentials in the code: `meteohub_download.USERNAME`/`PASSWORD` read `METEOHUB_USERNAME`/`METEOHUB_PASSWORD`, and all scripts (`meteohub_stations.py` and `meteohub_inventory.py` use them as `--username`/`--password` defaults) exit if they are missing. Never commit credentials or the ARCO access key.
 
 ## Agent skills
 

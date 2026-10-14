@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcoDataHub - Italian AI Factory Earth Data Portal</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="/static/datasets/css/style.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+
+    
+</head>
+
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="/datasets/">
+                <span class="me-2">🌍</span>
+                <span>ArcoDataHub</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    
+                        <a class="btn btn-outline-light me-2" href="/datasets/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/datasets/">
+                            <i class="fas fa-database me-1"></i>Datasets
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/dashboard/">
+                            <i class="fas fa-table me-1"></i>Dashboard
+                        </a>
+                        <a class="btn btn-outline-light me-2" href="/datasets/getting-started/">
+                            <i class="fas fa-rocket me-1"></i>Getting Started
+                        </a>
+                        <a class="btn btn-light me-2" href="/datasets/login/">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a class="btn btn-light" href="/datasets/register/">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed navbar -->
+    <div style="height: 80px;"></div>
+
+    <!-- Messages with enhanced styling -->
+    <div class="container mt-4">
+        
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="container-main">
+            
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold mb-4">
+                Welcome to ArcoDataHub
+            </h1>
+            <p class="lead mb-4">
+                Part of the Italian AI Factory (IT4LIA), your gateway to <span class="fw-bold">Analysis-Ready Cloud-Optimized (ARCO)</span> datasets.
+            </p>
+            <p class="lead mb-4">
+                Access, analyze, and download high-quality <span class="fw-bold">live-updated</span> data in cloud-native formats including Zarr, COG (Cloud-Optimized GeoTIFF),
+                Parquet, and FlatGeobuf.
+            </p>
+            <p class="lead mb-4">
+                Our portal serves diverse domains
+                including meteorology, agriculture, cybersecurity, and beyond for researchers, scientists, and data enthusiasts across Italy and Europe.
+            </p>
+            
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/datasets/register/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="/datasets/login/" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="bg-gradient rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-satellite text-muted fa-2x"></i>
+                </div>
+                <h5 class="card-title text-gradient">High-Quality Data</h5>
+                <p class="card-text">Access curated ARCO datasets from diverse domains with real-time updates and analysis-ready formats.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="bg-gradient rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-code text-muted fa-2x"></i>
+                </div>
+                <h5 class="card-title text-gradient">Easy Integration</h5>
+                <p class="card-text">Simple access with support for Python (zarr and xarray) and command line tools via S3 API.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="bg-gradient rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-cloud-download-alt text-muted fa-2x"></i>
+                </div>
+                <h5 class="card-title text-gradient">Fast Downloads</h5>
+                <p class="card-text">Optimized data delivery with cloud-native formats for quick access and processing.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- API Usage Section -->
+
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="fas fa-lock fa-3x text-muted"></i>
+    </div>
+    <h4 class="text-gradient mb-3">Ready to Get Started?</h4>
+    <p class="text-muted mb-4">Sign up for an account to access our comprehensive live-updated ARCO datasets</p>
+    <a href="/datasets/register/" class="btn btn-primary btn-lg">
+        <i class="fas fa-rocket me-2"></i>Create Account
+    </a>
+</div>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 footer-dark text-white text-center">
+        <div class="container">
+            <!-- IT4LIA AI Factory promoters (same as it4lia-aifactory.eu) -->
+            <div class="footer-promoters mb-3">
+                <img src="/static/datasets/images/promoters/logo-ue-1.svg" alt="European Union">
+                <img src="/static/datasets/images/promoters/logo-euro-hpc-1.svg" alt="EuroHPC Joint Undertaking">
+                <img src="/static/datasets/images/promoters/logo-ai-factories-1.svg" alt="AI Factories">
+                <img src="/static/datasets/images/promoters/logo-mur-1.svg" alt="Ministero dell'Università e della Ricerca">
+                <img src="/static/datasets/images/promoters/logo-ACN-spazio.svg" alt="Agenzia per la Cybersicurezza Nazionale">
+                <img src="/static/datasets/images/promoters/logo-cineca-footer.svg" alt="Cineca">
+            </div>
+            <p class="footer-funding small text-light mx-auto mb-4">
+                IT4LIA AI FACTORY is funded by the Ministry of University and Research and the
+                National Cybersecurity Agency. The initiative is co-funded by the European
+                Commission through the European High Performance Computing Joint Undertaking
+                under Grant Agreement No. 101234224. Additional contributions come from Austria,
+                Slovenia, as well as from Cineca, the Emilia-Romagna Region, the Italian National
+                Institute for Nuclear Physics, the Italian Institute of Artificial Intelligence
+                for Industry, Fondazione Bruno Kessler, and the ItaliaMeteo Agency.
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-2">ArcoDataHub</h6>
+                    <p class="mb-0">Your gateway to live-updated ARCO datasets</p>
+                    <small class="text-light">Part of the Italian AI Factory (IT4LIA)</small>
+                    <small class="d-block mt-1">
+                        <a href="/datasets/status/" class="text-light"><i class="fas fa-heart-pulse me-1"></i>Service status</a>
+                        <span class="mx-1">&middot;</span>
+                        <a href="https://catalog.arcodatahub.com/" class="text-light"><i class="fas fa-sitemap me-1"></i>STAC catalogue</a>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 ArcoDataHub - Italian AI Factory. All rights reserved.</p>
+                    <small class="text-light">Made with <i class="fas fa-heart"> </i> by <a href="https://www.fbk.eu/en/">FBK</a>, Powered by <a href="https://www.cineca.it/">CINECA</a></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-bash.min.js"></script>
+
+    
+</body>
+
+</html>

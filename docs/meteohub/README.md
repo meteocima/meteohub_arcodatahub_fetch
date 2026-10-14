@@ -5,6 +5,11 @@ Note raccolte il 2026-10-13 interrogando direttamente l'API di produzione
 completo, dataset per dataset, è in [`inventory/`](inventory/) ed è generato da
 `meteohub_inventory.py`.
 
+Il **resoconto completo** di cosa c'è su MeteoHub e su ARCO Data Hub (reti e variabili
+di osservazione, radar, modelli con tutte le variabili, livelli ed elaborazioni) è in
+[`catalogo/RESOCONTO.md`](catalogo/RESOCONTO.md), con le tabelle CSV e le fonti grezze
+nella stessa cartella. Si rigenera con gli script in `tools/catalogo/`.
+
 ## Fonti
 
 Documentazione ufficiale e primaria:
