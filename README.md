@@ -215,7 +215,7 @@ uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVEL
 > [!WARNING]
 > I modelli si leggono solo con le estrazioni `/api/data`, che **consumano la quota di 10 richieste all'ora** per account. Lo script la gestisce da solo, ma un periodo lungo può richiedere ore.
 
-L'account non ha elaborazioni lato server: ogni estrazione scarica il campo intero, che viene ritagliato sull'area in locale. Lo script stima la dimensione di una corsa, raggruppa le corse in estrazioni sotto `--limite-mb` e cancella ogni estrazione dal server appena scaricata, perché anche lo spazio sul server è di 1 GB. Se la quota è esaurita, aspetta l'ora successiva e riprende da solo.
+L'account non ha elaborazioni lato server: ogni estrazione scarica il campo intero, che viene ritagliato sull'area in locale. Lo script stima la dimensione di una corsa, raggruppa le corse in estrazioni sotto `--limite-mb` (una corsa più grande, come la pioggia di ICON-2I-EPS da 1,2 GB, viene divisa in più estrazioni per gruppi di scadenze) e cancella ogni estrazione dal server appena scaricata, perché anche lo spazio sul server è di 1 GB. Se la quota è esaurita, aspetta l'ora successiva e riprende da solo.
 
 Il ritaglio funziona su tutte le griglie dei modelli: lat/lon regolare (ICON-2I), ruotata (MOLOCH, MOLOCH_AIM, BOLAM), Mercator (`WRF_OL`, `WRF_DA_ITA`) e Lambert (`WRF`). Sulle griglie non regolari il file ha le dimensioni `y`, `x` e latitudine e longitudine di ogni cella; si tiene il rettangolo più piccolo di celle che contiene l'area e le celle fuori dall'area valgono NaN. Se un'estrazione contiene la stessa variabile su più griglie (MOLOCH dà `t2m` su 1154×1154 e su 577×577), si tiene la più fine. Le griglie che non si possono georeferenziare (la non strutturata di ICON-2I-EPS) non vengono chieste.
 
@@ -236,7 +236,7 @@ uv run python meteohub_fetch.py radar --tipo srt1 --from 2026-10-11 --to 2026-10
     --punti output/ge/stazioni_provincia_GE_2026101100_2026101200.csv --out-dir output/ge
 ```
 
-`--punti` accetta un CSV con le colonne `lat` e `lon` e, se c'è, un nome (`nome`, `stazione`, `station_name` o `name`); va bene il file `stazioni_` del sottocomando `stazioni`. Oltre ai NetCDF, `radar` scrive `punti_radar_<tipo>_nativo_...csv` (ogni scansione) e `punti_radar_<tipo>_orario_...csv`, e `modelli` scrive `punti_modello_<modello>_<var>_...csv`: una riga per punto, istante (e scadenza) e variabile, con il valore della **cella più vicina che ha dati**, le coordinate del suo centro e la distanza in km. I punti fuori dall'area vengono esclusi, e così quelli senza nessun dato intorno in tutto il periodo. Non è un'interpolazione: su una griglia di 1 km il punto è a meno di 0,7 km dal centro della cella, su una di 8 km fino a circa 6 km.
+`--punti` accetta un CSV con le colonne `lat` e `lon` e, se c'è, un nome (`nome`, `stazione`, `station_name` o `name`); va bene il file `stazioni_` del sottocomando `stazioni`. Oltre ai NetCDF, `radar` scrive `punti_radar_<tipo>_nativo_...csv` (ogni scansione) e `punti_radar_<tipo>_orario_...csv`, e `modelli` scrive `punti_modello_<modello>_<var>_...csv`: una riga per punto, istante (e scadenza) e variabile, con il valore della **cella più vicina che ha dati**, le coordinate del suo centro e la distanza in km; per ICON-2I-EPS anche il `membro` (1-20). I punti fuori dall'area vengono esclusi, e così quelli senza nessun dato intorno in tutto il periodo. Non è un'interpolazione: su una griglia di 1 km il punto è a meno di 0,7 km dal centro della cella, su una di 8 km fino a circa 6 km.
 
 ## Catalogo
 

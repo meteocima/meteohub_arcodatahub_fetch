@@ -210,20 +210,34 @@ class MeteoHub:
         items["licenza"] = " ".join(x.get("code", "") for x in items.get("all_licenses", []))
         return items
 
+    @staticmethod
+    def _codice_livello(livello: Dict[str, Any]) -> Optional[str]:
+        """arkimet query code of a GRIB2 level as /api/fields describes it (None for other styles)."""
+        if livello.get("style") == "GRIB2S":
+            return f"GRIB2S,{livello['level_type']},{livello['scale']},{livello['value']}"
+        return None
+
     def stima_mb(self, dataset: str, filtri: Dict[str, List[Dict[str, Any]]], giorno: datetime) -> float:
         """Size in MB of one run of the filtered products, from /api/fields SummaryStats of one day.
 
-        SummaryStats covers all levels and timeranges of a product: it is scaled by the share of them the
-        filters keep (an estimate, since fields of different levels can differ in size)."""
-        totale = 0.0
+        The count is asked for the product and, if there is one GRIB2 level, that level (fields of one product
+        are not spread evenly over levels: ICON_2I_EPS prec is 1040 of 1670 fields at the surface); the share of
+        the timeranges kept scales what is left. A product listed twice by /api/fields is counted once."""
+        livelli = {self._codice_livello(x) for x in filtri.get("level", [])}
+        livello = next(iter(livelli)) if len(livelli) == 1 else None  # one GRIB2 level, maybe listed twice
+        totale, visti = 0.0, set()
         for p in filtri["product"]:
-            q = f"{self._giorno(giorno)};product:{self._codice(p)}"
+            codice = self._codice(p)
+            if codice in visti:
+                continue
+            visti.add(codice)
+            q = f"{self._giorno(giorno)};product:{codice}" + (f";level:{livello}" if livello else "")
             r = self._get("/api/fields", {"datasets": dataset, "q": q, "SummaryStats": "true"})
             r.raise_for_status()
             items = r.json().get("items", {})
             stats = items.get("summarystats") or {}
             quota = 1.0
-            for chiave in ("level", "timerange"):
+            for chiave in ("timerange",) if livello else ("level", "timerange"):
                 tutti = items.get(chiave, [])
                 if chiave in filtri and tutti:
                     quota *= min(1.0, sum(1 for x in tutti if x in filtri[chiave]) / len(tutti))

@@ -30,9 +30,21 @@ def pianifica_estrazioni(corse: List[datetime], mb_per_corsa: float, limite_mb: 
         raise SystemExit("Dimensione delle corse non stimabile: nessun dato per le variabili scelte nel periodo.")
     per_estrazione = int(limite_mb // mb_per_corsa)
     if per_estrazione < 1:
-        raise SystemExit(f"Una corsa vale circa {mb_per_corsa:.0f} MB, oltre il limite di {limite_mb:.0f} MB per estrazione: "
-                         "scegli meno variabili o livelli.")
+        raise SystemExit(f"Una corsa vale circa {mb_per_corsa:.0f} MB, oltre il limite di {limite_mb:.0f} MB per estrazione, "
+                         "e non si può dividere per scadenze.")
     return [corse[i:i + per_estrazione] for i in range(0, len(corse), per_estrazione)]
+
+
+def dividi_scadenze(elaborazioni: List[Dict[str, Any]], mb_per_corsa: float, limite_mb: float) -> List[List[Dict[str, Any]]]:
+    """The timerange filter of a run cut into contiguous slices of steps, each under limite_mb; one slice (all of
+    them) if the run fits. ICON_2I_EPS prec is 1.18 GB a run, over the 1 GB of one extraction."""
+    if mb_per_corsa <= limite_mb or len(elaborazioni) < 2:
+        return [list(elaborazioni)]
+    per_scadenza = mb_per_corsa / len(elaborazioni)
+    n = int(limite_mb // per_scadenza)
+    if n < 1:
+        raise SystemExit(f"Una sola scadenza vale circa {per_scadenza:.0f} MB, oltre il limite di {limite_mb:.0f} MB per estrazione.")
+    return [list(elaborazioni[i:i + n]) for i in range(0, len(elaborazioni), n)]
 
 
 def pioggia_oraria_modello(cumulata: xr.DataArray) -> xr.DataArray:
@@ -103,6 +115,11 @@ class Variabile:
     elaborazione: Callable[[Dict[str, Any]], bool]  # on a Timedef timerange
 
 
+def _ore_scadenza(t: Dict[str, Any]) -> float:
+    """Forecast step of a Timedef timerange, in hours."""
+    return t.get("step_len", 0) * UNITA_S.get(t.get("step_unit"), 0) / 3600
+
+
 def _istantaneo(t: Dict[str, Any]) -> bool:
     return t.get("stat_type", 254) == 254
 
@@ -133,7 +150,8 @@ def filtri_variabile(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict
     if nome not in VARIABILI:
         raise SystemExit(f"Variabile {nome!r} non prevista: usa {', '.join(VARIABILI)}.")
     v = VARIABILI[nome]
-    filtri = {"product": [p for p in metadati.get("product", []) if v.prodotto(p.get("desc", "").lower())],
+    prodotti = [p for p in metadati.get("product", []) if v.prodotto(p.get("desc", "").lower())]
+    filtri = {"product": [p for i, p in enumerate(prodotti) if p not in prodotti[:i]],  # ICON_2I_EPS lists prec twice
               "level": [l for l in metadati.get("level", []) if v.livello(l)],
               "timerange": [t for t in metadati.get("timerange", []) if t.get("style") == "Timedef" and v.elaborazione(t)]}
     mancanti = [k for k, x in filtri.items() if not x and metadati.get(k)]
@@ -205,6 +223,7 @@ def _ritaglia_file(path: Path, apri: Callable[[Path], xr.Dataset], area: Area) -
     with apri(path) as ds:
         valori = ds[next(iter(ds.data_vars))]
         valori = valori if "time" in valori.dims else valori.expand_dims("time")
+        valori = valori if "step" in valori.dims or "step" not in valori.coords else valori.expand_dims("step")
         return ritaglia_griglia(a_griglia(valori), area).load()
 
 
@@ -235,31 +254,43 @@ def scarica_modelli(fonte: Any, area: Area, inizio: datetime, fine: datetime, mo
     for nome in variabili:
         filtri = filtri_variabile(metadati, nome)
         mb = fonte.stima_mb(modello, filtri, giorno)
-        gribs = []
-        for gruppo in pianifica_estrazioni(corse, mb, limite_mb):
-            etichetta = f"{modello}_{nome}_{gruppo[0]:%Y%m%d%H}_{gruppo[-1]:%Y%m%d%H}"
-            path = cartella / "grib" / nome / f"{etichetta}.grib"
-            gribs.append(path)
-            if path.exists():
-                continue
+        elaborazioni = filtri.get("timerange", [])
+        fette = dividi_scadenze(elaborazioni, mb, limite_mb)  # several only if one run is over the limit
+        mb_fetta = mb * max(len(f) for f in fette) / max(1, len(elaborazioni)) if len(fette) > 1 else mb
+        gribs: List[List[Path]] = []
+        for gruppo in pianifica_estrazioni(corse, mb_fetta, limite_mb):
             ore = sorted({c.hour * 60 + c.minute for c in gruppo})
-            filtri_gruppo = {**filtri, "run": [r for r in metadati.get("run", []) if r.get("value") in ore]}
-            print(f"{modello} {nome}: corse {gruppo[0]:%Y-%m-%d %H} -> {gruppo[-1]:%Y-%m-%d %H} (~{mb * len(gruppo):.0f} MB)", flush=True)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = path.with_suffix(".part")
-            for tentativo in range(3):
-                if fonte.quota_rimanente() <= 0:
-                    _attendi_ora_successiva(dormi)
-                try:
-                    fonte.estrazione(f"meteohub_fetch_{etichetta}", modello, gruppo[0], gruppo[-1], filtri_gruppo, tmp)
-                    break
-                except EstrazioneRifiutata as exc:  # the quota counter lags: a refusal may still mean "wait an hour"
-                    if tentativo == 2:
-                        raise SystemExit(f"MeteoHub rifiuta l'estrazione {etichetta}: {exc}")
-                    print(f"  estrazione rifiutata ({exc}): riprovo dopo l'ora", flush=True)
-                    _attendi_ora_successiva(dormi)
-            tmp.replace(path)
-        valori = xr.concat([_ritaglia_file(p, apri, area) for p in gribs], dim="time")
+            filtri_corse = {**filtri, "run": [r for r in metadati.get("run", []) if r.get("value") in ore]}
+            gribs.append([])
+            for fetta in fette:
+                etichetta = f"{modello}_{nome}_{gruppo[0]:%Y%m%d%H}_{gruppo[-1]:%Y%m%d%H}"
+                filtri_gruppo, descrizione = filtri_corse, ""
+                if len(fette) > 1:  # the label names the steps, so a cached slice is reused only for the same steps
+                    da_h, a_h = (_ore_scadenza(fetta[i]) for i in (0, -1))
+                    etichetta += f"_scadenze{da_h:g}-{a_h:g}h"
+                    filtri_gruppo, descrizione = {**filtri_corse, "timerange": fetta}, f", scadenze +{da_h:g}..+{a_h:g} h"
+                path = cartella / "grib" / nome / f"{etichetta}.grib"
+                gribs[-1].append(path)
+                if path.exists():
+                    continue
+                print(f"{modello} {nome}: corse {gruppo[0]:%Y-%m-%d %H} -> {gruppo[-1]:%Y-%m-%d %H}{descrizione} "
+                      f"(~{mb_fetta * len(gruppo):.0f} MB)", flush=True)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                tmp = path.with_suffix(".part")
+                for tentativo in range(3):
+                    if fonte.quota_rimanente() <= 0:
+                        _attendi_ora_successiva(dormi)
+                    try:
+                        fonte.estrazione(f"meteohub_fetch_{etichetta}", modello, gruppo[0], gruppo[-1], filtri_gruppo, tmp)
+                        break
+                    except EstrazioneRifiutata as exc:  # the quota counter lags: a refusal may still mean "wait an hour"
+                        if tentativo == 2:
+                            raise SystemExit(f"MeteoHub rifiuta l'estrazione {etichetta}: {exc}")
+                        print(f"  estrazione rifiutata ({exc}): riprovo dopo l'ora", flush=True)
+                        _attendi_ora_successiva(dormi)
+                tmp.replace(path)
+        valori = xr.concat([xr.concat([_ritaglia_file(p, apri, area) for p in parti_gruppo], dim="step").sortby("step")
+                            for parti_gruppo in gribs], dim="time")
         ds = valori.to_dataset(name=nome)
         if nome == "prec":
             ds["prec_1h"] = pioggia_oraria_modello(valori)

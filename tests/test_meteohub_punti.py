@@ -66,3 +66,20 @@ def test_a_point_with_no_data_around_gets_no_rows():
     vuoto = regolare() * np.nan
 
     assert valori_nei_punti(vuoto, [Punto("Genova", 44.41, 8.79)]) == []
+
+
+def test_ensemble_members_are_told_apart():
+    # ICON_2I_EPS: one field per member (dim number) besides time
+    campo = xr.concat([regolare(), regolare() + 1000], dim=xr.DataArray([1, 2], dims="number", name="number"))
+
+    righe = valori_nei_punti(campo, [Punto("Genova", 44.41, 8.79)])
+
+    assert [(r["membro"], r["time"][11:16], r["valore"]) for r in righe] == [
+        (1, "01:00", 0.0), (1, "02:00", 100.0), (2, "01:00", 1000.0), (2, "02:00", 1100.0)]
+
+
+def test_a_single_step_keeps_its_valid_time():
+    # one run, one step: cfgrib leaves time, step and valid_time scalar
+    campo = regolare().isel(time=0).assign_coords(valid_time=np.datetime64("2026-10-12T01:00"))
+
+    assert valori_nei_punti(campo, [Punto("Genova", 44.41, 8.79)])[0]["valid_time"] == "2026-10-12T01:00:00Z"

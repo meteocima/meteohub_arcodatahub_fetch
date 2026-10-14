@@ -267,3 +267,60 @@ def test_a_mercator_field_given_as_points_is_put_back_on_its_grid():
     assert dict(griglia.sizes) == {"time": 1, "y": 2, "x": 3}
     assert griglia.values[0].tolist() == [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]]
     assert griglia.latitude.values[:, 0].tolist() == [44.0, 44.1]
+
+
+def passo(ore):
+    return {"type": "timerange", "style": "Timedef", "step_len": ore, "step_unit": 1, "stat_type": 1, "stat_len": ore, "stat_unit": 1}
+
+
+class EpsGrandeFinto(MeteoHubFinto):
+    """A run of 1500 MB, over the 900 MB of one extraction (ICON_2I_EPS prec: 1.18 GB a run): rain accumulated
+    since the run start, 1 mm an hour, on the steps the timerange filter asks for."""
+
+    def metadati(self, dataset, giorno):
+        return {**super().metadati(dataset, giorno), "timerange": [passo(h) for h in range(4)]}
+
+    def stima_mb(self, dataset, filtri, giorno):
+        return 1500.0
+
+    def estrazione(self, nome, dataset, da, a, filtri, path):
+        ore = [t["step_len"] for t in filtri["timerange"]]
+        self.estrazioni.append((da, a, ore))
+        corse = pd.date_range(da, a, freq="12h")
+        campi = []
+        for c in corse:  # two members, the second raining twice as much
+            tp = cumulata([float(h) for h in range(4)], str(c)).isel(step=ore)
+            campi.append(xr.concat([tp, tp * 2], dim=xr.DataArray([1, 2], dims="number", name="number")).assign_coords(time=c))
+        xr.concat(campi, dim="time").to_dataset().to_netcdf(path)
+        return path
+
+
+def test_a_run_larger_than_one_extraction_is_split_by_steps_and_put_back_together(tmp_path):
+    fonte = EpsGrandeFinto(quote=[])
+
+    file = scarica_modelli(fonte, Area.da_testo("bbox:8.7,44.3,9.1,44.7"), datetime(2026, 10, 11), datetime(2026, 10, 11, 12),
+                           "ICON_2I_EPS", ["prec"], tmp_path, limite_mb=900, apri=xr.open_dataset)
+
+    assert [(str(da)[11:13], ore) for da, _, ore in fonte.estrazioni] == [("00", [0, 1]), ("00", [2, 3]), ("12", [0, 1]), ("12", [2, 3])]
+    with xr.open_dataset(file["prec"]) as ds:
+        assert ds["prec"].sizes["time"] == 2 and ds["prec"].sizes["step"] == 4
+        assert ds["prec_1h"].sel(number=1).isel(time=1, latitude=0, longitude=0).values[1:].tolist() == [1.0, 1.0, 1.0]
+        assert ds["prec_1h"].sel(number=2).isel(time=1, latitude=0, longitude=0).values[1:].tolist() == [2.0, 2.0, 2.0]
+
+
+from meteohub.modelli import dividi_scadenze
+
+
+def test_the_steps_of_a_run_are_cut_into_contiguous_slices_each_under_the_limit():
+    passi = [passo(h) for h in range(52)]  # 2650 MB a run, 51 MB a step: 17 steps (867 MB) fit under 900 MB
+
+    fette = dividi_scadenze(passi, mb_per_corsa=2650, limite_mb=900)
+
+    assert [len(f) for f in fette] == [17, 17, 17, 1]
+    assert [p for f in fette for p in f] == passi
+
+
+def test_a_run_that_fits_is_not_cut():
+    passi = [passo(h) for h in range(4)]
+
+    assert dividi_scadenze(passi, mb_per_corsa=500, limite_mb=900) == [passi]

@@ -93,7 +93,9 @@ Ogni punto dice da dove viene la misura; i commit citati contengono il codice ch
 
 - **Un'estrazione non terminata non si cancella prima di 2 giorni**, e **le estrazioni di osservazioni contano sulla quota oraria e sono lente**: vedi i due punti sopra.
 - **Il disco dell'account sul server è di 1 GB** (`/api/usage`: `quota: 1073741824`). Un'estrazione rimasta dal 2026-09-27 ne occupava 84 MB finché non è stata cancellata, il 2026-10-14.
-- **I filtri di `/api/data` accettano `area`** (definizione `Filters` di `docs/meteohub/openapi.json`). `meteohub_fetch.py modelli` lo usa per non chiedere la griglia non strutturata di `ICON_2I_EPS` (e408a80); non è ancora stato provato con un'estrazione vera.
+- **I filtri di `/api/data` accettano `area`** (definizione `Filters` di `docs/meteohub/openapi.json`). `meteohub_fetch.py modelli` lo usa per non chiedere la griglia non strutturata di `ICON_2I_EPS`: provato il 2026-10-14 sulla corsa del 2026-10-11 21, il GRIB contiene solo la griglia 761×761.
+- **Il limite di un'estrazione scatta dopo l'elaborazione, non all'invio.** Un'estrazione `ICON_2I_EPS` `prec` di una corsa (1040 campi, 1,18 GB) è stata accettata e poi è fallita con "The resulting output size exceeds the size allowed for a single request" (2026-10-14). Divisa in due estrazioni per gruppi di scadenze (filtro `timerange`), da circa 590 MB ciascuna, è andata a buon fine.
+- **Contare i campi per prodotto e livello.** `/api/fields` con `SummaryStats` e `q=...;product:...` conta tutti i livelli ed elaborazioni del prodotto: per `ICON_2I_EPS` la pioggia dà 1670 campi (1,64 GB) su 2 livelli e 122 elaborazioni, ma al suolo sono 1040 (1,18 GB). Una stima per proporzione di livelli ed elaborazioni dava 698 MB; aggiungendo `;level:GRIB2S,1,0,0` alla query il conteggio è esatto. `/api/fields` elenca inoltre due volte lo stesso prodotto pioggia di `ICON_2I_EPS`.
 - **Limiti di dimensione:** le prove sono in corso con `tools/prove_estrazioni.py` e i risultati vanno in `limiti_estrazioni.csv` (issue #3).
 
 **Griglie dei modelli** (estrazioni `t2m` della corsa del 2026-10-12 su provincia di Genova, e408a80)
@@ -104,7 +106,7 @@ Ogni punto dice da dove viene la misura; i commit citati contengono il codice ch
 | `WRF_OL`, `WRF_DA_ITA` | Mercator, `tn=10` | non lat/lon regolare come si pensava; passo costante 0,0138° × 0,0192° (`WRF_OL`) e 0,0236° × 0,033° (`WRF_DA_ITA`) |
 | `MOLOCH` | ruotata, `tn=1` | due griglie nella stessa estrazione: 1154×1154 (~1,25 km) con tutte le 45 scadenze orarie, 577×577 (~2,5 km) con 16. `/api/fields` elenca sei varianti, alcune sfalsate di mezza cella |
 | `BOLAM`, `MOLOCH_AIM` | ruotata, `tn=1` | una griglia; ritaglio su Genova di 6×9 celle (BOLAM, 8,3 km) e 52×77 (MOLOCH_AIM, ~1 km) |
-| `ICON_2I_EPS` | lat/lon `tn=0` più non strutturata `tn=101` | la `tn=101` non ha coordinate nel GRIB |
+| `ICON_2I_EPS` | lat/lon `tn=0` più non strutturata `tn=101` | la `tn=101` non ha coordinate nel GRIB. 20 membri (dimensione `number` in cfgrib), una corsa alle 21 con 52 scadenze orarie; `prec` di una corsa è 1,18 GB, oltre il limite di un'estrazione |
 | `swan-ita`, `swan-med` | GRIB1 | descritte da `/api/fields` senza `tn` |
 
 **Lettura dei GRIB con cfgrib** (e408a80)

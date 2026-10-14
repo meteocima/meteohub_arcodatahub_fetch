@@ -13,6 +13,10 @@ class Risposta:
     def json(self):
         return self._corpo
 
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise RuntimeError(self.status_code)
+
 
 class HttpFinto:
     """/api/observations that times out (502) on windows of two hours or more and refuses (400) the one starting at errore."""
@@ -123,3 +127,27 @@ def test_a_refused_extraction_says_its_http_status():
         assert client.http.richieste[0]["force_obs_download"] is True
     else:
         raise AssertionError("no refusal")
+
+
+class FieldsEps(HttpFinto):
+    """/api/fields SummaryStats of ICON_2I_EPS prec, 2026-10-11 (real numbers): the product alone counts 1670 fields
+    on 2 levels and 122 timeranges, the surface level alone 1040 fields (52 steps x 20 members)."""
+
+    def get(self, url, params=None, headers=None, timeout=None):
+        self.richieste.append(params)
+        if "level:GRIB2S,1,0,0" in params["q"]:
+            items = {"summarystats": {"c": 1040, "s": 1181652280}, "timerange": [{"n": i} for i in range(52)], "run": [{"v": 1260}]}
+        else:
+            items = {"summarystats": {"c": 1670, "s": 1637854040}, "level": [{"l": 1}, {"l": 2}],
+                     "timerange": [{"n": i} for i in range(122)], "run": [{"v": 1260}]}
+        return Risposta(200, {"items": items})
+
+
+def test_the_size_of_a_run_is_counted_on_the_level_asked_and_each_product_once(monkeypatch):
+    client = meteohub(monkeypatch, FieldsEps())
+    prec = {"style": "GRIB2", "centre": 80, "discipline": 0, "category": 1, "number": 52}
+    filtri = {"product": [prec, dict(prec)],  # /api/fields lists the product twice
+              "level": [{"style": "GRIB2S", "level_type": 1, "scale": 0, "value": 0}],
+              "timerange": [{"n": i} for i in range(52)]}
+
+    assert round(client.stima_mb("ICON_2I_EPS", filtri, datetime(2026, 10, 11))) == 1182

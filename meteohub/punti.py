@@ -13,6 +13,7 @@ from meteohub.area import Area
 
 RAGGIO_KM = 6371.0
 NOMI = ("nome", "stazione", "station_name", "name")  # name column of a points file, first one found
+NOMI_COLONNE = {"number": "membro"}  # cfgrib dim -> column of the points CSV
 
 
 @dataclass(frozen=True)
@@ -64,18 +65,21 @@ def valori_nei_punti(campo: xr.DataArray, punti: List[Punto]) -> List[Dict[str, 
         lat2, lon2 = lat.values, (lon.values + 180) % 360 - 180
     altre = [x for x in campo.dims if x not in spaziali]
     con_dati = campo.notnull().any(altre).transpose(*spaziali).values if altre else campo.notnull().values
-    # time-like coordinates of the other dims (time, step, valid_time), spread to every value of a point's series
-    tempi = {c: campo[c] for c in campo.coords if c not in (lat_n, lon_n) and np.asarray(campo[c]).dtype.kind in "mM"
-             and set(campo[c].dims) <= set(altre)}
+    # columns besides the value: time-like coordinates (time, step, valid_time, also scalar ones) and the
+    # coordinates of the other dims (number: the members of an ensemble, column membro)
+    da_colonna = {c: campo[c] for c in campo.coords if c not in (lat_n, lon_n) and set(campo[c].dims) <= set(altre)
+                  and (np.asarray(campo[c]).dtype.kind in "mM" or c in altre)}
     forma = tuple(campo.sizes[x] for x in altre)
     colonne = {}
-    for c, v in tempi.items():
+    for c, v in da_colonna.items():
         valori = np.broadcast_to(v.transpose(*[x for x in altre if x in v.dims]).values.reshape(
             [campo.sizes[x] if x in v.dims else 1 for x in altre]), forma).reshape(-1)
         if valori.dtype.kind == "m":
             colonne["step_h"] = valori / np.timedelta64(1, "h")
-        else:
+        elif valori.dtype.kind == "M":
             colonne[c] = pd.DatetimeIndex(valori).strftime("%Y-%m-%dT%H:%M:%SZ")
+        else:
+            colonne[NOMI_COLONNE.get(c, c)] = valori.tolist()
     righe = []
     for p in punti:
         d = np.where(con_dati, _km(p.lat, p.lon, lat2, lon2), np.inf)  # cells always NaN (outside the polygon) are skipped
