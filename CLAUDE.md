@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Standalone Python scripts (no package, no linter config; pytest tests in `tests/`) that pull station observations from MeteoHub (`https://meteohub.agenziaitaliameteo.it`, Agenzia ItaliaMeteo) and turn them into per-province CSVs. README and comments are in Italian; output file names use Italian words (`stazioni_`, `_orario`, `provincia_`).
+Python scripts plus a small local package `meteohub/` (not installed; `pyproject.toml` has `package = false`), no linter config, pytest tests in `tests/`. They pull observations, radar and model data from MeteoHub (`https://meteohub.agenziaitaliameteo.it`, Agenzia ItaliaMeteo) and ARCO Data Hub. README, docs, CLI help and messages are in Italian; code comments are in English, as in the existing modules; output file names use Italian words (`stazioni_`, `_orario`, `provincia_`).
 
 ## Commands
 
@@ -12,6 +12,7 @@ Managed with `uv` (Python >= 3.12, only dependency `requests`; `pyproject.toml` 
 
 ```bash
 uv sync
+uv run python meteohub_fetch.py stazioni --from 2026-10-10 --to 2026-10-11 --area provincia:GE   # new downloader (radar/modelli not yet built)
 uv run python meteohub_download.py --dry-run          # print the chunk windows only, no network
 uv run python meteohub_download.py                    # full download with defaults
 uv run python meteohub_download.py --from 2025-01-01T00:00:00Z --to 2025-01-10T23:59:00Z --out-dir output_test --datasets dpcn-lombardia
@@ -27,6 +28,13 @@ uv run --with pytest pytest                                               # test
 `run_meteohub_download_background.sh` and the `cd` path in README are hard-coded to another user's macOS machine (`/Users/andrea/...`, zsh, Homebrew uv); they need adapting before use here.
 
 ## Pipeline and architecture
+
+**New downloader** (`meteohub_fetch.py`, see `CONTEXT.md` for terms and `docs/adr/` for decisions): subcommands `stazioni` (built), `radar`, `modelli`, `catalogo` (not yet). Modules in `meteohub/`:
+- `area.py`: `Area.da_testo("provincia:GE" | "regione:Liguria" | "bbox:..." | "italia" | "file:x.geojson")` → `.rettangolo`, `.contiene(lat, lon)`; openpolis boundaries cached in `output/`.
+- `client.py`: `MeteoHub().osservazioni(rete, inizio, fine, rettangolo)` → `/api/observations` JSON; login, 401 renewal, retries, 5xx windows split down to 1 h.
+- `stazioni.py`: `scarica_stazioni(fonte, area, inizio, fine, variabili, cartella, reti=None)` → CSV paths `osservazioni` (long, native, with `qc` flags), `orario` (hour ending HH:00: `prec_1h` + `passo_prec_s`, means only with ≥ 2/3 of the samples expected from that hour's step, vector-mean `wdir`, `n_*` counts), `stazioni`, `errori`. One call per network (all 28 by default) and 10-day window on the area rectangle, polygon as mask; raw answers cached in `<cartella>/raw/<rectangle>/<rete>/`; a failing network is listed in `errori` and retried on rerun. Test seams: `osservazioni_in_righe`, `righe_orarie`, `scarica_stazioni` with a fake `fonte`.
+- Old scripts (below) still work; their windowing, retry and polygon code is duplicated in `meteohub/` and should be rebuilt on it.
+
 
 There are two independent download routes. Both end in a per-province CSV, but with different schemas.
 
