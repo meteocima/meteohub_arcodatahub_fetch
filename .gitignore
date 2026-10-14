@@ -6,3 +6,4 @@ output/
 output_*/
 *.log
 !docs/meteohub/inventory/run.log
+.claude/settings.local.json

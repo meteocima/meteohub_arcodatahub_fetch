@@ -25,10 +25,10 @@ import json
 import math
 import time
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from statistics import median
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import requests
 
@@ -163,12 +163,16 @@ def summarise_fields(items: Dict[str, Any]) -> Dict[str, Any]:
     for a in items.get("area", []):
         v = a.get("value", {})
         if {"Ni", "Nj", "latfirst", "latlast", "lonfirst", "lonlast"} <= v.keys() and v["Ni"] > 1 and v["Nj"] > 1:
+            # rotated grids (latp/lonp = rotated south pole) give coordinates in the rotated frame,
+            # whose equator crosses the domain, and may run across the 0 meridian (354.9 -> 7.9)
+            rotated = "latp" in v
             dlat = abs(v["latlast"] - v["latfirst"]) / 1e6 / (v["Nj"] - 1)
-            dlon = abs(v["lonlast"] - v["lonfirst"]) / 1e6 / (v["Ni"] - 1)
-            lat_mid = (v["latlast"] + v["latfirst"]) / 2e6
+            dlon = ((v["lonlast"] - v["lonfirst"]) % 360_000_000) / 1e6 / (v["Ni"] - 1)
+            lat_mid = 0 if rotated else (v["latlast"] + v["latfirst"]) / 2e6
             km = (dlat * 111.2 + dlon * 111.2 * math.cos(math.radians(lat_mid))) / 2
+            pole = f" rotated (south pole {v['latp'] / 1e6:.2f},{v['lonp'] / 1e6:.2f})" if rotated else ""
             grids.append(
-                f"{v['Ni']}x{v['Nj']} lat {v['latfirst'] / 1e6:.2f}..{v['latlast'] / 1e6:.2f} "
+                f"{v['Ni']}x{v['Nj']}{pole} lat {v['latfirst'] / 1e6:.2f}..{v['latlast'] / 1e6:.2f} "
                 f"lon {v['lonfirst'] / 1e6:.2f}..{v['lonlast'] / 1e6:.2f} "
                 f"d={dlat:.4f}x{dlon:.4f} deg (~{km:.1f} km)"
             )
@@ -177,6 +181,68 @@ def summarise_fields(items: Dict[str, Any]) -> Dict[str, Any]:
     if grids:
         row["grid"] = " | ".join(grids)
     return row
+
+
+def merge_fields(parts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Join /api/fields items of several reftime windows into one archive summary."""
+    stats = [p["summarystats"] for p in parts if p.get("summarystats", {}).get("c")]
+    merged: Dict[str, Any] = {"summarystats": {
+        "b": min((s["b"] for s in stats), default=None),
+        "e": max((s["e"] for s in stats), default=None),
+        "c": sum(s["c"] for s in stats),
+        "s": sum(s.get("s", 0) for s in stats),
+    }}
+    for p in parts:
+        for key, values in p.items():
+            if key == "summarystats" or not isinstance(values, list):
+                continue
+            seen = merged.setdefault(key, [])
+            seen += [v for v in values if v not in seen]
+    return merged
+
+
+FieldsFetch = Callable[[date, date], Tuple[int, Any]]
+
+
+def fields_by_windows(fetch: FieldsFetch, start: date, end: date, window_days: int = 31
+                      ) -> Tuple[Dict[str, Any], List[Tuple[date, date]], List[Tuple[date, date]]]:
+    """/api/fields over [start, end] in windows, for archives too big or partly unreadable for one call.
+
+    fetch(d0, d1) returns (status, body) for the whole days d0..d1. A window that fails is split in
+    two down to one day. Returns the merged items, the days that still fail with 4xx (broken
+    archive blocks) and those that still fail with 5xx/timeouts, both as (first, last) ranges.
+    """
+    parts: List[Dict[str, Any]] = []
+    bad_days: Dict[str, List[date]] = {"broken": [], "failed": []}
+
+    def get(d0: date, d1: date) -> None:
+        status, body = fetch(d0, d1)
+        if status == 200 and isinstance(body, dict):
+            parts.append(body.get("items") or {})
+        elif d1 > d0:
+            mid = d0 + (d1 - d0) / 2
+            get(d0, mid)
+            get(mid + timedelta(days=1), d1)
+        else:
+            bad_days["broken" if 400 <= status < 500 else "failed"].append(d0)
+
+    d = start
+    while d <= end:
+        e = min(d + timedelta(days=window_days - 1), end)
+        get(d, e)
+        d = e + timedelta(days=1)
+    return merge_fields(parts), day_ranges(bad_days["broken"]), day_ranges(bad_days["failed"])
+
+
+def day_ranges(days: List[date]) -> List[Tuple[date, date]]:
+    """Consecutive days -> (first, last) ranges."""
+    ranges: List[Tuple[date, date]] = []
+    for d in sorted(days):
+        if ranges and d - ranges[-1][1] == timedelta(days=1):
+            ranges[-1] = (ranges[-1][0], d)
+        else:
+            ranges.append((d, d))
+    return ranges
 
 
 def ref_step_seconds(vals: List[Dict[str, Any]]) -> Optional[float]:
@@ -361,6 +427,22 @@ def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
         w.writerows(rows)
 
 
+FIELDS_WINDOWS_FROM = date(2000, 1, 1)
+
+
+def fields_in_windows(api: Api, ds_id: str) -> Tuple[Dict[str, Any], List[Tuple[date, date]], List[Tuple[date, date]]]:
+    """Fallback when /api/fields on the whole archive fails: monthly windows since FIELDS_WINDOWS_FROM."""
+    def fetch(d0: date, d1: date) -> Tuple[int, Any]:
+        q = f"reftime: >={d0} 00:00,<={d1} 23:59"
+        status, body = api.get("/api/fields", {"datasets": ds_id, "SummaryStats": "true", "allAvailableProducts": "true", "q": q},
+                               read_timeout=300, attempts=1)
+        api.calls[-1]["window_h"] = ((d1 - d0).days + 1) * 24
+        return status, body
+
+    print(f"  {ds_id}: /api/fields on the whole archive failed, trying monthly windows", flush=True)
+    return fields_by_windows(fetch, FIELDS_WINDOWS_FROM, datetime.now(timezone.utc).date())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Inventory of MeteoHub datasets.")
     yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -405,8 +487,19 @@ def main() -> None:
             )
         if status == 200 and isinstance(body, dict) and "items" in body:
             row.update(summarise_fields(body["items"]))
+        elif ds.get("source") == "nwp":
+            # /api/fields answers 400 AttributeError for every source=nwp dataset, whatever the parameters (#4)
+            row["fields_error"] = f"{status} {str(body)[:200]}"
+            row["fields_note"] = "source=nwp: /api/fields not supported; ARCO archive if any, otherwise only /api/data"
         else:
             row["fields_error"] = f"{status} {str(body)[:200]}"
+            items, broken, failed = fields_in_windows(api, ds["id"])
+            if items["summarystats"]["c"]:
+                row.update(summarise_fields(items))
+                row["fields_by_windows"] = "monthly"
+                (raw / "fields" / f"{ds['id']}.windows.json").write_text(json.dumps(items, indent=1), encoding="utf-8")
+            row["fields_broken_days"] = " ".join(f"{a}..{b}" for a, b in broken)
+            row["fields_failed_days"] = " ".join(f"{a}..{b}" for a, b in failed)
             st2, od = api.get(f"/api/datasets/{ds['id']}/opendata", save=f"opendata/{ds['id']}.json")
             row["opendata_files"] = len(od) if isinstance(od, list) else f"{st2}"
 
@@ -453,7 +546,13 @@ def main() -> None:
     if arco_rows:
         write_csv(args.out_dir / "arco.csv", arco_rows)
     write_csv(args.out_dir / "api_calls.csv", api.calls)
-    write_csv(args.out_dir / "api_problems.csv", summarise_calls(api.calls))
+    problems = summarise_calls(api.calls)
+    for pr in problems:
+        ds_row = next((r for r in ds_rows if r["id"] == pr["dataset"]), {})
+        if pr["path"] == "/api/fields":
+            pr["broken_days"] = ds_row.get("fields_broken_days", "")
+            pr["failed_days"] = ds_row.get("fields_failed_days", "")
+    write_csv(args.out_dir / "api_problems.csv", problems)
     (args.out_dir / "run_info.json").write_text(
         json.dumps(
             {
