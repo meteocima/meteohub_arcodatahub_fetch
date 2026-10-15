@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Python scripts plus a small local package `meteohub/` (not installed; `pyproject.toml` has `package = false`), no linter config, pytest tests in `tests/`. They pull observations, radar and model data from MeteoHub (`https://meteohub.agenziaitaliameteo.it`, Agenzia ItaliaMeteo) and ARCO Data Hub. README, docs, CLI help and messages are in Italian; code comments are in English, as in the existing modules; output file names use Italian words (`stazioni_`, `_orario`, `provincia_`).
+Python scripts plus a package `meteohub/` (installable as `meteohub-download`, a dependency of meteocima/CORO), no linter config, pytest tests in `tests/`. They pull observations, radar and model data from MeteoHub (`https://meteohub.agenziaitaliameteo.it`, Agenzia ItaliaMeteo) and ARCO Data Hub. README, docs, CLI help and messages are in Italian; code comments are in English, as in the existing modules; output file names use Italian words (`stazioni_`, `_orario`, `provincia_`).
 
 ## Commands
 
