@@ -66,7 +66,7 @@ Il punto d'ingresso è `meteohub_fetch.py`, con un sottocomando per tipo di dato
 |---|---|---|---|---|
 | **`stazioni`** | osservazioni delle 28 reti di stazioni | MeteoHub `/api/observations` | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
 | **`radar`** | pioggia dal mosaico radar del Dipartimento della Protezione Civile (DPC): SRT1, cumulata oraria corretta con i pluviometri (dal 2018-07), e SRI, intensità istantanea (dal 2010) | ARCO Data Hub, Zarr | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
-| **`modelli`** | ICON-2I, MOLOCH, BOLAM, WRF (tutte le griglie) | MeteoHub `/api/data` | sì, 10 estrazioni all'ora | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
+| **`modelli`** | ICON-2I (anche l'ensemble EPS), MOLOCH, BOLAM, WRF (tutte le griglie) | MeteoHub `/api/data` | sì, 10 estrazioni all'ora | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
 | **`catalogo`** | che cosa c'è per un'area e un periodo, con il comando per scaricarlo | inventario nel repository | no | ![disponibile](https://img.shields.io/badge/-disponibile-2ea44f) |
 
 Con `--punti`, `radar` e `modelli` scrivono anche i valori sulle coordinate delle stazioni (vedi [Valori sui punti](#valori-sui-punti)). Ogni lancio scrive il dato nativo e quello orario, con l'ora che termina alle HH:00 e i tempi in UTC. Le scelte di progetto sono nelle [decisioni (ADR)](docs/adr/) e i termini usati sono definiti nel [glossario](CONTEXT.md).
@@ -171,6 +171,7 @@ Le opzioni `--from`, `--to`, `--area` e `--out-dir` sono le stesse delle stazion
 |---|---|
 | **`radar_<tipo>_nativo_...nc`** | le scansioni originali ritagliate sull'area. La griglia è in Mercatore trasverso, quindi il ritaglio rettangolare sulla griglia include celle fuori dall'area: queste valgono NaN |
 | **`radar_<tipo>_orario_...nc`** | `prec_1h` per ogni ora del periodo |
+| **`punti_radar_<tipo>_nativo_...csv`**, **`punti_radar_<tipo>_orario_...csv`** | con `--punti`: i valori sui punti (vedi [Valori sui punti](#valori-sui-punti)) |
 
 Per `srt1` il valore orario è quello delle HH:00. Per `sri` è la media delle intensità valide dell'ora moltiplicata per un'ora, calcolata solo se ci sono almeno 2/3 delle scansioni attese; la variabile `n_misure` dice quante scansioni sono state usate in ogni cella. Il passo delle scansioni SRI cambia nel tempo: 15 min fino al 2014-06, 10 min fino al 2020-06, poi 5 min.
 
@@ -213,9 +214,9 @@ uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVEL
 | `--from`, `--to`, `--area`, `--out-dir` | come per le stazioni; si scaricano le corse che partono nel periodo. Con una data senza ora, `--to` arriva all'ultima corsa di quel giorno. La cartella predefinita è `output/modelli_<modello>_<area>_<inizio>_<fine>/` |
 
 > [!WARNING]
-> I modelli si leggono solo con le estrazioni `/api/data`, che **consumano la quota di 10 richieste all'ora** per account. Lo script la gestisce da solo, ma un periodo lungo può richiedere ore.
+> I modelli si leggono solo con le estrazioni `/api/data`: **10 richieste all'ora** per account e **circa 1 GB per estrazione**. Lo script gestisce da solo quota e dimensioni, ma un periodo lungo può richiedere ore. `SEASONAL` e `shyfem` non si possono estrarre: MeteoHub risponde con un errore interno a ogni richiesta (vedi [limiti delle estrazioni](docs/meteohub/README.md#limiti-delle-estrazioni-prove-del-2026-10-14-issue-3)).
 
-L'account non ha elaborazioni lato server: ogni estrazione scarica il campo intero, che viene ritagliato sull'area in locale. Lo script stima la dimensione di una corsa, raggruppa le corse in estrazioni sotto `--limite-mb` (una corsa più grande, come la pioggia di ICON-2I-EPS da 1,2 GB, viene divisa in più estrazioni per gruppi di scadenze) e cancella ogni estrazione dal server appena scaricata, perché anche lo spazio sul server è di 1 GB. Se la quota è esaurita, aspetta l'ora successiva e riprende da solo.
+L'account non ha elaborazioni lato server: ogni estrazione scarica il campo intero, che viene ritagliato sull'area in locale. Lo script stima la dimensione di una corsa, raggruppa le corse in estrazioni sotto `--limite-mb` (una corsa più grande, come la pioggia di ICON-2I-EPS da 1,2 GB, viene divisa in più estrazioni per gruppi di scadenze) e cancella ogni estrazione dal server appena scaricata, perché anche lo spazio sul server è di 1 GB. Se la quota è esaurita, aspetta l'ora successiva e riprende da solo. Il tempo di un'estrazione dipende soprattutto dalla coda sul server: da pochi secondi a qualche minuto per i modelli provati.
 
 Il ritaglio funziona su tutte le griglie dei modelli: lat/lon regolare (ICON-2I), ruotata (MOLOCH, MOLOCH_AIM, BOLAM), Mercator (`WRF_OL`, `WRF_DA_ITA`) e Lambert (`WRF`). Sulle griglie non regolari il file ha le dimensioni `y`, `x` e latitudine e longitudine di ogni cella; si tiene il rettangolo più piccolo di celle che contiene l'area e le celle fuori dall'area valgono NaN. Se un'estrazione contiene la stessa variabile su più griglie (MOLOCH dà `t2m` su 1154×1154 e su 577×577), si tiene la più fine. Le griglie che non si possono georeferenziare (la non strutturata di ICON-2I-EPS) non vengono chieste.
 
@@ -224,7 +225,8 @@ Il ritaglio funziona su tutte le griglie dei modelli: lat/lon regolare (ICON-2I)
 | File | Contenuto |
 |---|---|
 | **`modello_<modello>_<var>_...nc`** | un NetCDF per variabile, ritagliato sull'area (celle fuori dal poligono a NaN): `time` è l'inizio della corsa, `step` la scadenza, `valid_time` l'istante di validità, in UTC |
-| **`grib/<var>/`** | i GRIB scaricati, uno per estrazione: rilanciando il comando si estrae solo quello che manca |
+| **`grib/<var>/`** | i GRIB scaricati, uno per estrazione (`_scadenze<a>-<b>h` se la corsa è divisa): rilanciando il comando si estrae solo quello che manca |
+| **`punti_modello_<modello>_<var>_...csv`** | con `--punti`: i valori sui punti (vedi [Valori sui punti](#valori-sui-punti)) |
 
 Per `prec` il file contiene anche `prec_1h`, la pioggia dell'ora che termina a ogni scadenza intera. Si calcola come differenza fra due scadenze consecutive della cumulata dall'inizio della corsa, e le differenze negative dovute alla compressione GRIB diventano 0. Per ICON-2I-RUC, che ha scadenze ogni 10 minuti, si usano solo quelle a ora intera.
 
@@ -353,6 +355,7 @@ meteohub_stations.py       percorso B: stazioni di una provincia
 clean_and_hourly.py        percorso B: pulizia e passo orario
 meteohub_inventory.py      inventario dei dataset
 tools/catalogo/            catalogo delle variabili e resoconto
+tools/prove_estrazioni.py  prove sui limiti delle estrazioni /api/data (usa la quota)
 tests/                     test pytest
 docs/                      documentazione (sotto)
 CONTEXT.md                 glossario dei termini
@@ -367,7 +370,8 @@ DATI_DISPONIBILI.md        che cosa c'è e che cosa manca nelle due piattaforme
 |---|---|
 | **[DATI_DISPONIBILI.md](DATI_DISPONIBILI.md)** | sintesi di che cosa c'è e che cosa manca su MeteoHub e ARCO Data Hub |
 | [docs/meteohub/catalogo/RESOCONTO.md](docs/meteohub/catalogo/RESOCONTO.md) | resoconto completo: ogni rete, radar e modello con tutte le variabili |
-| [docs/meteohub/README.md](docs/meteohub/README.md) | note sulle API di MeteoHub: endpoint, autenticazione, codici BUFR, fonti |
+| [docs/meteohub/README.md](docs/meteohub/README.md) | note sulle API di MeteoHub: endpoint, autenticazione, codici BUFR, scoperte, limiti delle estrazioni, fonti |
+| [docs/meteohub/limiti_estrazioni.csv](docs/meteohub/limiti_estrazioni.csv) | le prove sui limiti delle estrazioni, una riga per richiesta |
 | [docs/meteohub/inventory/](docs/meteohub/inventory/) | inventario dei dataset e risposte grezze delle API |
 | [CONTEXT.md](CONTEXT.md) | glossario: rete, passo di cumulata, pioggia oraria, corsa, quota… |
 | [docs/adr/](docs/adr/) | decisioni di progetto |
