@@ -324,3 +324,92 @@ def test_a_run_that_fits_is_not_cut():
     passi = [passo(h) for h in range(4)]
 
     assert dividi_scadenze(passi, mb_per_corsa=500, limite_mb=900) == [passi]
+
+
+from meteohub.modelli import filtri_variabile
+
+
+def prodotto(desc, numero):
+    return {"type": "product", "desc": desc, "style": "GRIB2", "centre": 80, "discipline": 0, "category": 0, "number": numero}
+
+
+def livello(tipo, valore, scala=0):
+    return {"type": "level", "style": "GRIB2S", "level_type": tipo, "scale": scala, "value": valore}
+
+
+ISTANTANEO = {"type": "timerange", "style": "Timedef", "step_len": 3, "step_unit": 1, "stat_type": 254, "stat_len": 0, "stat_unit": 13}
+CUMULATA = {"type": "timerange", "style": "Timedef", "step_len": 3, "step_unit": 1, "stat_type": 1, "stat_len": 3, "stat_unit": 1}
+# Products and levels as /api/fields lists them for ICON-2I, BOLAM, MOLOCH and WRF_DA_ITA (2026-10-15).
+U = prodotto("u-component of wind (m/s)", 2)
+CAPE = prodotto("Convective available potential energy (J/kg)", 6)
+SUOLO, SUOLO_SENZA_VALORE, ML, COLONNA = livello(1, 0), livello(1, None, None), livello(192, 0), livello(200, 0)
+HPA = {p: livello(100, p * 100) for p in (500, 700, 850)}
+
+
+def metadati(*prodotti):
+    return {"product": list(prodotti), "level": [SUOLO, SUOLO_SENZA_VALORE, ML, COLONNA, *HPA.values()],
+            "timerange": [ISTANTANEO, CUMULATA]}
+
+
+def test_wind_on_a_pressure_level_asks_for_that_level_only():
+    filtri = filtri_variabile(metadati(U, CAPE), "u850")
+
+    assert filtri == {"product": [U], "level": [HPA[850]], "timerange": [ISTANTANEO]}
+
+
+GEOPOTENZIALE = prodotto("Geopotential (m2 s-2)", 4)
+ALTEZZA_GEOPOTENZIALE = prodotto("Geopotential height (gpm)", 5)
+
+
+def test_geopotential_at_500_hpa_is_found_as_geopotential_or_as_its_height():
+    # ICON-2I gives the geopotential, BOLAM, MOLOCH and WRF its height.
+    assert filtri_variabile(metadati(GEOPOTENZIALE, U), "z500") == {
+        "product": [GEOPOTENZIALE], "level": [HPA[500]], "timerange": [ISTANTANEO]}
+    assert filtri_variabile(metadati(ALTEZZA_GEOPOTENZIALE, U), "z500")["product"] == [ALTEZZA_GEOPOTENZIALE]
+
+
+def test_cape_is_the_surface_based_one():
+    filtri = filtri_variabile(metadati(CAPE, U), "cape")
+
+    # ICON-2I also has a mixed-layer CAPE on level 192; BOLAM and MOLOCH give theirs on a surface level without value.
+    assert filtri["product"] == [CAPE] and filtri["timerange"] == [ISTANTANEO]
+    assert filtri["level"] == [SUOLO, SUOLO_SENZA_VALORE]
+
+
+TCWV = prodotto("Total column integrated water vapour (kg m-2)", 64)
+ACQUA_PRECIPITABILE = prodotto("Precipitable water (kg m-2)", 3)
+
+
+def test_water_vapour_column_is_found_under_both_names():
+    # ICON-2I: surface level; WRF: precipitable water on the whole column (level 200).
+    assert filtri_variabile(metadati(TCWV, U), "tcwv")["product"] == [TCWV]
+    filtri = filtri_variabile(metadati(ACQUA_PRECIPITABILE, U), "tcwv")
+    assert filtri["product"] == [ACQUA_PRECIPITABILE] and COLONNA in filtri["level"]
+    assert not any(l["level_type"] == 100 for l in filtri["level"])
+
+
+V = prodotto("v-component of wind (m s-1)", 3)
+
+
+@pytest.mark.parametrize("nome, componente, hpa", [("v850", V, 850), ("u700", U, 700), ("v700", V, 700)])
+def test_both_wind_components_are_there_at_850_and_700_hpa(nome, componente, hpa):
+    assert filtri_variabile(metadati(U, V), nome) == {"product": [componente], "level": [HPA[hpa]], "timerange": [ISTANTANEO]}
+
+
+def accumulo(passo_ore, durata, unita_durata, unita_passo=1):
+    passo = passo_ore * (60 if unita_passo == 0 else 1)
+    return {"type": "timerange", "style": "Timedef", "step_len": passo, "step_unit": unita_passo,
+            "stat_type": 1, "stat_len": durata, "stat_unit": unita_durata}
+
+
+PIOGGIA = prodotto("Total precipitation rate (kg m-2 s-1)", 52)
+
+
+def test_hourly_rain_takes_the_one_hour_accumulations_bolam_and_moloch_give():
+    # BOLAM: 1 hour at each hourly step, plus 3-hour sums; MOLOCH: the same hour written as 60 minutes.
+    bolam = [accumulo(1, 1, 1), accumulo(2, 1, 1), accumulo(3, 3, 1)]
+    moloch = [accumulo(1, 60, 0, unita_passo=0), accumulo(2, 60, 0, unita_passo=0), accumulo(3, 3, 1)]
+    for elaborazioni in (bolam, moloch):
+        meta = {"product": [PIOGGIA], "level": [SUOLO, SUOLO_SENZA_VALORE], "timerange": [ISTANTANEO, *elaborazioni]}
+
+        assert filtri_variabile(meta, "prec_1h")["timerange"] == elaborazioni[:2]

@@ -130,18 +130,37 @@ def _cumulata_dall_inizio(t: Dict[str, Any]) -> bool:
     return t.get("stat_type") == 1 and durata == passo
 
 
+def _cumulata_su_un_ora(t: Dict[str, Any]) -> bool:
+    return t.get("stat_type") == 1 and t.get("stat_len", 0) * UNITA_S.get(t.get("stat_unit"), 0) == 3600
+
+
 def _alto(m: int) -> Callable[[Dict[str, Any]], bool]:
     return lambda l: l.get("level_type") == 103 and l.get("value") == m and l.get("scale", 0) == 0
+
+
+def _isobara(hpa: int) -> Callable[[Dict[str, Any]], bool]:
+    return lambda l: l.get("level_type") == 100 and l.get("value") == hpa * 100 and l.get("scale", 0) == 0
 
 
 # short names on the command line (CONTEXT.md, "Variabile")
 VARIABILI = {
     "prec": Variabile(lambda d: d.startswith("total precipitation"),
                       lambda l: l.get("level_type") == 1 and l.get("value") == 0, _cumulata_dall_inizio),
+    "prec_1h": Variabile(lambda d: d.startswith("total precipitation"), lambda l: l.get("level_type") == 1,
+                         _cumulata_su_un_ora),  # BOLAM and MOLOCH give the hourly rain itself
     "t2m": Variabile(lambda d: d.startswith("temperature"), _alto(2), _istantaneo),
     "u10": Variabile(lambda d: d.startswith("u-component of wind"), _alto(10), _istantaneo),
     "v10": Variabile(lambda d: d.startswith("v-component of wind"), _alto(10), _istantaneo),
     "mslp": Variabile(lambda d: d.startswith("pressure reduced to msl"), lambda l: l.get("level_type") == 101, _istantaneo),
+    "u850": Variabile(lambda d: d.startswith("u-component of wind"), _isobara(850), _istantaneo),
+    "v850": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(850), _istantaneo),
+    "u700": Variabile(lambda d: d.startswith("u-component of wind"), _isobara(700), _istantaneo),
+    "v700": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(700), _istantaneo),
+    "cape": Variabile(lambda d: d.startswith("convective available potential energy"),
+                      lambda l: l.get("level_type") == 1, _istantaneo),
+    "tcwv": Variabile(lambda d: d.startswith(("total column integrated water vapour", "precipitable water")),
+                      lambda l: l.get("level_type") in (1, 10, 200), _istantaneo),
+    "z500": Variabile(lambda d: d.startswith("geopotential"), _isobara(500), _istantaneo),  # m2 s-2 (ICON) or gpm
 }
 
 

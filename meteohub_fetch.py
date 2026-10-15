@@ -141,7 +141,7 @@ def main() -> None:
 
     p = sub.add_parser("modelli", parents=[comuni], help="modelli da MeteoHub /api/data (usa la quota: 10 estrazioni all'ora)")
     p.add_argument("--modello", default="ICON_2I_SURFACE_PRESSURE_LEVELS", help="dataset MeteoHub (vedi docs/meteohub/catalogo/RESOCONTO.md)")
-    p.add_argument("--vars", default="prec", help="variabili: prec, t2m, u10, v10, mslp (predefinita prec)")
+    p.add_argument("--vars", default="prec", help="variabili: prec, prec_1h, t2m, u10, v10, mslp, u850, v850, u700, v700, z500, cape, tcwv (predefinita prec)")
     p.add_argument("--limite-mb", type=float, default=900, help="dimensione massima di un'estrazione in MB (limite dell'account: 1 GB)")
     p.add_argument("--punti", type=Path, help=PUNTI)
     p.set_defaults(func=modelli)
