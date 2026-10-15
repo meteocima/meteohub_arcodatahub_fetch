@@ -209,7 +209,7 @@ uv run python meteohub_fetch.py modelli --modello ICON_2I_SURFACE_PRESSURE_LEVEL
 | Opzione | Significato |
 |---|---|
 | **`--modello`** | dataset MeteoHub; predefinito `ICON_2I_SURFACE_PRESSURE_LEVELS`. L'elenco è in [DATI_DISPONIBILI.md](DATI_DISPONIBILI.md#modelli) |
-| **`--vars`** | `prec` (pioggia cumulata dall'inizio della corsa, ICON-2I e WRF), `prec_1h` (pioggia oraria data già dal modello, BOLAM e MOLOCH), `t2m` (temperatura a 2 m), `u10`, `v10` (vento a 10 m), `mslp` (pressione al livello del mare), `u850`, `v850`, `u700`, `v700` (vento a 850 e 700 hPa), `z500` (geopotenziale a 500 hPa: m² s⁻² per ICON-2I, altezza in gpm per gli altri), `cape` (CAPE dalla superficie), `tcwv` (vapore nella colonna; *precipitable water* in WRF); predefinita `prec` |
+| **`--vars`** | `prec` (pioggia cumulata dall'inizio della corsa, ICON-2I e WRF), `prec_1h` (pioggia oraria data già dal modello, BOLAM e MOLOCH), `t2m` (temperatura a 2 m), `u10`, `v10` (vento a 10 m), `mslp` (pressione al livello del mare), `u850`, `v850`, `u700`, `v700` (vento a 850 e 700 hPa), `z500` (geopotenziale a 500 hPa: m² s⁻² per ICON-2I, altezza in gpm per gli altri), `cape` (CAPE dalla superficie), `cape_ml` (CAPE mixed-layer di ICON-2I, livello 192, la sola che ICON-2I dà fino almeno al 15/10/2024), `tcwv` (vapore nella colonna; *precipitable water* in WRF); predefinita `prec` |
 | **`--limite-mb`** | dimensione massima di un'estrazione in MB; predefinita 900, sotto il limite di 1 GB dell'account |
 | `--from`, `--to`, `--area`, `--out-dir` | come per le stazioni; si scaricano le corse che partono nel periodo. Con una data senza ora, `--to` arriva all'ultima corsa di quel giorno. La cartella predefinita è `output/modelli_<modello>_<area>_<inizio>_<fine>/` |
 

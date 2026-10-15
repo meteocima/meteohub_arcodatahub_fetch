@@ -158,6 +158,8 @@ VARIABILI = {
     "v700": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(700), _istantaneo),
     "cape": Variabile(lambda d: d.startswith("convective available potential energy"),
                       lambda l: l.get("level_type") == 1, _istantaneo),
+    "cape_ml": Variabile(lambda d: d.startswith("convective available potential energy"),
+                         lambda l: l.get("level_type") == 192, _istantaneo),  # ICON-2I mixed-layer CAPE
     "tcwv": Variabile(lambda d: d.startswith(("total column integrated water vapour", "precipitable water")),
                       lambda l: l.get("level_type") in (1, 10, 200), _istantaneo),
     "z500": Variabile(lambda d: d.startswith("geopotential"), _isobara(500), _istantaneo),  # m2 s-2 (ICON) or gpm

@@ -422,3 +422,10 @@ def test_levels_without_a_value_are_left_out_of_the_filter_since_meteohub_cannot
     # BOLAM hourly rain: the "0 0" surface stays, the "- -" one goes.
     misti = {"product": [PIOGGIA], "level": [SUOLO, SUOLO_SENZA_VALORE], "timerange": [accumulo(1, 1, 1)]}
     assert filtri_variabile(misti, "prec_1h")["level"] == [SUOLO]
+
+
+def test_mixed_layer_cape_is_the_one_on_level_192():
+    # ICON-2I gives only this CAPE until at least 2024-10-15; the surface-based one comes later.
+    filtri = filtri_variabile(metadati(CAPE, U), "cape_ml")
+
+    assert filtri == {"product": [CAPE], "level": [ML], "timerange": [ISTANTANEO]}
