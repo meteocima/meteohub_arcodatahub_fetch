@@ -74,10 +74,10 @@ viene da prove dirette sull'API e dal codice di questo repository.
   tutte le stazioni. Ora `meteohub_stations.py` somma in ore tutti i passi elencati in `meteohub_download.PREC_STEPS_S` (1, 2, 3, 5, 10, 15, 30 e 60 min) e `meteohub_download.py` li chiede tutti, con una colonna per passo (`prec_300s`…). Verifica: `meteohub_stations.py --province GE --from 2026-10-10T00:00:00Z --to 2026-10-11T23:59:00Z --networks dpcn-liguria,mnw`, eseguito il 2026-10-14, dà la pioggia oraria per 62 stazioni `dpcn-liguria` su 63 (8 prima della correzione).
 - **Radar.** `radar_sri_dpc` (GRIB, arkimet) va solo dal 2026-01-28. L'archivio ARCO `radar.zarr`
   (FBK con DPC, CC BY-SA 4.0) contiene invece la variabile `RR` (mm/h) su una griglia 1400×1200 dal 2010 a oggi.
-- **Quota di estrazione: 10 richieste all'ora.** Con blocchi da 2 giorni, un anno di `meteohub_download.py` richiede
-  almeno 18 ore.
+- **Quota di estrazione: 10 richieste all'ora.** Un anno di `meteohub_download.py` su tutte le reti, a blocchi di 12 ore
+  (sotto il limite di ~1 GB per estrazione, vedi sotto), sono 730 estrazioni.
 - **Un'estrazione non terminata non si cancella per 2 giorni.** `DELETE /api/requests/<id>` su una richiesta `PENDING` risponde 403 "You cannot delete an unterminated request unless grace period (of 2 days) has expired" (2026-10-14). Un'estrazione interrotta resta in coda, finisce e occupa spazio sul disco del server finché non la si cancella: `meteohub.client.MeteoHub.segui` lo segnala, e `tools/prove_estrazioni.py` riprende una richiesta già in coda con lo stesso nome invece di inviarne un'altra.
-- **Le estrazioni di osservazioni contano sulla quota e sono lente.** Dopo l'invio di una richiesta su `dpcn-lombardia`, `/api/hourly` dava `submitted: 1, remaining: 9` (2026-10-14), mentre 5 estrazioni GRIB di modelli non l'avevano mosso. Un'estrazione di 24 ore di tutte le reti (2026-09-27, 84 MB in JSON) è stata pronta 2 ore dopo l'invio. Misure sui limiti di dimensione: `tools/prove_estrazioni.py` → `docs/meteohub/limiti_estrazioni.csv` (issue #3).
+- **`/api/hourly` non sembra contare le estrazioni inviate nell'ora, ma quelle ancora sul server.** Mentre `prova_limiti_lombardia_2g` era `PENDING`, `/api/hourly` dava `submitted: 1, remaining: 9`; letto dopo ognuna delle 7 estrazioni accettate il 2026-10-14 (tre inviate in 5 minuti, alle 17:54, 17:56 e 17:59 UTC), ognuna già scaricata e cancellata, era sempre `remaining: 10`, e le richieste rifiutate all'invio non lo muovono. Le prove non hanno mai avuto due estrazioni aperte insieme, quindi non distinguono fra "non concluse" e "non cancellate". Le estrazioni di osservazioni restano a lungo in coda: `dpcn-lombardia` su 2, 7 e 18 giorni ha impiegato 71, 62 e 82 minuti dall'invio al file, mentre tutte le reti su 4 e 8 ore ne hanno impiegati 1,3 e 2,6 la sera dello stesso giorno.
 
 ### Emerso il 2026-10-14, costruendo il downloader
 
@@ -91,12 +91,12 @@ Ogni punto dice da dove viene la misura; i commit citati contengono il codice ch
 
 **Estrazioni (`/api/data`) e account**
 
-- **Un'estrazione non terminata non si cancella prima di 2 giorni**, e **le estrazioni di osservazioni contano sulla quota oraria e sono lente**: vedi i due punti sopra.
+- **Un'estrazione non terminata non si cancella prima di 2 giorni**, e **le estrazioni di osservazioni restano a lungo in coda**: vedi i due punti sopra.
 - **Il disco dell'account sul server è di 1 GB** (`/api/usage`: `quota: 1073741824`). Un'estrazione rimasta dal 2026-09-27 ne occupava 84 MB finché non è stata cancellata, il 2026-10-14.
 - **I filtri di `/api/data` accettano `area`** (definizione `Filters` di `docs/meteohub/openapi.json`). `meteohub_fetch.py modelli` lo usa per non chiedere la griglia non strutturata di `ICON_2I_EPS`: provato il 2026-10-14 sulla corsa del 2026-10-11 21, il GRIB contiene solo la griglia 761×761.
 - **Il limite di un'estrazione scatta dopo l'elaborazione, non all'invio.** Un'estrazione `ICON_2I_EPS` `prec` di una corsa (1040 campi, 1,18 GB) è stata accettata e poi è fallita con "The resulting output size exceeds the size allowed for a single request" (2026-10-14). Divisa in due estrazioni per gruppi di scadenze (filtro `timerange`), da circa 590 MB ciascuna, è andata a buon fine.
 - **Contare i campi per prodotto e livello.** `/api/fields` con `SummaryStats` e `q=...;product:...` conta tutti i livelli ed elaborazioni del prodotto: per `ICON_2I_EPS` la pioggia dà 1670 campi (1,64 GB) su 2 livelli e 122 elaborazioni, ma al suolo sono 1040 (1,18 GB). Una stima per proporzione di livelli ed elaborazioni dava 698 MB; aggiungendo `;level:GRIB2S,1,0,0` alla query il conteggio è esatto. `/api/fields` elenca inoltre due volte lo stesso prodotto pioggia di `ICON_2I_EPS`.
-- **Limiti di dimensione:** le prove sono in corso con `tools/prove_estrazioni.py` e i risultati vanno in `limiti_estrazioni.csv` (issue #3).
+- **Limiti di dimensione:** vedi la sezione successiva.
 
 **Griglie dei modelli** (estrazioni `t2m` della corsa del 2026-10-12 su provincia di Genova, e408a80)
 
@@ -120,3 +120,27 @@ Ogni punto dice da dove viene la misura; i commit citati contengono il codice ch
 - SRT1 su 61 stazioni di `dpcn-liguria` (provincia di Genova, 2026-10-11): distanza massima fra stazione e centro della cella 0,65 km, coerente con una griglia di 1 km.
 - `WRF_DA_ITA` (2,7 km): per una stazione costiera la cella più vicina cade fuori dal poligono della provincia ed è vuota; per questo si usa la cella più vicina **con dati**.
 
+### Limiti delle estrazioni (prove del 2026-10-14, issue #3)
+
+Misure di `tools/prove_estrazioni.py --fino-al 2026-10-12`, una riga per richiesta in [`limiti_estrazioni.csv`](limiti_estrazioni.csv). Filtri delle osservazioni: quelli di `meteohub_download.py` (temperatura, umidità, vento, radiazione e pioggia con tutti i passi di cumulata), `output_format=json`, `only_reliable=true`. Le dimensioni sono quelle del file JSON scaricato.
+
+| Prova | Dataset e finestra | Esito | File | Dall'invio al file |
+|---|---|---|---|---|
+| `lombardia_2g` | `dpcn-lombardia`, 2 giorni | ok | 92 MB | 71 min |
+| `lombardia_7g` | `dpcn-lombardia`, 7 giorni | ok | 323 MB | 62 min |
+| `lombardia_18g` | `dpcn-lombardia`, 18 giorni | ok | 827 MB | 82 min |
+| `lombardia_30g` | `dpcn-lombardia`, 30 giorni | **403 all'invio**: "The requested data size is estimated to exceed the maximum limit for output size." | | |
+| `lombardia_30g_force` | come sopra, `force_obs_download=true` | accettata, poi **FAILURE**: "The resulting output size exceeds the size allowed for a single request." | | 91 min |
+| `italia_4h` | 28 reti, 4 ore | ok | 267 MB | 1,3 min |
+| `italia_8h` | 28 reti, 8 ore | ok | 536 MB | 2,6 min |
+| `italia_12h_giorno` | 28 reti, 12 ore di giorno (08-20 UTC), lanciata il 2026-10-15 | ok | 808 MB | 3,6 min |
+| `modello_oltre_1gb` | `ICON_2I_SURFACE_PRESSURE_LEVELS` `t2m`, 14 corse (~1184 MB stimati) | accettata, poi **FAILURE** come sopra | | 3 s |
+| `seasonal_mese`, `shyfem_1g` | `SEASONAL`, `shyfem` | **400 all'invio** a ogni tentativo: `{"AttributeError": "There was an unexpected error. ErrorID: ..."}` (riprovato a mano il 2026-10-15 con e senza filtri e periodo: stesso errore) | | |
+
+Che cosa ne segue:
+
+- **Il limite di un'estrazione è circa 1 GB di file**, come `max_output_size` dell'account. Per le osservazioni il server lo controlla due volte: all'invio, su una stima, con un 403; e dopo l'elaborazione, sul file vero, con un `FAILURE`. Per i modelli c'è solo il secondo controllo (anche `ICON_2I_EPS` `prec`, una corsa da 1,18 GB, il 2026-10-14). `force_obs_download=true` salta il controllo all'invio ma non quello finale: non serve a superare il limite.
+- **Volumi delle osservazioni (2026-10-12):** `dpcn-lombardia` circa 46 MB al giorno (2, 7 e 18 giorni danno lo stesso rapporto); tutte le 28 reti circa 67 MB all'ora, cioè 1,6 GB al giorno. Un'estrazione di tutte le reti deve quindi stare sotto le 15 ore: `meteohub_download.py` usa ora blocchi di 12 ore (`--chunk-hours`; 808 MB misurati di giorno, circa il 20% sotto il limite). Il volume è misurato su un giorno di ottobre 2026: con più stazioni o più dati, se un blocco fallisce con "output size exceeds" va abbassato `--chunk-hours` (lo script non divide da solo un blocco fallito); con i vecchi blocchi di 2 giorni (`--chunk-days 2`) ogni richiesta sarebbe rifiutata. Per una rete sola si possono usare blocchi più lunghi (`dpcn-lombardia`: fino a circa 18 giorni).
+- **La stima di `/api/fields` non predice il JSON delle osservazioni.** Il rapporto fra file JSON e `summarystats.s` va da 4 (tutte le reti) a 12 (`dpcn-lombardia` su 18 giorni): la stima cresce meno della finestra (51, 68 e 80 MB per 7, 18 e 30 giorni) mentre il JSON cresce in proporzione. Il controllo all'invio usa una stima che non vediamo: `dpcn-lombardia` su 30 giorni (80 MB di `summarystats`) è stato rifiutato, tutte le reti su 8 ore (131 MB) accettate. Meglio i volumi misurati sopra.
+- **`SEASONAL` e `shyfem` non si possono estrarre con questo account.** `/api/data` risponde 400 `AttributeError` con e senza filtri, con e senza `reftime`; `/api/fields` dà lo stesso errore (ErrorID del 2026-10-15: `8c5ffd24-dab2-4b0a-94cd-3853f8110b71` per SEASONAL, `a3659dbe-d3a6-409e-8045-1ed268945c6b` per shyfem). `/api/datasets/<id>` li descrive (`source=nwp`, `supports_variable_browsing: true`) ma non c'è un endpoint per le variabili. È un errore lato MeteoHub da segnalare.
+- **Per tutta Italia, conviene `/api/observations`.** `meteohub_fetch.py stazioni` legge le stesse reti senza quota, senza coda e senza limite di dimensione, in finestre di 10 giorni per rete.

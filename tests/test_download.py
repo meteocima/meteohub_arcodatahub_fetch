@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+import pytest
+
 import meteohub_download as md
 
 
@@ -26,3 +30,17 @@ def test_two_precipitation_steps_at_the_same_time_are_both_kept(tmp_path):
 
     assert len(rows) == 1
     assert (rows[0]["prec_300s"], rows[0]["prec_3600s"], rows[0]["temp"]) == ("0.2", "3.0", "290.15")
+
+
+def test_windows_can_be_a_few_hours_long():
+    # all 28 networks are ~67 MB of JSON an hour (2026-10-12): 12 h stay under the 1 GB of one extraction
+    windows = md.build_time_windows("2026-10-12T00:00:00Z", "2026-10-12T23:59:00Z", timedelta(hours=12))
+
+    assert windows == [("2026-10-12T00:00:00.000000Z", "2026-10-12T11:59:00.000000Z"),
+                        ("2026-10-12T12:00:00.000000Z", "2026-10-12T23:59:00.000000Z")]
+
+
+def test_a_zero_chunk_length_is_an_error_not_a_default():
+    with pytest.raises(ValueError):
+        md.chunk_span(chunk_hours=0, chunk_days=None)
+    assert md.chunk_span(chunk_hours=12, chunk_days=18) == timedelta(days=18)  # --chunk-days wins when given

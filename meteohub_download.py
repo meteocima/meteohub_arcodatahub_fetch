@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Download MeteoHub observations in 2-day chunks.
+"""Download MeteoHub observations with /api/data extractions, in chunks of 12 hours (--chunk-hours).
+
+One extraction may not exceed about 1 GB: all 28 networks give ~67 MB of JSON an hour with these filters
+(2026-10-12), dpcn-lombardia alone ~46 MB a day (docs/meteohub/limiti_estrazioni.csv, issue #3). 2-day chunks
+of all networks are refused.
 
 Default request:
   2026-07-26 00:00 UTC -> 2026-08-16 23:00 UTC
@@ -22,7 +26,7 @@ from meteohub.stazioni import PASSI_PIOGGIA_S as PREC_STEPS_S, RETI as DATASET_N
 
 DEFAULT_T_FROM = "2026-07-26T00:00:00.000000Z"
 DEFAULT_T_TO = "2026-08-16T23:00:00.000000Z"
-DEFAULT_CHUNK_DAYS = 2
+DEFAULT_CHUNK_HOURS = 12  # all networks: ~800 MB, under the ~1 GB of one extraction
 CHUNK_STEP = timedelta(minutes=1)
 REQUEST_PREFIX = "meteohub_obs"
 
@@ -111,23 +115,26 @@ def format_iso8601(value: datetime) -> str:
     return value.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000000Z")
 
 
-def build_time_windows(t_from: str, t_to: str, chunk_days: int) -> List[Tuple[str, str]]:
-    if chunk_days <= 0:
-        raise ValueError("chunk_days must be positive")
+def chunk_span(chunk_hours: Optional[int], chunk_days: Optional[int]) -> timedelta:
+    """Chunk length: --chunk-days if given, else --chunk-hours; zero or negative is an error."""
+    span = timedelta(days=chunk_days) if chunk_days is not None else timedelta(hours=chunk_hours or 0)
+    if span <= CHUNK_STEP:
+        raise ValueError("chunk length must be positive")
+    return span
 
+
+def build_time_windows(t_from: str, t_to: str, chunk: timedelta) -> List[Tuple[str, str]]:
+    """Non-overlapping windows of length chunk covering [t_from, t_to]."""
     start = parse_iso8601(t_from)
     end = parse_iso8601(t_to)
     if start > end:
         raise ValueError(f"Invalid time window: {t_from} is after {t_to}")
 
-    chunk_span = timedelta(days=chunk_days)
-    if chunk_span <= CHUNK_STEP:
-        raise ValueError("chunk span must be larger than the chunk step")
 
     windows: List[Tuple[str, str]] = []
     current_start = start
     while current_start <= end:
-        chunk_end = min(current_start + chunk_span - CHUNK_STEP, end)
+        chunk_end = min(current_start + chunk - CHUNK_STEP, end)
         windows.append((format_iso8601(current_start), format_iso8601(chunk_end)))
         current_start = chunk_end + CHUNK_STEP
 
@@ -464,10 +471,13 @@ def chunk_request_name(chunk_from: str, chunk_to: str) -> str:
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Download MeteoHub data in 2-day chunks.")
+    parser = argparse.ArgumentParser(description="Download MeteoHub data in chunks of --chunk-hours (default 12).")
     parser.add_argument("--from", dest="t_from", default=DEFAULT_T_FROM, help="UTC start time")
     parser.add_argument("--to", dest="t_to", default=DEFAULT_T_TO, help="UTC end time")
-    parser.add_argument("--chunk-days", type=int, default=DEFAULT_CHUNK_DAYS)
+    parser.add_argument("--chunk-hours", type=int, default=DEFAULT_CHUNK_HOURS,
+                        help="chunk length in hours; one extraction may not exceed ~1 GB (all networks: ~67 MB an hour)")
+    parser.add_argument("--chunk-days", type=int, default=None,
+                        help="chunk length in days, instead of --chunk-hours (e.g. 18 for dpcn-lombardia alone)")
     parser.add_argument("--username", default=USERNAME)
     parser.add_argument("--password", default=PASSWORD)
     parser.add_argument("--output", type=Path, default=None, help="Merged CSV path")
@@ -486,7 +496,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_arg_parser().parse_args()
-    windows = build_time_windows(args.t_from, args.t_to, args.chunk_days)
+    chunk = chunk_span(args.chunk_hours, args.chunk_days)
+    windows = build_time_windows(args.t_from, args.t_to, chunk)
     out_raw = args.out_dir / "raw_json"
     out_csv = args.out_dir / "csv"
     output = args.output or (OUT_COMBINED if args.out_dir == OUT_ROOT else args.out_dir / "meteohub_merged.csv")
@@ -497,7 +508,7 @@ def main() -> None:
     )
 
     print(f"Time window: {args.t_from} -> {args.t_to}")
-    print(f"Processing {len(windows)} chunks of {args.chunk_days} day(s)")
+    print(f"Processing {len(windows)} chunks of {chunk.total_seconds() / 3600:g} hour(s)")
     for i, (chunk_from, chunk_to) in enumerate(windows, 1):
         print(f"  {i:02d}. {chunk_request_name(chunk_from, chunk_to)}: {chunk_from} -> {chunk_to}")
 

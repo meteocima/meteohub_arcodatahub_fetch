@@ -32,10 +32,10 @@ FILE_TENUTI = RADICE / "output" / "prove_estrazioni"
 COLONNE = ["prova", "fino_al", "dataset", "da", "a", "stima_mb", "opzioni", "id", "stato_http", "esito", "messaggio",
            "stato_server", "inviata", "terminata", "elaborazione_s", "totale_s", "mb", "file", "disco_prima_mb",
            "disco_dopo_mb", "quota_dopo", "quando"]
-CONCLUSE = ("ok", "troppo_grande", "fallita")  # outcomes not repeated on a rerun
+CONCLUSE = ("ok", "troppo_grande", "fallita", "rifiutata")  # outcomes not repeated on a rerun
 LOMBARDIA_SU_ITALIA = 6.26 / 703.34  # size_gb of dpcn-lombardia over all 28 networks (docs/meteohub/inventory/datasets.csv)
 OSSERVAZIONI = {"output_format": "json", "only_reliable": True}
-ATTESA_MAX_S = 24 * 3600  # an observation day of all networks took 2 h (2026-09-27)
+ATTESA_MAX_S = 24 * 3600  # observation extractions waited up to 91 min in the queue (2026-10-14)
 
 
 def fatte(fino_al: str) -> dict:
@@ -102,6 +102,9 @@ def prova(client: MeteoHub, nome: str, fino_al: str, dataset, da: datetime, a: d
             if exc.stato == 403:  # the size refusal this script looks for
                 riga.update(stato_http=exc.stato, esito="troppo_grande", messaggio=str(exc)[:300])
                 break
+            if exc.stato != 429 and exc.stato < 500:  # e.g. 400 AttributeError on SEASONAL/shyfem: waiting does not help
+                riga.update(stato_http=exc.stato, esito="rifiutata", messaggio=str(exc)[:300])
+                break
             print(f"  rifiutata ({exc}): riprovo dopo l'ora", flush=True)  # hourly quota, whose counter lags
             time.sleep(3600 - datetime.now().minute * 60 + 60)
     if "id" in riga:
@@ -120,7 +123,7 @@ def prova(client: MeteoHub, nome: str, fino_al: str, dataset, da: datetime, a: d
         riga.update(stato_server=misure.get("status"), inviata=misure.get("submission_date"), terminata=misure.get("end_date"),
                     elaborazione_s=_secondi(misure.get("submission_date"), misure.get("end_date")))
     elif "esito" not in riga:
-        riga.update(esito="rifiutata", messaggio="rifiutata 4 volte, non per dimensione")
+        riga.update(esito="rifiutata", messaggio="rifiutata 4 volte (quota o errore del server)")
     riga.update(totale_s=round(time.time() - t0), disco_dopo_mb=client.uso_disco_mb(), quota_dopo=client.quota_rimanente())
     print(f"  {riga['esito']} {riga.get('mb', '')} MB {riga.get('messaggio', '')}", flush=True)
     registra(riga)

@@ -55,7 +55,7 @@ There are two independent download routes. Both end in a per-province CSV, but w
 `meteohub_stations.py` is a shortcut over `meteohub.stazioni.scarica_stazioni`; `filter_provincia.py` uses `meteohub.area.Area`; `meteohub_inventory.py` reads `/api/observations` through `meteohub.client.MeteoHub`.
 
 1. **`meteohub_download.py`** — bulk extraction via the asynchronous `/api/data` endpoint:
-   - `build_time_windows` splits `[--from, --to]` into `--chunk-days` windows (default 2) that don't overlap (each ends 1 minute before the next starts).
+   - `build_time_windows` splits `[--from, --to]` into `--chunk-hours` windows (default 12; `--chunk-days` instead if given) that don't overlap (each ends 1 minute before the next starts). One extraction is limited to ~1 GB: all 28 networks give ~67 MB of JSON an hour, so 2-day chunks of all networks are refused (403 at submit; with `force_obs_download` they fail after processing). Measurements: `docs/meteohub/limiti_estrazioni.csv` and the "Limiti delle estrazioni" section of `docs/meteohub/README.md`.
    - For each chunk: login (`/auth/login` → bearer token) → `POST /api/data` with a `request_name` derived from the window (`meteohub_obs_YYYYMMDDHH_YYYYMMDDHH`) → poll `GET /api/requests` every 10 s until the matching item has `fileoutput` → download `GET /api/data/<file>` → convert JSON to CSV → delete the server-side request (unless `--keep-requests`).
    - **Resumable**: a chunk is skipped if its CSV already exists, and converted without a new request if its raw JSON exists; an existing server request with the same name is reused rather than resubmitted. `--force` overrides this.
    - On 401 during polling it logs in again. The MeteoHub request quota is per-account, so leftover requests matter; `--cleanup-start` deletes all of them first.
@@ -75,7 +75,7 @@ There are two independent download routes. Both end in a per-province CSV, but w
 ## MeteoHub API reference
 
 `DATI_DISPONIBILI.md` (repo root, linked from README) is the readable summary of what MeteoHub and ARCO Data Hub have and lack; keep its numbers in step with `docs/meteohub/catalogo/RESOCONTO.md` when the catalogue is regenerated. `docs/meteohub/README.md` has the endpoint notes, BUFR/level/timerange codes, findings and **sources**; `docs/meteohub/openapi.json` is the official spec (`/api/specs`, no parameter descriptions) and `docs/meteohub/datasets.json` the dataset list. Key facts:
-- Extraction quota (`/api/hourly`): 10 `/api/data` requests per hour.
+- Extraction quota (`/api/hourly`): 10 `/api/data` requests per hour; observed to count only extractions not yet finished. One extraction ≤ ~1 GB of output. `SEASONAL` and `shyfem` (`source=nwp`) cannot be extracted: `/api/data` and `/api/fields` answer 400 AttributeError (2026-10-15).
 - Precipitation timeranges differ per network (e.g. `dpcn-liguria` is mostly `1,0,300` = 5 min); requesting only `1,0,3600` drops most stations, so `FILTERS` in `meteohub_download.py` asks for all of them (`PREC_STEPS_S`), one CSV column per step.
 - `/api/observations` with `networks=` must not get `stationDetails=true` (400). `/api/fields` fails (400) on `source=nwp` datasets.
 - ARCO archives (`/api/arco/...`, e.g. `radar.zarr` = DPC SRI radar since 2010) use the account access key via HTTP Basic Auth, not the bearer token.

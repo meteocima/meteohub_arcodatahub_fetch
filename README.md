@@ -258,7 +258,7 @@ Prima di `meteohub_fetch.py` il repository aveva due percorsi separati per le st
 <summary><b>Percorso A: tutta Italia, poi una provincia</b></summary>
 
 
-`meteohub_download.py` scarica tutte le reti con le estrazioni `/api/data`, in blocchi di 2 giorni; `filter_provincia.py` tiene poi le stazioni di una provincia.
+`meteohub_download.py` scarica tutte le reti con le estrazioni `/api/data`, in blocchi di 12 ore (`--chunk-hours`; un'estrazione non può superare circa 1 GB e tutte le reti valgono circa 67 MB all'ora); `filter_provincia.py` tiene poi le stazioni di una provincia.
 
 ```bash
 uv run python meteohub_download.py --dry-run     # mostra solo i blocchi, senza rete
@@ -267,7 +267,7 @@ uv run python meteohub_download.py --from 2025-01-01T00:00:00Z --to 2025-01-10T2
 uv run python filter_provincia.py --province MI --input output_test/csv/*.csv --name meteohub_2025
 ```
 
-- Ogni blocco è una richiesta di estrazione: con la quota di 10 all'ora, un anno di dati richiede almeno 18 ore.
+- Ogni blocco è una richiesta di estrazione: un anno di tutte le reti a blocchi di 12 ore sono 730 estrazioni, e ognuna può restare in coda da pochi minuti a più di un'ora. Per tutta Italia conviene `meteohub_fetch.py stazioni`, che usa `/api/observations` senza quota né limite di dimensione.
 - Il download riprende da dove si era fermato: i blocchi con il CSV già scritto si saltano, e una richiesta già presente sul server con lo stesso nome si riusa. `--force` riscarica tutto, `--cleanup-start` cancella prima le richieste rimaste sul server, `--keep-requests` non le cancella dopo il download.
 - Uscite: `<out-dir>/raw_json/`, `<out-dir>/csv/` (un CSV per blocco) e un CSV unito. La temperatura resta in kelvin; la pioggia ha una colonna per passo di cumulata (`prec_60s` … `prec_3600s`).
 - `filter_provincia.py` converte la temperatura in °C (`temp_c`) e scrive `stazioni_<PROV>.csv`. Non calcola `prec_1h`, quindi il suo output non si può dare a `clean_and_hourly.py`.
