@@ -15,9 +15,10 @@ import argparse
 import csv
 import json
 import time
+from collections import deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 # shared with the meteohub/ package, which owns them (issue #5); the names stay for the scripts that import them
 from meteohub.client import BASE, PASSWORD, USERNAME, auth_headers, delete_request, download_file, login  # noqa: F401
@@ -141,6 +142,69 @@ def build_time_windows(t_from: str, t_to: str, chunk: timedelta) -> List[Tuple[s
     return windows
 
 
+class ChunkTooLarge(RuntimeError):
+    """MeteoHub refused a chunk for its size: 403 at submit (estimate) or FAILURE after processing (real file)."""
+
+
+def is_too_large(message: str) -> bool:
+    """True for MeteoHub's two size refusals (texts seen on 2026-10-14, docs/meteohub/README.md)."""
+    text = message.lower()
+    return "estimated to exceed" in text or "output size exceeds" in text
+
+
+def split_window(t_from: str, t_to: str) -> Optional[List[Tuple[str, str]]]:
+    """The window cut in two at the whole hour nearest before its middle; None if it is shorter than 2 hours."""
+    start, end = parse_iso8601(t_from), parse_iso8601(t_to)
+    middle = (start + (end + CHUNK_STEP - start) / 2).replace(minute=0, second=0, microsecond=0)  # windows end at :59
+    if middle - start < timedelta(hours=1) or end + CHUNK_STEP - middle < timedelta(hours=1):
+        return None
+    return [(t_from, format_iso8601(middle - CHUNK_STEP)), (format_iso8601(middle), t_to)]
+
+
+def fetch_windows(
+    windows: List[Tuple[str, str]],
+    fetch: Callable[[str, str], Path],
+    saved: Callable[[str, str], Optional[Path]],
+) -> List[Path]:
+    """CSV paths of the windows, in time order.
+
+    fetch(t_from, t_to) downloads one window (or converts its saved JSON) and returns its CSV. saved(t_from, t_to)
+    gives the CSV or JSON an earlier run left for that window, or None. A window MeteoHub refuses for its size
+    (ChunkTooLarge) is split in two by split_window, down to one hour; on a rerun, a window with any part already
+    saved goes straight to its halves, so it is not asked again. ChunkTooLarge if a window cannot be split further.
+    """
+
+    def started(t_from: str, t_to: str) -> bool:
+        if saved(t_from, t_to):
+            return True
+        halves = split_window(t_from, t_to)
+        return bool(halves) and any(started(*h) for h in halves)
+
+    queue = deque(windows)
+    paths: List[Path] = []
+    while queue:
+        t_from, t_to = queue.popleft()
+        path = saved(t_from, t_to)
+        if path and path.suffix == ".csv":
+            print(f"Skipping existing CSV: {path}")
+            paths.append(path)
+            continue
+        halves = split_window(t_from, t_to)
+        if not path and halves and any(started(*h) for h in halves):  # split by an earlier run
+            queue.extendleft(reversed(halves))
+            continue
+        try:
+            paths.append(fetch(t_from, t_to))
+        except ChunkTooLarge as exc:
+            if not halves:
+                raise ChunkTooLarge(f"{t_from} -> {t_to} is too large for one extraction and shorter than 2 hours, "
+                                    f"so it cannot be split: {exc}") from exc
+            print(f"Chunk too large ({exc}); splitting it at {halves[1][0]}")
+            queue.extendleft(reversed(halves))
+        print(f"{len(paths)} chunk(s) done, {len(queue)} queued")
+    return paths
+
+
 def build_filters(products: Optional[List[str]], timeranges: Optional[List[str]]) -> Dict[str, Any]:
     filters = dict(FILTERS)
     if products:
@@ -177,6 +241,8 @@ def submit_extraction(
     try:
         r.raise_for_status()
     except requests.HTTPError as exc:
+        if exc.response.status_code == 403 and is_too_large(exc.response.text):
+            raise ChunkTooLarge(exc.response.text.strip()) from exc
         raise RuntimeError(f"Submit failed ({exc.response.status_code}): {exc.response.text}") from exc
     return r.json()
 
@@ -288,6 +354,8 @@ def wait_for_file(
 
         status = (match.get("status") or match.get("state") or "").lower()
         if status in {"failure", "failed", "error"}:
+            if is_too_large(str(match.get("error_message") or "")):
+                raise ChunkTooLarge(match["error_message"])
             raise RuntimeError(f"Request failed: {match}")
 
         if match.get("fileoutput"):
@@ -523,31 +591,31 @@ def main() -> None:
     if not args.keep_requests and args.cleanup_start:
         delete_all_requests(token)
 
-    csv_paths = []
-    for i, (chunk_from, chunk_to) in enumerate(windows, 1):
+    def files(chunk_from: str, chunk_to: str) -> Tuple[Path, Path]:
         chunk_name = chunk_request_name(chunk_from, chunk_to)
-        json_path = out_raw / f"{chunk_name}.json"
-        csv_path = out_csv / f"{chunk_name}.csv"
+        return out_raw / f"{chunk_name}.json", out_csv / f"{chunk_name}.csv"
 
-        if csv_path.exists() and csv_path.stat().st_size > 0 and not args.force:
-            print(f"\nChunk {i}/{len(windows)}: {chunk_name}")
-            print(f"Skipping existing CSV: {csv_path}")
-            csv_paths.append(csv_path)
-            continue
+    def saved(chunk_from: str, chunk_to: str) -> Optional[Path]:
+        if args.force:  # nothing counts as done
+            return None
+        csv_path, json_path = files(chunk_from, chunk_to)[::-1]
+        return next((p for p in (csv_path, json_path) if p.exists() and p.stat().st_size > 0), None)
+
+    def fetch(chunk_from: str, chunk_to: str) -> Path:
+        nonlocal token
+        chunk_name = chunk_request_name(chunk_from, chunk_to)
+        json_path, csv_path = files(chunk_from, chunk_to)
+        print(f"\nChunk {chunk_name}: {chunk_from} -> {chunk_to}")
 
         if json_path.exists() and json_path.stat().st_size > 0 and not args.force:
-            print(f"\nChunk {i}/{len(windows)}: {chunk_name}")
             print(f"Converting existing JSON without submitting a new request: {json_path}")
             convert_json_to_csv(json_path, csv_path)
-            csv_paths.append(csv_path)
             if args.delete_json:
                 json_path.unlink()
-            continue
+            return csv_path
 
-        print(f"\nChunk {i}/{len(windows)}: {chunk_name}")
         chunk_start = time.time()
         task_id = None
-
         try:
             existing_request = find_existing_request(token, chunk_name)
             if existing_request:
@@ -558,27 +626,14 @@ def main() -> None:
                 )
                 filename = existing_request.get("fileoutput")
                 if not filename:
-                    token, filename = wait_for_file(
-                        token,
-                        chunk_name,
-                        task_id,
-                        args.username,
-                        args.password,
-                    )
+                    token, filename = wait_for_file(token, chunk_name, task_id, args.username, args.password)
             else:
                 response = submit_extraction(token, chunk_name, chunk_from, chunk_to, filters, dataset_names)
                 task_id = response.get("task_id")
-                token, filename = wait_for_file(
-                    token,
-                    chunk_name,
-                    task_id,
-                    args.username,
-                    args.password,
-                )
+                token, filename = wait_for_file(token, chunk_name, task_id, args.username, args.password)
 
             download_file(token, filename, json_path)
             convert_json_to_csv(json_path, csv_path)
-            csv_paths.append(csv_path)
             if args.delete_json:
                 json_path.unlink()
         finally:
@@ -587,6 +642,12 @@ def main() -> None:
                 if identifiers:
                     delete_request(token, identifiers[0])
         print(f"Chunk done in {time.time() - chunk_start:.1f}s")
+        return csv_path
+
+    try:
+        csv_paths = fetch_windows(windows, fetch, saved)
+    except ChunkTooLarge as exc:
+        raise SystemExit(f"{exc}\nAsk for fewer networks (--datasets); chunks already downloaded are kept for a rerun.")
 
     if not args.no_merge:
         combined = merge_csv_files(csv_paths, output)

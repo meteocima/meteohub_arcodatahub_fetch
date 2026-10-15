@@ -267,6 +267,7 @@ uv run python meteohub_download.py --from 2025-01-01T00:00:00Z --to 2025-01-10T2
 uv run python filter_provincia.py --province MI --input output_test/csv/*.csv --name meteohub_2025
 ```
 
+- Un blocco che MeteoHub rifiuta perché troppo grande (oltre circa 1 GB) viene diviso da solo in due metà, fino a blocchi di un'ora; rilanciando, le parti già scaricate non si richiedono e il blocco intero non viene rinviato.
 - Ogni blocco è una richiesta di estrazione: un anno di tutte le reti a blocchi di 12 ore sono 730 estrazioni, e ognuna può restare in coda da pochi minuti a più di un'ora. Per tutta Italia conviene `meteohub_fetch.py stazioni`, che usa `/api/observations` senza quota né limite di dimensione.
 - Il download riprende da dove si era fermato: i blocchi con il CSV già scritto si saltano, e una richiesta già presente sul server con lo stesso nome si riusa. `--force` riscarica tutto, `--cleanup-start` cancella prima le richieste rimaste sul server, `--keep-requests` non le cancella dopo il download.
 - Uscite: `<out-dir>/raw_json/`, `<out-dir>/csv/` (un CSV per blocco) e un CSV unito. La temperatura resta in kelvin; la pioggia ha una colonna per passo di cumulata (`prec_60s` … `prec_3600s`).
