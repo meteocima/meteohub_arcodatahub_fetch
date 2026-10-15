@@ -177,6 +177,9 @@ def filtri_variabile(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict
     if not filtri["product"] or mancanti:
         disponibili = "; ".join(p.get("desc", "") for p in metadati.get("product", []))
         raise SystemExit(f"{nome!r}: nessun {', '.join(mancanti) or 'product'} adatto nel dataset. Variabili disponibili: {disponibili}")
+    # A level listed without value (BOLAM and MOLOCH "sfc - -") matches nothing in an extraction, which then comes
+    # back empty: it is left out, and with no level left the filter does not restrict levels at all.
+    filtri["level"] = [l for l in filtri["level"] if l.get("value") is not None]
     aree = metadati.get("area", [])
     if any(not _ritagliabile(a) for a in aree):
         filtri["area"] = [a for a in aree if _ritagliabile(a)]

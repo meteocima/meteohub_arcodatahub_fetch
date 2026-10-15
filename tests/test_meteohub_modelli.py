@@ -371,9 +371,9 @@ def test_geopotential_at_500_hpa_is_found_as_geopotential_or_as_its_height():
 def test_cape_is_the_surface_based_one():
     filtri = filtri_variabile(metadati(CAPE, U), "cape")
 
-    # ICON-2I also has a mixed-layer CAPE on level 192; BOLAM and MOLOCH give theirs on a surface level without value.
+    # ICON-2I also has a mixed-layer CAPE on level 192.
     assert filtri["product"] == [CAPE] and filtri["timerange"] == [ISTANTANEO]
-    assert filtri["level"] == [SUOLO, SUOLO_SENZA_VALORE]
+    assert filtri["level"] == [SUOLO]
 
 
 TCWV = prodotto("Total column integrated water vapour (kg m-2)", 64)
@@ -413,3 +413,12 @@ def test_hourly_rain_takes_the_one_hour_accumulations_bolam_and_moloch_give():
         meta = {"product": [PIOGGIA], "level": [SUOLO, SUOLO_SENZA_VALORE], "timerange": [ISTANTANEO, *elaborazioni]}
 
         assert filtri_variabile(meta, "prec_1h")["timerange"] == elaborazioni[:2]
+
+
+def test_levels_without_a_value_are_left_out_of_the_filter_since_meteohub_cannot_match_them():
+    # MOLOCH CAPE, from the metadata of that product alone: only a surface level written "- -".
+    solo_senza_valore = {"product": [CAPE], "level": [SUOLO_SENZA_VALORE], "timerange": [ISTANTANEO]}
+    assert filtri_variabile(solo_senza_valore, "cape") == {"product": [CAPE], "timerange": [ISTANTANEO]}
+    # BOLAM hourly rain: the "0 0" surface stays, the "- -" one goes.
+    misti = {"product": [PIOGGIA], "level": [SUOLO, SUOLO_SENZA_VALORE], "timerange": [accumulo(1, 1, 1)]}
+    assert filtri_variabile(misti, "prec_1h")["level"] == [SUOLO]

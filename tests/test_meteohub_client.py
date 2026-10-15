@@ -151,3 +151,19 @@ def test_the_size_of_a_run_is_counted_on_the_level_asked_and_each_product_once(m
               "timerange": [{"n": i} for i in range(52)]}
 
     assert round(client.stima_mb("ICON_2I_EPS", filtri, datetime(2026, 10, 11))) == 1182
+
+
+class FieldsDiUnProdotto(HttpFinto):
+    def get(self, url, params=None, headers=None, timeout=None):
+        self.richieste.append(params)
+        return Risposta(200, {"items": {"level": [{"l": 1}]}})
+
+
+def test_the_metadata_of_one_product_ask_meteohub_for_that_product_only(monkeypatch):
+    http = FieldsDiUnProdotto()
+    client = meteohub(monkeypatch, http)
+    cape = {"style": "GRIB2", "centre": 80, "discipline": 0, "category": 7, "number": 6}
+
+    client.metadati("MOLOCH", datetime(2026, 10, 10), prodotto=cape)
+
+    assert http.richieste[-1]["q"] == "reftime: >=2026-10-10 00:00,<=2026-10-10 23:59;product:GRIB2,80,0,7,6"

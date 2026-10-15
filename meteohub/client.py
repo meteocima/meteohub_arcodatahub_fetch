@@ -202,9 +202,11 @@ class MeteoHub:
             return f"GRIB2,{prodotto['centre']},{prodotto['discipline']},{prodotto['category']},{prodotto['number']}"
         return f"GRIB1,{prodotto['origin']},{prodotto['table']},{prodotto['product']}"
 
-    def metadati(self, dataset: str, giorno: datetime) -> Dict[str, Any]:
-        """/api/fields items of one day of the dataset (products, levels, timeranges, runs, grid) plus "licenza"."""
-        r = self._get("/api/fields", {"datasets": dataset, "q": self._giorno(giorno), "allAvailableProducts": "true"})
+    def metadati(self, dataset: str, giorno: datetime, prodotto: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """/api/fields items of one day of the dataset (products, levels, timeranges, runs, grid) plus "licenza".
+        With prodotto (an item of "product"), only its own levels and timeranges: the day mixes those of all products."""
+        q = self._giorno(giorno) + (f";product:{self._codice(prodotto)}" if prodotto else "")
+        r = self._get("/api/fields", {"datasets": dataset, "q": q, "allAvailableProducts": "true"})
         r.raise_for_status()
         items = r.json().get("items", {})
         items["licenza"] = " ".join(x.get("code", "") for x in items.get("all_licenses", []))
