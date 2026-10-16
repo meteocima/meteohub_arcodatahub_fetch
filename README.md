@@ -1,6 +1,6 @@
 <div align="center">
 
-# meteohub_fetch
+# meteohub_arcodatahub_fetch
 
 **Stazioni, radar e modelli meteorologici italiani, ritagliati sulla tua area, con un comando.**
 
