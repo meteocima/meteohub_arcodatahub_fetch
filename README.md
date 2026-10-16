@@ -11,7 +11,7 @@
 [![MeteoHub](https://img.shields.io/badge/fonte-MeteoHub-0b6aa2)](https://meteohub.agenziaitaliameteo.it)
 [![ARCO Data Hub](https://img.shields.io/badge/fonte-ARCO%20Data%20Hub-e6662e)](https://arcodatahub.com)
 
-[Avvio rapido](#avvio-rapido) | [Dati disponibili](DATI_DISPONIBILI.md) | [Stazioni](#stazioni) | [Radar](#radar) | [Modelli](#modelli) | [Issue](https://github.com/meteocima/meteohub_fetch/issues)
+[Avvio rapido](#avvio-rapido) | [Dati disponibili](DATI_DISPONIBILI.md) | [Stazioni](#stazioni) | [Radar](#radar) | [Modelli](#modelli) | [Issue](https://github.com/meteocima/meteohub_arcodatahub_fetch/issues)
 
 </div>
 
@@ -24,7 +24,7 @@ Scarica a richiesta osservazioni da stazione, dati radar e modelli meteorologici
 
 ```bash
 # 1. installa
-git clone https://github.com/meteocima/meteohub_fetch.git && cd meteohub_fetch
+git clone https://github.com/meteocima/meteohub_arcodatahub_fetch.git && cd meteohub_arcodatahub_fetch
 uv sync
 
 # 2. carica le credenziali (vedi "Credenziali")
@@ -76,8 +76,8 @@ Con `--punti`, `radar` e `modelli` scrivono anche i valori sulle coordinate dell
 Servono Python 3.12 o successivo e [uv](https://docs.astral.sh/uv/).
 
 ```bash
-git clone https://github.com/meteocima/meteohub_fetch.git
-cd meteohub_fetch
+git clone https://github.com/meteocima/meteohub_arcodatahub_fetch.git
+cd meteohub_arcodatahub_fetch
 uv sync
 ```
 
@@ -254,7 +254,7 @@ Elenca, per l'area e il periodo, le reti con stazioni nell'area (con i passi di 
 > [!TIP]
 > Per un lavoro nuovo usa `meteohub_fetch.py stazioni`. Gli script qui sotto servono solo per riprodurre file già prodotti con i loro schemi.
 
-Prima di `meteohub_fetch.py` il repository aveva due percorsi separati per le stazioni, che funzionano ancora. Producono CSV con schemi diversi da quelli del nuovo downloader e tra loro. Per un lavoro nuovo si usa `meteohub_fetch.py stazioni`; i due percorsi servono per riprodurre file già prodotti con quegli schemi. Il loro codice di finestre, ripresa e poligoni è duplicato in `meteohub/`, e la loro riscrittura su quei moduli è seguita nella [issue #1](https://github.com/meteocima/meteohub_fetch/issues/1).
+Prima di `meteohub_fetch.py` il repository aveva due percorsi separati per le stazioni, che funzionano ancora. Producono CSV con schemi diversi da quelli del nuovo downloader e tra loro. Per un lavoro nuovo si usa `meteohub_fetch.py stazioni`; i due percorsi servono per riprodurre file già prodotti con quegli schemi. Il loro codice di finestre, ripresa e poligoni è duplicato in `meteohub/`, e la loro riscrittura su quei moduli è seguita nella [issue #1](https://github.com/meteocima/meteohub_arcodatahub_fetch/issues/1).
 
 <details>
 <summary><b>Percorso A: tutta Italia, poi una provincia</b></summary>
@@ -375,10 +375,10 @@ DATI_DISPONIBILI.md        che cosa c'è e che cosa manca nelle due piattaforme
 | [docs/meteohub/inventory/](docs/meteohub/inventory/) | inventario dei dataset e risposte grezze delle API |
 | [CONTEXT.md](CONTEXT.md) | glossario: rete, passo di cumulata, pioggia oraria, corsa, quota… |
 | [docs/adr/](docs/adr/) | decisioni di progetto |
-| [Issue](https://github.com/meteocima/meteohub_fetch/issues) | lavoro in corso e diagnosi |
+| [Issue](https://github.com/meteocima/meteohub_arcodatahub_fetch/issues) | lavoro in corso e diagnosi |
 
 ## Referente e licenza
 
-**Referente:** Luca Monaco, Fondazione CIMA (CIMA Research Foundation). Errori e richieste si segnalano nelle [issue](https://github.com/meteocima/meteohub_fetch/issues).
+**Referente:** Luca Monaco, Fondazione CIMA (CIMA Research Foundation). Errori e richieste si segnalano nelle [issue](https://github.com/meteocima/meteohub_arcodatahub_fetch/issues).
 
 **Licenza:** il codice è distribuito con [licenza MIT](LICENSE): si può usare, modificare e ridistribuire liberamente, anche per scopi commerciali, mantenendo l'avviso di copyright. La documentazione scritta per questo repository è distribuita con licenza [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). I dati scaricati con gli script restano sotto la licenza della loro fonte (vedi [Licenze dei dati](#licenze-dei-dati)), come le copie delle risposte delle API conservate in `docs/meteohub/`.

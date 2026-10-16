@@ -89,7 +89,7 @@ ArcoDataHub (`https://api.arcodatahub.com/S3/<store>.zarr`, HTTP Basic) uses `AR
 
 ### Issue tracker
 
-Issues live in GitHub Issues of `meteocima/meteohub_fetch` (via `gh`, always with `--repo meteocima/meteohub_fetch`). See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues of `meteocima/meteohub_arcodatahub_fetch` (via `gh`, always with `--repo meteocima/meteohub_arcodatahub_fetch`). See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

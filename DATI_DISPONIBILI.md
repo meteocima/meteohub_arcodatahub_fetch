@@ -170,4 +170,4 @@ I numeri di questo file vengono da interrogazioni dirette delle API, fatte il 13
 - ARCO Data Hub (FBK, CINECA): [catalogo dei dataset](https://arcodatahub.com/datasets/datasets/), [guida all'accesso](https://arcodatahub.com/datasets/getting-started/), [catalogo STAC](https://stac.arcodatahub.com/collections).
 - Archivio radar SRI in Zarr: Franch, G., Tomasi, E., Azhel, U., et al. (2026), "IT-DPC-SRI: A Cloud-Optimized Archive of Italian Radar Precipitation (2010-2025)", [arXiv:2602.15088](https://arxiv.org/abs/2602.15088); copia statica 2010-2025 su [Zenodo](https://zenodo.org/records/18637608), DOI 10.5281/zenodo.18637608.
 - Osservazioni in tempo reale non validate: [Agenzia ItaliaMeteo, pagina "Real time data"](https://www.agenziaitaliameteo.it/?p=2878).
-- Lavoro di diagnosi e inventario: [issue del repository](https://github.com/meteocima/meteohub_fetch/issues), in particolare #1, #2 e #4.
+- Lavoro di diagnosi e inventario: [issue del repository](https://github.com/meteocima/meteohub_arcodatahub_fetch/issues), in particolare #1, #2 e #4.
