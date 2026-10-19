@@ -142,12 +142,28 @@ def _isobara(hpa: int) -> Callable[[Dict[str, Any]], bool]:
     return lambda l: l.get("level_type") == 100 and l.get("value") == hpa * 100 and l.get("scale", 0) == 0
 
 
+def _codice_grib2(desc: str) -> tuple[str, ...]:
+    """(discipline, category, number) of a product MeteoHub cannot name, "grib2(centre, d, c, n, table, local)"."""
+    if not (desc.startswith("grib2(") and desc.endswith(")")):
+        return ()
+    return tuple(desc[len("grib2("):-1].split(", ")[1:4])
+
+
 # short names on the command line (CONTEXT.md, "Variabile")
 VARIABILI = {
     "prec": Variabile(lambda d: d.startswith("total precipitation"),
                       lambda l: l.get("level_type") == 1 and l.get("value") == 0, _cumulata_dall_inizio),
     "prec_1h": Variabile(lambda d: d.startswith("total precipitation"), lambda l: l.get("level_type") == 1,
                          _cumulata_su_un_ora),  # BOLAM and MOLOCH give the hourly rain itself
+    # Snow water equivalent, as each model gives it: ICON-2I convective and large-scale snow accumulated since the run
+    # start; BOLAM and MOLOCH total snow over one hour. The snow of WRF_DA_ITA and WRF on MeteoHub is left out: all
+    # zero and all missing on 2026-02-28 in Valle d'Aosta, with up to 26 mm of precipitation.
+    "snow_conv": Variabile(lambda d: d.startswith("convective snowfall rate water equivalent"),
+                           lambda l: l.get("level_type") == 1, _cumulata_dall_inizio),
+    "snow_ls": Variabile(lambda d: d.startswith("large scale snowfall rate water equivalent"),
+                         lambda l: l.get("level_type") == 1, _cumulata_dall_inizio),
+    "snow_1h": Variabile(lambda d: d.startswith("total snowfall rate water equivalent"),
+                         lambda l: l.get("level_type") == 1, _cumulata_su_un_ora),
     "t2m": Variabile(lambda d: d.startswith("temperature"), _alto(2), _istantaneo),
     "u10": Variabile(lambda d: d.startswith("u-component of wind"), _alto(10), _istantaneo),
     "v10": Variabile(lambda d: d.startswith("v-component of wind"), _alto(10), _istantaneo),
@@ -156,13 +172,26 @@ VARIABILI = {
     "v850": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(850), _istantaneo),
     "u700": Variabile(lambda d: d.startswith("u-component of wind"), _isobara(700), _istantaneo),
     "v700": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(700), _istantaneo),
+    "u500": Variabile(lambda d: d.startswith("u-component of wind"), _isobara(500), _istantaneo),
+    "v500": Variabile(lambda d: d.startswith("v-component of wind"), _isobara(500), _istantaneo),
     "cape": Variabile(lambda d: d.startswith("convective available potential energy"),
                       lambda l: l.get("level_type") == 1, _istantaneo),
     "cape_ml": Variabile(lambda d: d.startswith("convective available potential energy"),
                          lambda l: l.get("level_type") == 192, _istantaneo),  # ICON-2I mixed-layer CAPE
-    "tcwv": Variabile(lambda d: d.startswith(("total column integrated water vapour", "precipitable water")),
+    "cin": Variabile(lambda d: d.startswith("convective inhibition"), lambda l: l.get("level_type") == 1, _istantaneo),
+    "cin_ml": Variabile(lambda d: d.startswith("convective inhibition"),
+                        lambda l: l.get("level_type") == 192, _istantaneo),  # ICON-2I mixed-layer CIN
+    # Height of the 0 degree C isotherm (level type 4); ICON-2I gives it between the isotherm and sea level (GRIB2D).
+    "hzerocl": Variabile(lambda d: d.startswith("geometric height"),
+                         lambda l: l.get("level_type", l.get("l1")) == 4, _istantaneo),
+    # BOLAM and MOLOCH give it as an unnamed "GRIB2(00080, 000, 001, 064, 004, 000)": code 0,1,64 of the WMO table
+    "tcwv": Variabile(lambda d: d.startswith(("total column integrated water vapour", "precipitable water"))
+                      or _codice_grib2(d) == ("000", "001", "064"),
                       lambda l: l.get("level_type") in (1, 10, 200), _istantaneo),
     "z500": Variabile(lambda d: d.startswith("geopotential"), _isobara(500), _istantaneo),  # m2 s-2 (ICON) or gpm
+    # Temperature on the standard levels the four MeteoHub members give between 1000 and 500 hPa (CORO ADR 0018)
+    **{f"t{hpa}": Variabile(lambda d: d.startswith("temperature"), _isobara(hpa), _istantaneo)
+       for hpa in (1000, 975, 950, 925, 900, 850, 800, 700, 600, 500)},
 }
 
 
@@ -181,7 +210,8 @@ def filtri_variabile(metadati: Dict[str, Any], nome: str) -> Dict[str, List[Dict
         raise SystemExit(f"{nome!r}: nessun {', '.join(mancanti) or 'product'} adatto nel dataset. Variabili disponibili: {disponibili}")
     # A level listed without value (BOLAM and MOLOCH "sfc - -") matches nothing in an extraction, which then comes
     # back empty: it is left out, and with no level left the filter does not restrict levels at all.
-    filtri["level"] = [l for l in filtri["level"] if l.get("value") is not None]
+    # A level between two surfaces (GRIB2D, ICON-2I freezing level) has value1 and value2 instead.
+    filtri["level"] = [l for l in filtri["level"] if l.get("value", l.get("value1")) is not None]
     aree = metadati.get("area", [])
     if any(not _ritagliabile(a) for a in aree):
         filtri["area"] = [a for a in aree if _ritagliabile(a)]

@@ -429,3 +429,76 @@ def test_mixed_layer_cape_is_the_one_on_level_192():
     filtri = filtri_variabile(metadati(CAPE, U), "cape_ml")
 
     assert filtri == {"product": [CAPE], "level": [ML], "timerange": [ISTANTANEO]}
+
+
+T = prodotto("Temperature (K)", 0)
+
+
+@pytest.mark.parametrize("hpa", [1000, 975, 950, 925, 900, 850, 800, 700, 600, 500])
+def test_temperature_is_there_on_every_standard_level_between_1000_and_500_hpa(hpa):
+    # The levels of all four MeteoHub members: WRF_DA_ITA has them all, ICON-2I, BOLAM and MOLOCH some.
+    livello_hpa = livello(100, hpa * 100)
+    meta = {"product": [T, U], "level": [SUOLO, livello(103, 2), livello_hpa], "timerange": [ISTANTANEO, CUMULATA]}
+
+    assert filtri_variabile(meta, f"t{hpa}") == {"product": [T], "level": [livello_hpa], "timerange": [ISTANTANEO]}
+
+
+@pytest.mark.parametrize("nome, componente", [("u500", U), ("v500", V)])
+def test_both_wind_components_are_there_at_500_hpa(nome, componente):
+    assert filtri_variabile(metadati(U, V), nome) == {"product": [componente], "level": [HPA[500]], "timerange": [ISTANTANEO]}
+
+
+# BOLAM and MOLOCH: GRIB2 with tablesVersion 4, where MeteoHub finds no name for code 0,1,64.
+TCWV_SENZA_NOME = {**prodotto("GRIB2(00080, 000, 001, 064, 004, 000)", 64), "category": 1, "table_version": 4}
+ACQUA_TOTALE_SENZA_NOME = {**prodotto("GRIB2(00080, 000, 001, 051, 004, 000)", 51), "category": 1, "table_version": 4}
+
+
+def test_water_vapour_column_is_found_by_its_code_when_meteohub_gives_it_no_name():
+    meta = {"product": [ACQUA_TOTALE_SENZA_NOME, TCWV_SENZA_NOME, U], "level": [SUOLO_SENZA_VALORE, *HPA.values()],
+            "timerange": [ISTANTANEO]}
+
+    # 0,1,64 is the total column integrated water vapour in the WMO table; 0,1,51 the total column water.
+    assert filtri_variabile(meta, "tcwv") == {"product": [TCWV_SENZA_NOME], "timerange": [ISTANTANEO]}
+
+
+CIN = prodotto("Convective inhibition (J/kg)", 7)
+
+
+def test_convective_inhibition_is_the_surface_one_or_the_mixed_layer_one():
+    # WRF_DA_ITA gives it at the surface, ICON-2I only on level 192 (mixed layer), like its CAPE.
+    assert filtri_variabile(metadati(CIN, CAPE), "cin") == {"product": [CIN], "level": [SUOLO], "timerange": [ISTANTANEO]}
+    assert filtri_variabile(metadati(CIN, CAPE), "cin_ml") == {"product": [CIN], "level": [ML], "timerange": [ISTANTANEO]}
+
+
+ALTEZZA_GEOMETRICA = prodotto("Geometric height (m)", 6)
+ZERO_TERMICO = livello(4, 0)
+# ICON-2I: levels between two surfaces, the orography (surface to sea level) and the 0 degree C isotherm above sea level.
+OROGRAFIA_ICON = {"type": "level", "style": "GRIB2D", "l1": 1, "scale1": 0, "value1": 0, "l2": 101, "scale2": None, "value2": None}
+ZERO_TERMICO_ICON = {"type": "level", "style": "GRIB2D", "l1": 4, "scale1": 0, "value1": 0, "l2": 101, "scale2": 0, "value2": 0}
+
+
+def test_freezing_level_is_the_height_of_the_zero_degree_isotherm_on_one_or_two_surface_levels():
+    bolam = {"product": [ALTEZZA_GEOMETRICA], "level": [ZERO_TERMICO], "timerange": [ISTANTANEO]}
+    icon = {"product": [ALTEZZA_GEOMETRICA, T], "level": [OROGRAFIA_ICON, ZERO_TERMICO_ICON, SUOLO, HPA[500]],
+            "timerange": [ISTANTANEO]}
+
+    assert filtri_variabile(bolam, "hzerocl") == {"product": [ALTEZZA_GEOMETRICA], "level": [ZERO_TERMICO], "timerange": [ISTANTANEO]}
+    assert filtri_variabile(icon, "hzerocl") == {"product": [ALTEZZA_GEOMETRICA], "level": [ZERO_TERMICO_ICON], "timerange": [ISTANTANEO]}
+
+
+NEVE_CONVETTIVA = prodotto("Convective snowfall rate water equivalent (kg m-2 s-1)", 55)
+NEVE_GRANDE_SCALA = prodotto("Large scale snowfall rate water equivalent (kg m-2 s-1)", 56)
+NEVE_TOTALE = prodotto("Total snowfall rate water equivalent (kg m-2 s-1)", 53)
+DALL_INIZIO = [accumulo(1, 1, 1), accumulo(2, 2, 1)]
+SU_UN_ORA = [accumulo(1, 1, 1), accumulo(2, 1, 1)]
+
+
+def test_snow_is_taken_as_each_member_accumulates_it():
+    # ICON-2I: convective and large-scale snow, each accumulated since the run start.
+    icon = {"product": [NEVE_CONVETTIVA, NEVE_GRANDE_SCALA, PIOGGIA], "level": [SUOLO], "timerange": [ISTANTANEO, *DALL_INIZIO]}
+    assert filtri_variabile(icon, "snow_conv") == {"product": [NEVE_CONVETTIVA], "level": [SUOLO], "timerange": DALL_INIZIO}
+    assert filtri_variabile(icon, "snow_ls") == {"product": [NEVE_GRANDE_SCALA], "level": [SUOLO], "timerange": DALL_INIZIO}
+    # BOLAM and MOLOCH: total snow over each hour, beside 3-hour sums.
+    bolam = {"product": [NEVE_TOTALE, PIOGGIA], "level": [SUOLO, SUOLO_SENZA_VALORE],
+             "timerange": [*SU_UN_ORA, accumulo(3, 3, 1)]}
+    assert filtri_variabile(bolam, "snow_1h") == {"product": [NEVE_TOTALE], "level": [SUOLO], "timerange": SU_UN_ORA}
