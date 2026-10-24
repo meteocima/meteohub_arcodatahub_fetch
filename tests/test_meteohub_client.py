@@ -167,3 +167,77 @@ def test_the_metadata_of_one_product_ask_meteohub_for_that_product_only(monkeypa
     client.metadati("MOLOCH", datetime(2026, 10, 10), prodotto=cape)
 
     assert http.richieste[-1]["q"] == "reftime: >=2026-10-10 00:00,<=2026-10-10 23:59;product:GRIB2,80,0,7,6"
+
+
+class RichiesteFinte(HttpFinto):
+    """/api/requests answering with the account's extractions as they are now."""
+
+    def __init__(self, estrazioni):
+        super().__init__()
+        self.estrazioni = estrazioni
+
+    def get(self, url, params=None, headers=None, timeout=None):
+        return Risposta(200, self.estrazioni)
+
+
+def test_an_extraction_left_pending_for_the_full_account_disk_fails_with_meteohub_message(monkeypatch, tmp_path):
+    # As MeteoHub left 5575713 on 2026-10-23: still PENDING, with the quota error in error_message.
+    client = meteohub(monkeypatch, RichiesteFinte([{
+        "id": 5575713, "status": "PENDING", "fileoutput": None,
+        "error_message": "Disk quota exceeded: required size 583MB; remaining space 420MB"}]))
+    cancellate = []
+    monkeypatch.setattr(client_mod, "delete_request", lambda token, i: cancellate.append(i) or True)
+
+    try:
+        client.segui("5575713", tmp_path / "x.grib", attesa_max_s=60)
+    except RuntimeError as exc:
+        assert "Disk quota exceeded" in str(exc)
+    else:
+        raise AssertionError("no failure")
+    assert cancellate == ["5575713"]
+
+
+class FieldsAltezza(HttpFinto):
+    """/api/fields SummaryStats of ICON_2I_SURFACE_PRESSURE_LEVELS geometric height, 2025-10-08 (real numbers): the
+    product counts 148 fields on 2 levels (the orography, one field a run, and the freezing level, 146) in 2 runs."""
+
+    def get(self, url, params=None, headers=None, timeout=None):
+        self.richieste.append(params)
+        tr = [{"n": i} for i in range(73)]
+        if "level:GRIB2D,4,0,0,101,0,0" in params["q"]:
+            items = {"summarystats": {"c": 146, "s": 178169979}, "timerange": tr, "run": [{"v": 0}, {"v": 720}]}
+        else:
+            items = {"summarystats": {"c": 148, "s": 180486835}, "level": [{"l": 1}, {"l": 4}], "timerange": tr,
+                     "run": [{"v": 0}, {"v": 720}]}
+        return Risposta(200, {"items": items})
+
+
+def test_the_size_of_a_run_on_a_level_between_two_surfaces_is_counted_on_that_level(monkeypatch):
+    client = meteohub(monkeypatch, FieldsAltezza())
+    altezza = {"style": "GRIB2", "centre": 80, "discipline": 0, "category": 3, "number": 6}
+    isoterma_zero = {"style": "GRIB2D", "l1": 4, "scale1": 0, "value1": 0, "l2": 101, "scale2": 0, "value2": 0}
+    filtri = {"product": [altezza], "level": [isoterma_zero], "timerange": [{"n": i} for i in range(73)]}
+
+    assert round(client.stima_mb("ICON_2I_SURFACE_PRESSURE_LEVELS", filtri, datetime(2025, 10, 8))) == 89
+
+
+def test_cleaning_deletes_the_named_extractions_ended_hours_ago_and_those_stuck_for_two_days(monkeypatch):
+    # The account on 2026-10-24 at 08:00 UTC: CORO's leftovers of the past days, a CORO extraction another copy is
+    # still downloading, one of another pipeline, and one stuck since yesterday that MeteoHub would not delete.
+    client = meteohub(monkeypatch, RichiesteFinte([
+        {"id": 1, "name": "coro_WRF_DA_ITA_u500", "status": "SUCCESS", "submission_date": "2026-10-19T09:01:40",
+         "end_date": "2026-10-19T09:02:59"},
+        {"id": 2, "name": "coro_MOLOCH_t850", "status": "PENDING", "submission_date": "2026-10-20T17:32:59",
+         "end_date": "2026-10-20T17:33:12"},
+        {"id": 3, "name": "coro_ICON_2I_t2m", "status": "SUCCESS", "submission_date": "2026-10-24T07:30:00",
+         "end_date": "2026-10-24T07:31:00"},
+        {"id": 4, "name": "radar_lombardia", "status": "SUCCESS", "submission_date": "2026-10-19T09:01:40",
+         "end_date": "2026-10-19T09:02:59"},
+        {"id": 5, "name": "coro_ICON_2I_hzerocl", "status": "PENDING", "submission_date": "2026-10-23T06:40:21",
+         "end_date": "2026-10-23T06:40:27"},
+    ]))
+    cancellate = []
+    monkeypatch.setattr(client_mod, "delete_request", lambda token, i: cancellate.append(i) or True)
+
+    assert client.pulisci("coro_", ora=datetime(2026, 10, 24, 8)) == ["1", "2"]
+    assert cancellate == ["1", "2"]
