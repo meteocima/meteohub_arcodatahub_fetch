@@ -15,6 +15,8 @@ LICENZA = "CCBY_COMPLIANT"
 ATTESE = [5, 15, 30, 60, 120, 300]  # seconds between retries of a failed call
 LETTURA_S = 300  # read timeout of a call
 FINESTRA_MINIMA = timedelta(hours=1)  # windows that still fail with 5xx are not split further
+ESTRAZIONE_FINITA_DA = timedelta(hours=2)  # an extraction ended this long ago is no longer being downloaded
+ESTRAZIONE_BLOCCATA_DA = timedelta(days=2)  # MeteoHub deletes an unterminated extraction only after this
 
 
 class EstrazioneRifiutata(RuntimeError):
@@ -214,9 +216,12 @@ class MeteoHub:
 
     @staticmethod
     def _codice_livello(livello: Dict[str, Any]) -> Optional[str]:
-        """arkimet query code of a GRIB2 level as /api/fields describes it (None for other styles)."""
+        """arkimet query code of a GRIB2 level as /api/fields describes it (None for other styles): a single surface,
+        or a level between two (GRIB2D: ICON-2I's freezing level, 0 degree isotherm above mean sea level)."""
         if livello.get("style") == "GRIB2S":
             return f"GRIB2S,{livello['level_type']},{livello['scale']},{livello['value']}"
+        if livello.get("style") == "GRIB2D":
+            return "GRIB2D," + ",".join(str(livello[k]) for k in ("l1", "scale1", "value1", "l2", "scale2", "value2"))
         return None
 
     def stima_mb(self, dataset: str, filtri: Dict[str, List[Dict[str, Any]]], giorno: datetime) -> float:
@@ -287,7 +292,8 @@ class MeteoHub:
                     misure.update({k: mia.get(k) for k in ("status", "submission_date", "end_date", "filesize", "error_message")})
                 if mia and mia.get("fileoutput"):
                     break
-                if stato in ("FAILURE", "FAILED", "ERROR"):
+                # A full account disk leaves the extraction PENDING, with the error in error_message (5575713, 2026-10-23).
+                if stato in ("FAILURE", "FAILED", "ERROR") or (mia or {}).get("error_message"):
                     raise RuntimeError(f"Estrazione {id_estrazione} fallita: {mia.get('error_message') or stato}")
                 if time.time() - inizio > attesa_max_s:
                     raise RuntimeError(f"Estrazione {id_estrazione} non pronta dopo {attesa_max_s / 3600:g} ore")
@@ -302,6 +308,22 @@ class MeteoHub:
                    path: Path, opzioni: Optional[Dict[str, Any]] = None) -> Path:
         """invia + segui: submit an extraction, wait, download it to path, delete it on the server."""
         return self.segui(self.invia(nome, dataset, da, a, filtri, opzioni), path)
+
+    def pulisci(self, prefisso: str, ora: Optional[datetime] = None) -> List[str]:
+        """Delete the account's extractions named prefisso... that segui left on the server (a delete lost to the
+        network, a copy killed): those ended over ESTRAZIONE_FINITA_DA ago, and those still unterminated after
+        the 2 days MeteoHub waits before it lets them go. The recent ones may still be downloading in another copy.
+        Return the ids deleted; ora is UTC, as the server's dates."""
+        ora = ora or datetime.now(timezone.utc).replace(tzinfo=None)
+        cancellate = []
+        for x in self.estrazioni():
+            if not str(x.get("name", "")).startswith(prefisso):
+                continue
+            terminata = str(x.get("status", "")).upper() in ("SUCCESS", "FAILURE", "FAILED", "ERROR")
+            data, attesa = (x.get("end_date"), ESTRAZIONE_FINITA_DA) if terminata else (x.get("submission_date"), ESTRAZIONE_BLOCCATA_DA)
+            if data and ora - datetime.fromisoformat(data) > attesa and delete_request(self.token, str(x["id"])):
+                cancellate.append(str(x["id"]))
+        return cancellate
 
     def uso_disco_mb(self) -> float:
         """Space the account's extractions take on the server (/api/usage), MB; the quota is 1 GB."""
